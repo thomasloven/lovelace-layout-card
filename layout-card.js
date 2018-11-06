@@ -53,7 +53,9 @@ class LayoutCard extends Polymer.Element {
     });
 
     window.addEventListener('resize', () => this._updateColumns());
-    window.setTimeout(() => this._updateColumns(), 10);
+    window.addEventListener('hass-open-menu', () => setTimeout(() => this._updateColumns(), 10));
+    window.addEventListener('hass-close-menu', () => setTimeout(() => this._updateColumns(), 10));
+    setTimeout(() => this._updateColumns(), 10);
   }
 
   _updateColumns() {
@@ -65,6 +67,7 @@ class LayoutCard extends Polymer.Element {
       numcols = Math.max(1,
         Math.floor(this.$.columns.clientWidth/this.config.column_width));
     }
+    console.log(numcols);
     if(numcols != this.colnum) {
       this.colnum = numcols;
       this._build();
