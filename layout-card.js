@@ -3,10 +3,6 @@ class LayoutCard extends Polymer.Element {
   static get template() {
     return Polymer.html`
     <style>
-    :host {
-      padding: 4px 4px 0;
-      display: block;
-    }
     #columns {
       display: flex;
       flex-direction: row;
@@ -17,6 +13,9 @@ class LayoutCard extends Polymer.Element {
       flex-grow: 1;
       max-width: 500px;
       overflow-x: hidden;
+    }
+    .column > *:first-child {
+      margin-top: 0;
     }
     .column > * {
       display: block;
@@ -46,13 +45,6 @@ class LayoutCard extends Polymer.Element {
     this.config.column_width = this.config.column_width || 300;
     this.config.layout = this.config.layout || 'auto';
 
-    this._cards = config.cards.map((c) => {
-      if (typeof c === 'string') return c;
-      let el = this.makeCard(c);
-      if (this.hass) el.hass = this.hass;
-      return el;
-    });
-
     window.addEventListener('resize', () => this._updateColumns());
     window.addEventListener('hass-open-menu', () => setTimeout(() => this._updateColumns(), 10));
     window.addEventListener('hass-close-menu', () => setTimeout(() => this._updateColumns(), 10));
@@ -60,6 +52,14 @@ class LayoutCard extends Polymer.Element {
   }
 
   _updateColumns() {
+    if (this.parentElement.id === "view")
+    {
+      this.style.padding = "8px 4px 0";
+      this.style.display = "block";
+    } else {
+      this.style.marginRight = "0";
+      this.style.marginLeft = "0";
+    }
     let numcols = 0;
     if (this.config.column_num) {
       numcols = this.config.column_num;
@@ -68,7 +68,6 @@ class LayoutCard extends Polymer.Element {
       numcols = Math.max(1,
         Math.floor(this.$.columns.clientWidth/this.config.column_width));
     }
-    console.log(numcols);
     if(numcols != this.colnum) {
       this.colnum = numcols;
       this._build();
@@ -78,6 +77,13 @@ class LayoutCard extends Polymer.Element {
   _build() {
     const root = this.$.columns;
     while(root.lastChild) root.removeChild(root.lastChild);
+
+    this._cards = this.config.cards.map((c) => {
+      if (typeof c === 'string') return c;
+      let el = this.makeCard(c);
+      if (this._hass) el.hass = this._hass;
+      return el;
+    });
 
     let cols = [];
     let colLen = [];
@@ -148,6 +154,8 @@ class LayoutCard extends Polymer.Element {
   }
 
   set hass(hass) {
+    this._hass = hass;
+    if(this._cards)
     this._cards.filter(c => typeof c !== 'string').forEach(c => c.hass = hass);
   }
 
