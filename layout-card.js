@@ -3,6 +3,10 @@ class LayoutCard extends Polymer.Element {
   static get template() {
     return Polymer.html`
     <style>
+    :host {
+      padding: 4px 4px 0;
+      display: block;
+    }
     #columns {
       display: flex;
       flex-direction: row;
@@ -13,9 +17,6 @@ class LayoutCard extends Polymer.Element {
       flex-grow: 1;
       max-width: 500px;
       overflow-x: hidden;
-    }
-    .column > *:first-child {
-      margin-top: 0;
     }
     .column > * {
       display: block;
