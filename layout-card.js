@@ -52,7 +52,7 @@ class LayoutCard extends Polymer.Element {
   }
 
   _updateColumns() {
-    if (this.parentElement.id === "view")
+    if (this.parentElement && this.parentElement.id === "view")
     {
       this.style.padding = "8px 4px 0";
       this.style.display = "block";
