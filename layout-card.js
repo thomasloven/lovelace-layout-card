@@ -44,6 +44,7 @@ class LayoutCard extends Polymer.Element {
     this.config.min_height = this.config.minheight || 5;
     this.config.column_width = this.config.column_width || 300;
     this.config.layout = this.config.layout || 'auto';
+    this.config.max_columns = this.config.max_columns || 100;
 
     window.addEventListener('resize', () => this._updateColumns());
     window.addEventListener('hass-open-menu', () => setTimeout(() => this._updateColumns(), 10));
@@ -66,8 +67,9 @@ class LayoutCard extends Polymer.Element {
     } else {
       let colWidth = this.config.column_width || 300;
       numcols = Math.max(1,
-        Math.floor(this.$.columns.clientWidth/this.config.column_width));
+        this.$ ? Math.floor(this.$.columns.clientWidth/this.config.column_width) : 0);
     }
+    numcols = Math.max(numcols, this.config.max_columns);
     if(numcols != this.colnum) {
       this.colnum = numcols;
       this._build();
@@ -75,6 +77,7 @@ class LayoutCard extends Polymer.Element {
   }
 
   _build() {
+    if(!this.$) return;
     const root = this.$.columns;
     while(root.lastChild) root.removeChild(root.lastChild);
 
