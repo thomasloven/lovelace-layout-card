@@ -69,7 +69,7 @@ class LayoutCard extends Polymer.Element {
       numcols = Math.max(1,
         this.$ ? Math.floor(this.$.columns.clientWidth/this.config.column_width) : 0);
     }
-    numcols = Math.max(numcols, this.config.max_columns);
+    numcols = Math.min(numcols, this.config.max_columns);
     if(numcols != this.colnum) {
       this.colnum = numcols;
       this._build();
