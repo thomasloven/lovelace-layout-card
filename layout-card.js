@@ -26,18 +26,10 @@ class LayoutCard extends Polymer.Element {
     `;
   }
 
-  makeCard(config) {
-    let tag = config.type;
-    if(tag.startsWith("custom:"))
-      tag = tag.substr(7);
-    else
-      tag = `hui-${tag}-card`;
-    let card = document.createElement(tag);
-    card.setConfig(config);
-    return card;
-  }
-
   setConfig(config) {
+    if(!window.cardTools) throw new Error(`Can't find card-tools. See https://github.com/thomasloven/lovelace-card-tools`);
+    window.cardTools.checkVersion(0.1);
+
     this.config = config;
 
     this.colnum = 0;
@@ -83,7 +75,7 @@ class LayoutCard extends Polymer.Element {
 
     this._cards = this.config.cards.map((c) => {
       if (typeof c === 'string') return c;
-      let el = this.makeCard(c);
+      let el = cardTools.createCard(c);
       if (this._hass) el.hass = this._hass;
       return el;
     });

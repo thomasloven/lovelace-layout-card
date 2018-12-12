@@ -16,6 +16,8 @@ Get more control over the placement of cards
 
 ## Instructions
 
+This card requires [card-tools](https://github.com/thomasloven/lovelace-card-tools) to be installed.
+
 This card takes other cards and place them in different layouts.
 
 The card works best if used in a view with `panel: true`.
