@@ -1,5 +1,5 @@
 {
-  "name": "com.ha.frk.lovelace.layout-card",
+  "name": "com.ha.frk.lovelace.layout.card",
   "displayName": "Home Assistant Forked Component Lovelace Layout Card",
   "version": "1.0.0",
   "description": "",
