@@ -14,6 +14,14 @@ Get more control over the placement of cards
 | layout | string | auto | `auto`, `vertical`, `horizontal`
 | column\_num | number | none | Number of columns to force
 
+### More options
+
+There are a few more options you can play around with:
+`min_height` - (default: 5) determines how long a column must be before a card is placed in the next one.
+`column_width` - (default: 300) determines how wide a column is in pixels.
+`max_columns` - (default: 100) determines the maximum number of columns.
+
+
 ## Instructions
 
 This card requires [card-tools](https://github.com/thomasloven/lovelace-card-tools) to be installed.
