@@ -1,3 +1,4 @@
+customElements.whenDefined('card-tools').then(() => {
 class LayoutCard extends Polymer.Element {
 
   static get template() {
@@ -27,8 +28,7 @@ class LayoutCard extends Polymer.Element {
   }
 
   setConfig(config) {
-    if(!window.cardTools) throw new Error(`Can't find card-tools. See https://github.com/thomasloven/lovelace-card-tools`);
-    window.cardTools.checkVersion(0.1);
+    cardTools.checkVersion(0.1);
 
     this.config = config;
 
@@ -161,3 +161,11 @@ class LayoutCard extends Polymer.Element {
 }
 
 customElements.define('layout-card', LayoutCard);
+});
+
+window.setTimeout(() => {
+  if(customElements.get('card-tools')) return;
+  customElements.define('layout-card', class extends HTMLElement{
+    setConfig() { throw new Error("Can't find card-tools. See https://github.com/thomasloven/lovelace-card-tools");}
+  });
+}, 2000);
