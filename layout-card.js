@@ -37,6 +37,7 @@ class LayoutCard extends Polymer.Element {
     this.config.column_width = this.config.column_width || 300;
     this.config.layout = this.config.layout || 'auto';
     this.config.max_columns = this.config.max_columns || 100;
+    this.config.column_style = this.config.column_style || null;
 
     window.addEventListener('resize', () => this._updateColumns());
     window.addEventListener('hass-open-menu', () => setTimeout(() => this._updateColumns(), 10));
@@ -143,9 +144,14 @@ class LayoutCard extends Polymer.Element {
 
     cols = cols.filter(c => c.length > 0);
     let maxlen = 0;
+    let currentCol = 0;
     cols.forEach( c => {
       const cEl = document.createElement('div');
       cEl.classList.add('column');
+      currentCol++; //counting arrays wrong, so that users don't have to count columns from 0
+      if (this.config.column_style && this.config.column_style[currentCol]) Object.keys(this.config.column_style[currentCol]).forEach(s => {
+        cEl.style[s] = this.config.column_style[currentCol][s];
+      });
       c.filter(e => typeof e !== 'string').forEach(e => cEl.appendChild(e));
       root.appendChild(cEl);
       if(c.length > maxlen) maxlen = c.length;
