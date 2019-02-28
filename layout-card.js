@@ -1,174 +1,169 @@
 customElements.whenDefined('card-tools').then(() => {
-class LayoutCard extends Polymer.Element {
+let cardTools = customElements.get('card-tools');
+class LayoutCard extends cardTools.LitElement {
 
-  static get template() {
-    return Polymer.html`
-    <style>
-    #columns {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-    }
-    .column {
-      flex-basis: 0;
-      flex-grow: 1;
-      max-width: 500px;
-      overflow-x: hidden;
-    }
-    .column > *:first-child {
-      margin-top: 0;
-    }
-    .column > * {
-      display: block;
-      margin: 4px 4px 8px;
-    }
-    </style>
+  async setConfig(config) {
+    this.config = config;
+    this.layout = config.layout || 'auto';
+    this.minCols = config.column_num || 1;
+    this.maxCols = config.max_columns || 100;
+    this.colWidth = config.column_width || 300;
+    this.maxWidth = config.max_width || 500;
+    this.minHeight = config.min_height || 5;
+    this.cardSize = 1;
+
+    window.addEventListener('resize', () => this.build());
+    window.addEventListener('hass-open-menu', () => setTimeout(() => this.build(), 100));
+    window.addEventListener('hass-close-menu', () => setTimeout(() => this.build(), 100));
+  }
+
+  render() {
+    return cardTools.LitHtml`
     <div id="columns"></div>
     `;
   }
 
-  setConfig(config) {
-    cardTools.checkVersion(0.1);
-
-    this.config = config;
-
-    this.colnum = 0;
-    this.config.min_height = this.config.minheight || 5;
-    this.config.column_width = this.config.column_width || 300;
-    this.config.layout = this.config.layout || 'auto';
-    this.config.max_columns = this.config.max_columns || 100;
-
-    window.addEventListener('resize', () => this._updateColumns());
-    window.addEventListener('hass-open-menu', () => setTimeout(() => this._updateColumns(), 10));
-    window.addEventListener('hass-close-menu', () => setTimeout(() => this._updateColumns(), 10));
-    setTimeout(() => this._updateColumns(), 10);
+  firstUpdated() {
+    this.build();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this._updateColumns();
-    this._build();
+  static get styles() {
+    return cardTools.LitCSS`
+      #columns {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      .column {
+        flex-basis: 0;
+        flex-grow: 1;
+        overflow-x: hidden;
+      }
+
+      .column > * {
+        display: block;
+        margin: 4px 4px 8px;
+      }
+
+      .column > *:first-child {
+        margin-top: 0;
+      }
+    `;
   }
 
-  _updateColumns() {
-    if (this.parentElement && this.parentElement.id === "view")
-    {
-      this.style.padding = "8px 4px 0";
-      this.style.display = "block";
-    } else {
-      this.style.marginRight = "0";
-      this.style.marginLeft = "0";
-    }
-    let numcols = 0;
-    if (this.config.column_num) {
-      numcols = this.config.column_num;
-    } else {
-      const cardWidth = this.$.columns.clientWidth || (this.parentElement && this.parentElement.clientWidth);
-
-      numcols = Math.max(1, Math.floor(cardWidth/this.config.column_width));
-    }
-    numcols = Math.min(numcols, this.config.max_columns);
-    if(numcols != this.colnum) {
-      this.colnum = numcols;
-      this._build();
-    }
-  }
-
-  _build() {
-    if(!this.$) return;
-    const root = this.$.columns;
-    while(root.lastChild) root.removeChild(root.lastChild);
-
-    this._cards = this.config.cards.map((c) => {
+  make_cards() {
+    this.cards = this.config.cards.map((c) => {
       if (typeof c === 'string') return c;
-      let el = cardTools.createCard(c);
-      if (this._hass) el.hass = this._hass;
-      return el;
+      const card = cardTools.createCard(c);
+      if(this._hass) card.hass = this._hass;
+      this.appendChild(card); // Place card in DOM to get size
+      return card;
     });
+  }
+
+  update_columns() {
+    const width = (this.shadowRoot && this.shadowRoot.querySelector("#columns").clientWidth) || (this.parentElement && this.parentElement.clientWidth);
+    if(typeof(this.colWidth) === 'object')
+      this.colNum = this.colWidth.length;
+    else
+      this.colNum = Math.floor(width / this.colWidth);
+    this.colNum = Math.max(this.colNum, this.minCols);
+    this.colNum = Math.min(this.colNum, this.maxCols);
+  }
+
+  build() {
+    const root = this.shadowRoot.querySelector("#columns");
+    while(root.lastChild) {
+      root.removeChild(root.lastChild);
+    }
+
+    this.update_columns();
+
+    if(!this.cards) this.make_cards();
 
     let cols = [];
-    let colLen = [];
-    for(let i = 0; i < this.colnum; i++) {
+    let colSize = [];
+    for(let i = 0; i < this.colNum; i++) {
       cols.push([]);
-      colLen.push(0);
+      colSize.push(0);
     }
 
-    let shortest = () => {
+    const shortestCol = () => {
       let i = 0;
-      for(let j = 0; j < colLen.length; j++) {
-        if(colLen[j] < this.config.min_height) {
-          i = j;
-          break;
-        }
-        if(colLen[j] < colLen[i])
+      for(let j = 0; j < this.colNum; j++) {
+        if(colSize[j] < this.min_height)
+          return j;
+        if(colSize[j] < colSize[i])
           i = j;
       }
       return i;
     }
 
     let i = 0;
-    this._cards.forEach((c) => {
-      let sz;
-      if(typeof c !== 'string') {
-        this.appendChild(c);
-        sz = typeof c.getCardSize === 'function' ? c.getCardSize() : 1;
-      }
-      switch (this.config.layout) {
-        case 'auto':
-          if(typeof c === 'string') break;
-          cols[shortest()].push(c);
-          colLen[shortest()] += sz;
+    this.cards.forEach((c) => {
+      const isBreak = (typeof(c) === 'string');
+      const sz = c.getCardSize ? c.getCardSize() : 1;
+
+      switch(this.layout) {
+        case 'horizontal':
+          if(i >= this.colNum) i = 0;
+          i += 1;
+          if(isBreak) break;
+          cols[i-1].push(c);
+          colSize[i-1] += sz;
           break;
         case 'vertical':
-          if(typeof c === 'string') {
+          if(isBreak){
             i += 1;
-          } else {
-            if (i >= this.colnum) i = 0;
-            cols[i].push(c);
-            colLen[i] += sz;
+            if(i >= this.colNum)
+              i = 0;
+            break;
           }
+          cols[i].push(c);
+          colSize[i] += sz;
           break;
-        case 'horizontal':
-          if(c instanceof String) {
-            i += 1;
-          } else {
-            if (i >= this.colnum) i = 0;
-            cols[i].push(c);
-            colLen[i] += sz;
-            i += 1;
-          }
+        case 'auto':
+        default:
+          if(isBreak) break;
+          cols[shortestCol()].push(c);
+          colSize[shortestCol()] += sz;
           break;
       }
     });
 
-    cols = cols.filter(c => c.length > 0);
-    let maxlen = 0;
-    cols.forEach( c => {
-      const cEl = document.createElement('div');
-      cEl.classList.add('column');
-      c.filter(e => typeof e !== 'string').forEach(e => cEl.appendChild(e));
-      root.appendChild(cEl);
-      if(c.length > maxlen) maxlen = c.length;
+    cols = cols.filter((c) => c.length > 0);
+    cols.forEach((c, i) => {
+      const div = document.createElement('div');
+      div.classList.add('column');
+      c.forEach((e) => div.appendChild(e));
+      root.appendChild(div);
+      if(typeof(this.colWidth) === 'object') {
+        div.style.setProperty('max-width', this.colWidth[i]);
+      } else {
+        div.style.setProperty('max-width', this.maxWidth+'px');
+      }
     });
 
-    this.maxlen = maxlen;
+    this.cardSize = Math.max.apply(null, colSize);
   }
 
   set hass(hass) {
     this._hass = hass;
-    if(this._cards)
-    this._cards.filter(c => typeof c !== 'string').forEach(c => c.hass = hass);
+    if(this.cards)
+      this.cards
+        .filter((c) => typeof(c) !== 'string')
+        .forEach((c) => c.hass = hass);
   }
 
   getCardSize() {
-    return this.maxlen;
+    return this.cardSize;
   }
 
 }
 
 customElements.define('layout-card', LayoutCard);
 });
-
 window.setTimeout(() => {
   if(customElements.get('card-tools')) return;
   customElements.define('layout-card', class extends HTMLElement{
