@@ -1,37 +1,32 @@
 layout-card
 ===========
 
-Get more control over the placement of cards
+Get more control over the placement of lovelace cards
 
-> You may think of this as a test-drive for the future of default lovelace behavior. As such I appreciate any feedback (even more than usual). Let me know if and how you use this, and we might see it as default behavior in the future. Or something else entirely, who knows...
-
-## Options
-
-| Name | Type | Default | Description
-| ---- | ---- | ------- | -----------
-| type | string | **Required** | `custom:layout-card`
-| cards | list | **Required** | The cards to display
-| layout | string | auto | `auto`, `vertical`, `horizontal`
-| column\_num | number | none | Number of columns to force
-
-### More options
-
-There are a few more options you can play around with:
-
-- `min_height` - (default: 5) determines how long a column must be before a card is placed in the next one.
-- `column_width` - (default: 300) determines how wide a column is in pixels.
-- `max_columns` - (default: 100) determines the maximum number of columns.
-
-
-## Instructions
+# Installation instructions
 
 This card requires [card-tools](https://github.com/thomasloven/lovelace-card-tools) to be installed.
 
+For installation instructions [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
+
+The recommended type of this plugin is: `js`
+
+### If you are using [custom\_updater](https://github.com/custom-components/custom_updater):
+```yaml
+resources:
+- url: /customcards/github/thomasloven/card-tools.js?track=true
+  type: js
+- url: /customcards/github/thomasloven/layout-card.js?track=true
+  type: js
+```
+
+# Usage instructions
+
 This card takes other cards and place them in different layouts.
 
-The card works best if used in a view with `panel: true`.
+This card works best if used in [panel mode](https://www.home-assistant.io/lovelace/views/#panel-mode).
 
-Each layout consists of columns, the number of which is determined by your screen width. The number of columns can also be overridden by setting `column_num`.
+Each layout consists of columns, the number of which is determined by your screen width and the settings of layout-card.
 
 There are three different layouts:
 
@@ -157,24 +152,75 @@ Add a `- break` to the list of cards to break the column right there, and move o
 
 Breaks also work with the `horizontal` layout, and even `auto`. Experiment a bit.
 
+## Configuration
+```yaml
+title: My view
+panel: true
+cards:
+  - type: custom:layout-card
+    layout: <layout>
+    column_num: <column count>
+    max_columns: <max column count>
+    column_width: <column width>
+    max_width: <max column width>
+    min_height: <min height>
+    cards:
+      <cards>
+```
+
+### `<layout>`
+Optional. Default: `auto`
+
+Either `auto`, `vertical` or `horizontal`.
+
+### `<column count>`
+Optional. Default: 1
+
+The minimum number of columns to make. Note that if a column has no cards, it will be removed regardless.
+
+### `<max column count>`
+Optional. Default: 100
+
+The maximum number of columns to make.
+
+### `<column width>`
+Optional. Default: 300
+
+The minimum width of a column in pixels.
+
+`<column width>` can also be an array of values ending with `%` or `px`. In that case the values will specify the width of each column and `<column count>` will be overridden with the number of entries in the array.
+
+Ex: `column_width: [70%, 300px, 30%]` will result in three columns, where the center one is 300 pixels wide, and the left and right divide the remaining space in a 70/30 ratio.
+
+![varied sizes](https://user-images.githubusercontent.com/1299821/53567104-807ab200-3b5e-11e9-8a20-67190b80b70d.jpg)
+
+This allows for some really interesting layout options when combined with stacks. Play around!
+
+![advanced layout](https://user-images.githubusercontent.com/1299821/53567164-a738e880-3b5e-11e9-93f2-d2041c512b8a.jpg)
+
+### `<max column width>`
+Optional. Default: 500
+
+The maximum width of a column in pixels.
+This value is ignored if `<column width>` is an array.
+
+### `<min height>`
+Optional. Default: 5
+
+The number of units needed before a column is considered not empty.
+
+### `<cards>`
+Required.
+
+A list of cards to put in the layout.
+
+The list can also contain `- break` - see description of layouts above.
+
+# FAX
+
+### Can I leave a gap in the layout?
+
+Yes. By using the compainon card: [gap-card](https://github.com/thomasloven/lovelace-gap-card).
+
 ---
-
-And as mentioned, use `column_num` to override the number of columns.
-
-![layout-card 5 - number of columns](https://user-images.githubusercontent.com/1299821/48088460-61988e80-e202-11e8-990f-22c5e0319b43.png)
-```yaml
-      - type: custom:layout-card
-        layout: auto
-        column_num: 2
-        cards:
-        ...
-```
-
-![layout-card 6 - number of columns](https://user-images.githubusercontent.com/1299821/48088459-61988e80-e202-11e8-9694-e7688ce34b5c.png)
-```yaml
-      - type: custom:layout-card
-        layout: horizontal
-        column_num: 8
-        cards:
-        ...
-```
+<a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
