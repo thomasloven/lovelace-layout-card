@@ -29,6 +29,10 @@ class LayoutCard extends cardTools.LitElement {
       this.style.padding = "0";
     }
     this.build();
+    this._cardModder = {
+      target: this,
+      styles: this.shadowRoot.querySelector("style")
+    };
   }
 
   static get styles() {
