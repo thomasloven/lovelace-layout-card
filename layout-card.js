@@ -24,11 +24,20 @@ class LayoutCard extends cardTools.LitElement {
   }
 
   firstUpdated() {
+    if(this.parentElement && this.parentElement.id !== "view")
+    {
+      this.style.padding = "0";
+    }
     this.build();
   }
 
   static get styles() {
     return cardTools.LitCSS`
+      :host {
+        padding: 8px 4px 0;
+        display: block;
+      }
+
       #columns {
         display: flex;
         flex-direction: row;
