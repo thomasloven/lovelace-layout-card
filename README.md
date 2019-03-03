@@ -164,6 +164,7 @@ cards:
     column_width: <column width>
     max_width: <max column width>
     min_height: <min height>
+    ltr: <ltr>
     cards:
       <cards>
 ```
@@ -208,6 +209,11 @@ This value is ignored if `<column width>` is an array.
 Optional. Default: 5
 
 The number of units needed before a column is considered not empty.
+
+### `<rtl>`
+Optional. Default: false
+
+If set to true, columns will be placed right-to-left.
 
 ### `<cards>`
 Required.
