@@ -159,10 +159,10 @@ panel: true
 cards:
   - type: custom:layout-card
     layout: <layout>
-    column_num: <column count>
-    max_columns: <max column count>
+    column_num: <column num>
+    max_columns: <max columns>
     column_width: <column width>
-    max_width: <max column width>
+    max_width: <max width>
     min_height: <min height>
     ltr: <ltr>
     cards:
@@ -174,12 +174,12 @@ Optional. Default: `auto`
 
 Either `auto`, `vertical` or `horizontal`.
 
-### `<column count>`
+### `<column num>`
 Optional. Default: 1
 
 The minimum number of columns to make. Note that if a column has no cards, it will be removed regardless.
 
-### `<max column count>`
+### `<max columns>`
 Optional. Default: 100
 
 The maximum number of columns to make.
@@ -189,21 +189,20 @@ Optional. Default: 300
 
 The minimum width of a column in pixels.
 
-`<column width>` can also be an array of values ending with `%` or `px`. In that case the values will specify the width of each column and `<column count>` will be overridden with the number of entries in the array.
 
-Ex: `column_width: [70%, 300px, 30%]` will result in three columns, where the center one is 300 pixels wide, and the left and right divide the remaining space in a 70/30 ratio.
+### `<max width>`
+Optional. Default: 500
+
+The maximum width of a column in pixels.
+`<max width>` can also be an array of values ending with `%` or `px`. In that case the values will specify the width of each column. This works best when combined with `<column count>` and `<max columns>`.
+
+Ex: `max_width: [70%, 300px, 30%]` will result in three columns, where the center one is 300 pixels wide, and the left and right divide the remaining space in a 70/30 ratio.
 
 ![varied sizes](https://user-images.githubusercontent.com/1299821/53567104-807ab200-3b5e-11e9-8a20-67190b80b70d.jpg)
 
 This allows for some really interesting layout options when combined with stacks. Play around!
 
 ![advanced layout](https://user-images.githubusercontent.com/1299821/53567164-a738e880-3b5e-11e9-93f2-d2041c512b8a.jpg)
-
-### `<max column width>`
-Optional. Default: 500
-
-The maximum width of a column in pixels.
-This value is ignored if `<column width>` is an array.
 
 ### `<min height>`
 Optional. Default: 5
