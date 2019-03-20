@@ -165,6 +165,7 @@ cards:
     max_width: <max width>
     min_height: <min height>
     ltr: <ltr>
+    rebuild: <rebuild>
     cards:
       <cards>
 ```
@@ -213,6 +214,11 @@ The number of units needed before a column is considered not empty.
 Optional. Default: false
 
 If set to true, columns will be placed right-to-left.
+
+### `<rebuild>`
+Optional. Default: false
+
+If set, a rebuild of the layout will be triggered after this many milliseconds. May be useful if your layout looks different after a page reload or when you return to the view, but it will cause your screen to flash once.
 
 ### `<cards>`
 Required.
