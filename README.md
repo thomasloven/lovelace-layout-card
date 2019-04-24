@@ -227,7 +227,7 @@ A list of cards to put in the layout.
 
 The list can also contain `- break` - see description of layouts above.
 
-# FAX
+# FAQ
 
 ### Can I leave a gap in the layout?
 
