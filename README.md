@@ -231,7 +231,7 @@ cards:
 
 - Further tweaks can be made in the same way using `<max_width>` and `<min_width>`, but most of the time `<column_width>` should be enough.
 
-- `<flex_grow>` (single value or list) and `<justify_content>` (single value) can be used to tweak the CSS flexbox settings of the layout. See [this excelent guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) for more info.
+- `<flex_grow>` (single value or list) and `<justify_content>` (single value) can be used to tweak the CSS flexbox settings of the layout. See [this excellent guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) for more info.
 
 - `<rtl>` will make the columns display from right to left instead of left to right.
 
