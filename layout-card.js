@@ -1,62 +1,35 @@
-customElements.whenDefined('card-tools').then(() => {
-let cardTools = customElements.get('card-tools');
-class LayoutCard extends cardTools.LitElement {
-
-  async setConfig(config) {
-    this.config = config;
-    this.layout = config.layout || 'auto';
-    this.minCols = config.column_num || 1;
-    this.maxCols = config.max_columns || 100;
-    this.colWidth = config.column_width || 400;
-    this.maxWidth = config.max_width || 500;
-    this.minHeight = config.min_height || 5;
-    this.rtl = config.rtl || false;
-    this.cardSize = 1;
-
-    this.make_cards();
-
-    window.addEventListener('resize', () => this.build());
-    window.addEventListener('hass-open-menu', () => setTimeout(() => this.build(), 100));
-    window.addEventListener('hass-close-menu', () => setTimeout(() => this.build(), 100));
-    window.addEventListener('location-changed', () => {
-      if(location.hash === "") setTimeout(() =>
-        this.build(), 100)
-    });
-    if(config.rebuild)
-      window.setTimeout(() => this.build(), config.rebuild);
-  }
-
-  render() {
-    return cardTools.LitHtml`
-    <div id="columns"></div>
-    `;
-  }
-
-  firstUpdated() {
-    if(this.parentElement && this.parentElement.id !== "view")
-    {
-      this.style.padding = "0";
-    }
-    if(this.rtl)
-      this.shadowRoot.querySelector("#columns").style.flexDirection = 'row-reverse';
-    this.build();
-    this._cardModder = {
-      target: this,
-      styles: this.shadowRoot.querySelector("style")
-    };
-  }
-
-  static get styles() {
-    return cardTools.LitCSS`
+!function(t){var e={};function n(i){if(e[i])return e[i].exports;var s=e[i]={i:i,l:!1,exports:{}};return t[i].call(s.exports,s,s.exports,n),s.l=!0,s.exports}n.m=t,n.c=e,n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:i})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var s in t)n.d(i,s,function(e){return t[e]}.bind(null,s));return i},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=0)}([function(t,e,n){"use strict";n.r(e);const i=customElements.get("home-assistant-main")?Object.getPrototypeOf(customElements.get("home-assistant-main")):Object.getPrototypeOf(customElements.get("hui-view")),s=i.prototype.html,o=i.prototype.css;function r(){return document.querySelector("home-assistant").hass}function a(t,e,n){t.forEach(t=>{if(!t)return;const i=e[function(){let t=0;for(let i=0;i<e.length;i++){if(e[i].length<n.min_height)return i;e[i].length<e[t].length&&(t=i)}return t}()];i.appendChild(t),i.length+=t.getCardSize?t.getCardSize():1})}customElements.define("layout-card",class extends i{static get properties(){return{hass:{},_config:{}}}async setConfig(t){this._config={min_height:5,column_width:300,max_width:t.column_width||"500px",min_columns:t.column_num||1,max_columns:100,...t},this.cards=[],this.columns=[]}async firstUpdated(){window.addEventListener("resize",()=>this.place_cards()),window.addEventListener("hass-open-menu",()=>setTimeout(()=>this.place_cards(),100)),window.addEventListener("hass-close-menu",()=>setTimeout(()=>this.place_cards(),100)),window.addEventListener("location-changed",()=>{""===location.hash&&setTimeout(()=>this.place_cards(),100)})}async updated(t){this.cards.length||(this.cards=await this.build_cards(),this.place_cards()),t.has("hass")&&this.hass&&this.cards&&this.cards.forEach(t=>{t&&(t.hass=this.hass)})}async build_card(t){if("break"===t)return null;const e=document.createElement("card-maker");return e.config=t,e.hass=r(),this.shadowRoot.querySelector("#staging").appendChild(e),new Promise((t,n)=>e.updateComplete.then(()=>t(e)))}async build_cards(){const t=this.shadowRoot.querySelector("#staging");for(;t.lastChild;)t.removeChild(t.lastChild);return Promise.all((this._config.entities||this._config.cards).map(t=>this.build_card(t)))}place_cards(){const t=this.shadowRoot.querySelector("#columns").clientWidth;this.columns=function(t,e,n){const i=t=>"string"==typeof t&&t.endsWith("%")?Math.floor(e*parseInt(t)/100):parseInt(t);let s=0;if("object"==typeof n.column_width){let t=e;for(;t>0;){let e=n.column_width[s];void 0===e&&(e=n.column_width.slice(-1)[0]),t-=i(e),s+=1}s=Math.max(s-1,1)}else s=Math.floor(e/i(n.column_width));s=Math.max(s,n.min_columns),s=Math.min(s,n.max_columns);let o=[];for(let t=0;t<s;t++){const t=document.createElement("div");t.classList.add("column"),t.length=0,o.push(t)}switch(n.layout){case"horizontal":!function(t,e,n){let i=0;t.forEach(t=>{if(i+=1,!t)return;const n=e[(i-1)%e.length];n.appendChild(t),n.length+=t.getCardSize?t.getCardSize():1})}(t,o);break;case"vertical":!function(t,e,n){let i=0;t.forEach(t=>{if(!t)return void(i+=1);const n=e[i%e.length];n.appendChild(t),n.length+=t.getCardSize?t.getCardSize():1})}(t,o);break;case"auto":default:a(t,o,n)}return o=o.filter(t=>t.childElementCount>0)}(this.cards,t,this._config),this.format_columns(),this.requestUpdate()}format_columns(){const t=(t,e,n,i="px")=>{if(void 0===this._config[e])return"";let s=`${t}: `;const o=this._config[e];return"object"==typeof o?o.length>n?s+=`${o[n]}`:s+=`${o.slice(-1)}`:s+=`${o}`,s.endsWith("px")||s.endsWith("%")||(s+=i),s+";"};for(const[e,n]of this.columns.entries()){const i=[t("max-width","max_width",e),t("min-width","min_width",e),t("width","column_width",e),t("flex-grow","flex_grow",e,"")];n.style.cssText="".concat(...i)}}getCardSize(){if(this.columns)return Math.max.apply(Math,this.columns.map(t=>t.length))}isPanel(){let t=this.parentElement,e=10;for(;e--;){if("hui-panel-view"===t.localName)return!0;if("div"===t.localName)return!1;t=t.parentElement}return!1}render(){return s`
+      <div id="columns"
+      class="
+      ${this._config.rtl?"rtl":" "}
+      ${this.isPanel()?"panel":" "}
+      "
+      style="
+      ${this._config.justify_content?`justify-content: ${this._config.justify_content};`:""}
+      ">
+        ${this.columns.map(t=>s`
+          ${t}
+        `)}
+      </div>
+      <div id="staging"></div>
+    `}static get styles(){return o`
       :host {
-        padding: 8px 4px 0;
+        padding: 0 4px;
         display: block;
+        margin-bottom: 0!important;
       }
 
       #columns {
         display: flex;
         flex-direction: row;
         justify-content: center;
+        margin-top: -8px;
+      }
+      #columns.rtl {
+        flex-direction: row-reverse;
+      }
+      #columns.panel {
+        margin-top: 0;
       }
 
       .column {
@@ -65,130 +38,19 @@ class LayoutCard extends cardTools.LitElement {
         overflow-x: hidden;
       }
 
-      .column > * {
+      card-maker>* {
         display: block;
         margin: 4px 4px 8px;
       }
-
-      .column > *:first-child {
-        margin-top: 0;
+      card-maker:first-child>* {
+        margin-top: 8px;
       }
-    `;
-  }
-
-  make_cards() {
-    this._cards = this.config.cards.map((c) => {
-      if (typeof c === 'string') return c;
-      const card = cardTools.createCard(c);
-      if(this._hass) card.hass = this._hass;
-      this.appendChild(card); // Place card in DOM to get size
-      return card;
-    });
-  }
-
-  update_columns() {
-    const width = (this.shadowRoot && this.shadowRoot.querySelector("#columns").clientWidth) || (this.parentElement && this.parentElement.clientWidth);
-    this.colNum = Math.floor(width / this.colWidth) || 1;
-    this.colNum = Math.max(this.colNum, this.minCols);
-    this.colNum = Math.min(this.colNum, this.maxCols);
-  }
-
-  build() {
-    if (this.offsetParent === null) return;
-    const root = this.shadowRoot.querySelector("#columns");
-    while(root.lastChild) {
-      root.removeChild(root.lastChild);
-    }
-
-    this.update_columns();
-
-    if(!this._cards) this.make_cards();
-
-    let cols = [];
-    let colSize = [];
-    for(let i = 0; i < this.colNum; i++) {
-      cols.push([]);
-      colSize.push(0);
-    }
-
-    const shortestCol = () => {
-      let i = 0;
-      for(let j = 0; j < this.colNum; j++) {
-        if(colSize[j] < this.min_height)
-          return j;
-        if(colSize[j] < colSize[i])
-          i = j;
+      card-maker:last-child>* {
+        margin-bottom: 4px;
       }
-      return i;
-    }
 
-    let i = 0;
-    this._cards.forEach((c) => {
-      const isBreak = (typeof(c) === 'string');
-      const sz = c.getCardSize ? c.getCardSize() : 1;
-
-      switch(this.layout) {
-        case 'horizontal':
-          if(i >= this.colNum) i = 0;
-          i += 1;
-          if(isBreak) break;
-          cols[i-1].push(c);
-          colSize[i-1] += sz;
-          break;
-        case 'vertical':
-          if(isBreak){
-            i += 1;
-            if(i >= this.colNum)
-              i = 0;
-            break;
-          }
-          cols[i].push(c);
-          colSize[i] += sz;
-          break;
-        case 'auto':
-        default:
-          if(isBreak) break;
-          cols[shortestCol()].push(c);
-          colSize[shortestCol()] += sz;
-          break;
+      #staging {
+        visibility: hidden;
+        height: 0;
       }
-    });
-
-    cols = cols.filter((c) => c.length > 0);
-    cols.forEach((c, i) => {
-      const div = document.createElement('div');
-      div.classList.add('column');
-      c.forEach((e) => div.appendChild(e));
-      root.appendChild(div);
-      if(cols.length > 1 && typeof(this.maxWidth) === 'object') {
-        div.style.setProperty('max-width', this.maxWidth[i]);
-      } else {
-        div.style.setProperty('max-width', this.maxWidth+'px');
-      }
-    });
-
-    this.cardSize = Math.max.apply(null, colSize);
-  }
-
-  set hass(hass) {
-    this._hass = hass;
-    if(this._cards)
-      this._cards
-        .filter((c) => typeof(c) !== 'string')
-        .forEach((c) => c.hass = hass);
-  }
-
-  getCardSize() {
-    return this.cardSize;
-  }
-
-}
-
-customElements.define('layout-card', LayoutCard);
-});
-window.setTimeout(() => {
-  if(customElements.get('card-tools')) return;
-  customElements.define('layout-card', class extends HTMLElement{
-    setConfig() { throw new Error("Can't find card-tools. See https://github.com/thomasloven/lovelace-card-tools");}
-  });
-}, 2000);
+    `}})}]);

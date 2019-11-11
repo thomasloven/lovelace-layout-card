@@ -1,0 +1,19 @@
+{
+  "name": "layout-card",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch --mode=development"
+  },
+  "author": "Thomas Lovén",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "card-tools": "github:thomasloven/lovelace-card-tools"
+  }
+}
