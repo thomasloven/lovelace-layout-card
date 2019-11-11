@@ -31,12 +31,15 @@ justify_content: <justify_content>
 ltr: <ltr>
 cards:
     <cards>
+card_options:
+    <card_options>
 ```
 
 ## Options
 - `<cards>` **Required** A list of lovelace cards to display.
+- `<card_options>` are options that are applied to all cards.
 - `<layout>` The layout method to use. `auto`, `vertical` or `horizontal`. See below. Default: `auto`.
-- `<min_height>` The minimum length of a column in `auto` layout.
+- `<min_height>` The minimum length of a column in `auto` layout. Default: `5`.
 - `<min_columns>` The minimum number of columns to use. Default: `1`.
 - `<max_columns>` The maximum number of columns to use. Default: `100`.
 - `<column_width>` Width of columns. Default: `300px`.

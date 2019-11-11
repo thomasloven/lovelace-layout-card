@@ -61,7 +61,7 @@ class LayoutCard extends LitElement {
       if(c === "break")
         return null;
       const el = document.createElement("card-maker");
-      el.config = c;
+      el.config = {...c, ...this._config.card_options};
       el.hass = hass();
       // Cards are initially placed in the staging area
       // That places them in the DOM and lets us read their getCardSize() function
@@ -132,7 +132,8 @@ class LayoutCard extends LitElement {
       return Math.max.apply(Math, this.columns.map((c) => c.length));
   }
 
-  isPanel() {
+  _isPanel() {
+    if(this.isPanel) return true;
     let el = this.parentElement;
     let steps = 10;
     while(steps--) {
@@ -148,7 +149,7 @@ class LayoutCard extends LitElement {
       <div id="columns"
       class="
       ${this._config.rtl ? "rtl": " "}
-      ${this.isPanel() ? "panel": " "}
+      ${this._isPanel() ? "panel": " "}
       "
       style="
       ${this._config.justify_content ? `justify-content: ${this._config.justify_content};` : ''}
@@ -204,6 +205,11 @@ class LayoutCard extends LitElement {
         height: 0;
       }
     `;
+  }
+
+  // Compatibility with legacy card-modder
+  get _cardModder() {
+    return {target: this};
   }
 
 }
