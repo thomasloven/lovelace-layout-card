@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "card-tools/src/lit-element";
-// import "card-tools/src/card-maker";
+import "card-tools/src/card-maker";
 import { hass } from "card-tools/src/hass";
 
 import {buildLayout} from "./layout";
@@ -38,11 +38,13 @@ class LayoutCard extends LitElement {
       if(location.hash === "")
         setTimeout(() => this.place_cards(), 100)
     });
-
   }
 
   async updated(changedproperties) {
-    if(!this.cards.length) {
+    if(!this.cards.length
+      && ((this._config.entities && this._config.entities.length)
+        || (this._config.cards && this._config.cards.length))
+      ) {
       // Build cards and layout
       this.cards = await this.build_cards();
       this.place_cards();
