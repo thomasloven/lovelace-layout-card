@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch --mode=development"
+    "watch": "webpack --watch --mode=development",
+    "update-card-tools": "npm uninstall card-tools && npm install thomasloven/lovelace-card-tools"
   },
   "author": "Thomas Lovén",
   "license": "MIT",
