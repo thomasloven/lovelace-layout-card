@@ -28,7 +28,7 @@ max_width: <max_width>
 min_width: <min_width>
 flex_grow: <flex_grow>
 justify_content: <justify_content>
-ltr: <ltr>
+rtl: <rtl>
 cards:
     <cards>
 card_options:
@@ -233,7 +233,7 @@ cards:
 
 - `<flex_grow>` (single value or list) and `<justify_content>` (single value) can be used to tweak the CSS flexbox settings of the layout. See [this excellent guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) for more info.
 
-- `<rtl>` will make the columns display from right to left instead of left to right.
+- `<rtl>` will populate the columns from right to left instead of left to right.
 
 
 ## A few tips

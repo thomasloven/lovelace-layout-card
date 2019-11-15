@@ -91,6 +91,9 @@ class LayoutCard extends LitElement {
       this._config
     );
 
+    if(this._config.rtl)
+      this.columns.reverse();
+
     this.format_columns();
 
     this.requestUpdate();
@@ -150,7 +153,6 @@ class LayoutCard extends LitElement {
     return html`
       <div id="columns"
       class="
-      ${this._config.rtl ? "rtl": " "}
       ${this._isPanel() ? "panel": " "}
       "
       style="
@@ -177,9 +179,6 @@ class LayoutCard extends LitElement {
         flex-direction: row;
         justify-content: center;
         margin-top: -8px;
-      }
-      #columns.rtl {
-        flex-direction: row-reverse;
       }
       #columns.panel {
         margin-top: 0;
