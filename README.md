@@ -15,6 +15,14 @@ resources:
     type: module
 ```
 
+Or when using `HACS`
+
+```yaml
+resources:
+  - url: /community_plugin/lovelace-layout-card/layout-card.js
+    type: module
+```
+
 ## Usage
 
 ```yaml
