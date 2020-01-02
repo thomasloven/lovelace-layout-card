@@ -74,6 +74,7 @@ export function buildLayout(cards, width, config) {
   }
   colnum = Math.max(colnum, config.min_columns);
   colnum = Math.min(colnum, config.max_columns);
+  colnum = Math.max(colnum,1);
 
   let cols = [];
   for (let i = 0; i < colnum; i++) {
