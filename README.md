@@ -185,7 +185,7 @@ cards:
 
 ### `grid` layout (experimental)
 
-For maximum controll, you can place every card manually in a [CSS grid](https://css-tricks.com/snippets/css/complete-guide-grid/) by using the `grid` layout.
+For maximum control, you can place every card manually in a [CSS grid](https://css-tricks.com/snippets/css/complete-guide-grid/) by using the `grid` layout.
 
 To do this, you need to specify `gridrows` and `gridcols` with the settings for `grid-template-rows` and `grid-template-columns` repectively **and** also add `gridcol:` and `gridrow:` for *each card* with the settings for `grid-column` and `grid-row` respectively.
 
