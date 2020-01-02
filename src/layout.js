@@ -79,6 +79,7 @@ export function buildLayout(cards, width, config) {
   for (let i = 0; i < colnum; i++) {
     const newCol = document.createElement("div");
     newCol.classList.add("column");
+    newCol.classList.add("cards");
     newCol.length = 0;
     cols.push(newCol);
   }

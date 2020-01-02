@@ -27,6 +27,8 @@ column_width: <column_width>
 max_width: <max_width>
 min_width: <min_width>
 flex_grow: <flex_grow>
+gridcols: <grid-cols>
+gridrows: <grid-rows>
 justify_content: <justify_content>
 rtl: <rtl>
 cards:
@@ -38,12 +40,13 @@ card_options:
 ## Options
 - `<cards>` **Required** A list of lovelace cards to display.
 - `<card_options>` are options that are applied to all cards.
-- `<layout>` The layout method to use. `auto`, `vertical` or `horizontal`. See below. Default: `auto`.
+- `<layout>` The layout method to use. `auto`, `vertical`, `horizontal` or `grid`. See below. Default: `auto`.
 - `<min_height>` The minimum length of a column in `auto` layout. Default: `5`.
 - `<min_columns>` The minimum number of columns to use. Default: `1`.
 - `<max_columns>` The maximum number of columns to use. Default: `100`.
 - `<column_width>` Width of columns. Default: `300px`.
 - `<max_width>`, `<min_width>`, `<flex_grow>` Set the `max-width`, `min-width` and `flex-grow` CSS properties of the columns manually. Default: `column_width or 500px`, `undefined`, `undefined`.
+- `<grid-rows>`, `<grid-col>` Set the `grid-template-rows` and `grid-template-columns` CSS properties when using `layout: grid`.
 - `<justify_content>` Set the `justify-content` CSS property of the column container. Default: `center`.
 
 ## Layouts
@@ -179,6 +182,52 @@ cards:
     ...
 ```
 ![layout-card 4 - manual breaks](https://user-images.githubusercontent.com/1299821/48088461-62312500-e202-11e8-96ab-e4f560f8d4fc.png)
+
+### `grid` layout (experimental)
+
+For maximum controll, you can place every card manually in a [CSS grid](https://css-tricks.com/snippets/css/complete-guide-grid/) by using the `grid` layout.
+
+To do this, you need to specify `gridrows` and `gridcols` with the settings for `grid-template-rows` and `grid-template-columns` repectively **and** also add `gridcol:` and `gridrow:` for *each card* with the settings for `grid-column` and `grid-row` respectively.
+
+> Hint: This may look better if you also have [card-mod](https://github.com/thomasloven/lovelace-card-mod) and set the card heights to `100 %`.
+
+```yaml
+type: custom:layout-card
+layout: vertical
+column_width: 100%
+cards:
+  - type: markdown
+    content: "# Grid"
+  - type: custom:layout-card
+    layout: grid
+    gridrows: 180px 200px auto
+    gridcols: 180px auto 180px
+    cards:
+      - type: glance
+        entities:
+          - sun.sun
+        gridrow: 1 / 2
+        gridcol: 1 / 2
+        style: "ha-card { height: 100%; }"
+      - type: entities
+        entities: &ents
+          - light.bed_light
+          - light.kitchen_lights
+          - light.ceiling_lights
+        gridrow: 1 / 3
+        gridcol: 2 / 4
+        style: "ha-card { height: 100%; }"
+      - type: markdown
+        content: test
+        gridrow: 2 / 4
+        gridcol: 1 / 2
+        style: "ha-card { height: 100%; }"
+      - type: entities
+        entities: *ents
+        gridrow: 3 / 4
+        gridcol: 2 / 3
+```
+![layout-card - Grid](https://user-images.githubusercontent.com/1299821/71694902-e3f1f380-2db0-11ea-82f1-8f880a2fbb24.png)
 
 ## Tweaking layouts
 

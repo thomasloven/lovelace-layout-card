@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "card-tools/src/lit-element";
 import "card-tools/src/card-maker";
+import { createCard } from "card-tools/src/lovelace-element";
 import { hass } from "card-tools/src/hass";
 
 import {buildLayout} from "./layout";
@@ -62,13 +63,20 @@ class LayoutCard extends LitElement {
   async build_card(c) {
       if(c === "break")
         return null;
-      const el = document.createElement("card-maker");
-      el.config = {...c, ...this._config.card_options};
+      const config = {...c, ...this._config.card_options};
+      const el = createCard(config);
       el.hass = hass();
+
+      el.style.gridColumn = config.gridcol;
+      el.style.gridRow = config.gridrow;
       // Cards are initially placed in the staging area
       // That places them in the DOM and lets us read their getCardSize() function
       this.shadowRoot.querySelector("#staging").appendChild(el);
-      return new Promise((resolve, reject) => el.updateComplete.then(() => resolve(el)));
+      return new Promise((resolve, reject) =>
+        el.updateComplete
+          ? el.updateComplete.then(() => resolve(el))
+          : resolve(el)
+        );
   }
 
   async build_cards() {
@@ -83,6 +91,8 @@ class LayoutCard extends LitElement {
   }
 
   place_cards() {
+    if(this._config.layout === "grid")
+      return;
     const width = this.shadowRoot.querySelector("#columns").clientWidth;
 
     this.columns = buildLayout(
@@ -141,7 +151,7 @@ class LayoutCard extends LitElement {
     if(this.isPanel) return true;
     let el = this.parentElement;
     let steps = 10;
-    while(steps--) {
+    while(steps-- && el) {
       if(el.localName === "hui-panel-view") return true;
       if(el.localName === "div") return false;
       el = el.parentElement;
@@ -150,6 +160,15 @@ class LayoutCard extends LitElement {
   }
 
   render() {
+    if(this._config.layout === "grid")
+      return html`
+        <div id="staging" class="grid cards"
+        style="
+        display: grid;
+        grid-template-rows: ${this._config.gridrows};
+        grid-template-columns: ${this._config.gridcols};
+        "></div>
+      `;
     return html`
       <div id="columns"
       class="
@@ -190,18 +209,19 @@ class LayoutCard extends LitElement {
         overflow-x: hidden;
       }
 
-      card-maker>* {
+
+      .cards>* {
         display: block;
         margin: 4px 4px 8px;
       }
-      card-maker:first-child>* {
+      .cards>*:first-child {
         margin-top: 8px;
       }
-      card-maker:last-child>* {
+      .cards>*:last-child {
         margin-bottom: 4px;
       }
 
-      #staging {
+      #staging:not(.grid) {
         visibility: hidden;
         height: 0;
       }
