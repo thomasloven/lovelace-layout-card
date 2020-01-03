@@ -47,8 +47,9 @@ class LayoutCard extends LitElement {
         || (this._config.cards && this._config.cards.length))
       ) {
       // Build cards and layout
+      const width = this.clientWidth;
       this.cards = await this.build_cards();
-      this.place_cards();
+      this.place_cards(width);
     }
 
     if(changedproperties.has("hass") && this.hass && this.cards) {
@@ -90,14 +91,12 @@ class LayoutCard extends LitElement {
     );
   }
 
-  place_cards() {
+  place_cards(width) {
     if(this._config.layout === "grid")
       return;
-    const width = this.shadowRoot.querySelector("#columns").clientWidth;
-
     this.columns = buildLayout(
       this.cards,
-      width,
+      width || 1,
       this._config
     );
 
