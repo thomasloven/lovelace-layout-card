@@ -94,6 +94,10 @@ class LayoutCard extends LitElement {
   place_cards(width) {
     if(this._config.layout === "grid")
       return;
+    if(width !== undefined)
+      this.lastWidth = width;
+    else
+      width = this.lastWidth;
     this.columns = buildLayout(
       this.cards,
       width || 1,
