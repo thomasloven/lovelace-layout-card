@@ -316,5 +316,12 @@ card:
 ```
 ![auto-entities](https://user-images.githubusercontent.com/1299821/68600943-a86b3500-04a3-11ea-8d08-106e77262552.png)
 
+
+## Note for Home Assistant Cast users
+
+Layout-card doesn't entirely work with Cast at this time. Specifically, the view may or may not load in if you start a Cast directly to a view which uses layout-card.
+
+If you instead load a different view, and then *switch* to the one using layout-card, things seem to be working better. I hope to be able to fix this soon.
+
 ---
 <a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
