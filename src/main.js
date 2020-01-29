@@ -31,6 +31,10 @@ class LayoutCard extends LitElement {
     this.columns = [];
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.place_cards(this.clientWidth);
+  }
   async firstUpdated() {
     window.addEventListener('resize', () => this.place_cards());
     window.addEventListener('hass-open-menu', () => setTimeout(() => this.place_cards(), 100));
@@ -96,8 +100,8 @@ class LayoutCard extends LitElement {
       return;
     if(width !== undefined)
       this.lastWidth = width;
-    else
-      width = this.lastWidth;
+    this.lastWidth = this.clientWidth || this.lastWidth;
+    width = this.lastWidth;
     this.columns = buildLayout(
       this.cards,
       width || 1,
@@ -238,4 +242,5 @@ class LayoutCard extends LitElement {
 
 }
 
-customElements.define("layout-card", LayoutCard);
+if(!customElements.get("layout-card"))
+  customElements.define("layout-card", LayoutCard);
