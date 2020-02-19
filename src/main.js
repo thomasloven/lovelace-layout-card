@@ -1,5 +1,4 @@
 import { LitElement, html, css } from "card-tools/src/lit-element";
-import "card-tools/src/card-maker";
 import { createCard } from "card-tools/src/lovelace-element";
 import { hass } from "card-tools/src/hass";
 
@@ -242,5 +241,10 @@ class LayoutCard extends LitElement {
 
 }
 
-if(!customElements.get("layout-card"))
+if(!customElements.get("layout-card")) {
   customElements.define("layout-card", LayoutCard);
+  const pjson = require('../package.json');
+  console.info(`%cLAYOUT-CARD ${pjson.version} IS INSTALLED`,
+  "color: green; font-weight: bold",
+  "");
+}
