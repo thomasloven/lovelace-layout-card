@@ -28,16 +28,31 @@ class LayoutCard extends LitElement {
 
     this.cards = [];
     this.columns = [];
+    this.resizer = new ResizeObserver((entries) => {
+      for (let e of entries) {
+        if(e.contentRect && e.contentRect.width) {
+          this._layoutWidth = e.contentRect.width;
+          this.place_cards();
+          return;
+        }
+      }
+    });
+    this.resizer.observe(this);
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.place_cards(this.clientWidth);
+    let el = this.parentElement;
+    let steps = 10;
+    while(steps-- && el) {
+      if(el.tagName === "HUI-PANEL-VIEW")
+        this.classList.add("panel");
+      if(el.tagName === "DIV")
+        break;
+    }
   }
+
   async firstUpdated() {
-    window.addEventListener('resize', () => this.place_cards());
-    window.addEventListener('hass-open-menu', () => setTimeout(() => this.place_cards(), 100));
-    window.addEventListener('hass-close-menu', () => setTimeout(() => this.place_cards(), 100));
     window.addEventListener('location-changed', () => {
       if(location.hash === "")
         setTimeout(() => this.place_cards(), 100)
@@ -52,7 +67,7 @@ class LayoutCard extends LitElement {
       // Build cards and layout
       const width = this.clientWidth;
       this.cards = await this.build_cards();
-      this.place_cards(width);
+      this.place_cards();
     }
 
     if(changedproperties.has("hass") && this.hass && this.cards) {
@@ -94,16 +109,12 @@ class LayoutCard extends LitElement {
     );
   }
 
-  place_cards(width) {
+  place_cards() {
     if(this._config.layout === "grid")
       return;
-    if(width !== undefined)
-      this.lastWidth = width;
-    this.lastWidth = this.clientWidth || this.lastWidth;
-    width = this.lastWidth;
     this.columns = buildLayout(
       this.cards,
-      width || 1,
+      this._layoutWidth || 1,
       this._config
     );
 
@@ -153,22 +164,10 @@ class LayoutCard extends LitElement {
       return Math.max.apply(Math, this.columns.map((c) => c.length));
   }
 
-  _isPanel() {
-    if(this.isPanel) return true;
-    let el = this.parentElement;
-    let steps = 10;
-    while(steps-- && el) {
-      if(el.localName === "hui-panel-view") return true;
-      if(el.localName === "div") return false;
-      el = el.parentElement;
-    }
-    return false;
-  }
-
   render() {
     if(this._config.layout === "grid")
       return html`
-        <div id="staging" class="grid cards"
+        <div id="staging" class="grid"
         style="
         display: grid;
         grid-template-rows: ${this._config.gridrows};
@@ -177,9 +176,6 @@ class LayoutCard extends LitElement {
       `;
     return html`
       <div id="columns"
-      class="
-      ${this._isPanel() ? "panel": " "}
-      "
       style="
       ${this._config.justify_content ? `justify-content: ${this._config.justify_content};` : ''}
       ">
@@ -194,9 +190,13 @@ class LayoutCard extends LitElement {
   static get styles() {
     return css`
       :host {
-        padding: 0 4px;
+        padding: 0;
         display: block;
         margin-bottom: 0!important;
+      }
+      :host(.panel) {
+        padding: 0 4px;
+        margin-top: 8px;
       }
 
       #columns {
@@ -205,18 +205,22 @@ class LayoutCard extends LitElement {
         justify-content: center;
         margin-top: -8px;
       }
-      #columns.panel {
-        margin-top: 0;
-      }
 
       .column {
         flex-basis: 0;
         flex-grow: 1;
         overflow-x: hidden;
       }
+      .column:first-child {
+        margin-left: -4px;
+      }
+      .column:last-child {
+        margin-right: -4px;
+      }
 
 
-      .cards>* {
+      .cards>*,
+      .grid>* {
         display: block;
         margin: 4px 4px 8px;
       }
@@ -230,6 +234,9 @@ class LayoutCard extends LitElement {
       #staging:not(.grid) {
         visibility: hidden;
         height: 0;
+      }
+      #staging.grid {
+        margin: 0 -4px;
       }
     `;
   }
