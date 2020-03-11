@@ -1,6 +1,6 @@
 {
   "name": "layout-card",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "private": true,
   "scripts": {
@@ -15,6 +15,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "card-tools": "github:thomasloven/lovelace-card-tools"
+    "card-tools": "github:thomasloven/lovelace-card-tools",
+    "resize-observer": "^1.0.0"
   }
 }

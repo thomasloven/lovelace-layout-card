@@ -4,6 +4,8 @@ import { hass } from "card-tools/src/hass";
 
 import {buildLayout} from "./layout";
 
+import { ResizeObserver } from "resize-observer";
+
 class LayoutCard extends LitElement {
 
   static get properties() {
@@ -28,16 +30,7 @@ class LayoutCard extends LitElement {
 
     this.cards = [];
     this.columns = [];
-    this.resizer = new ResizeObserver((entries) => {
-      for (let e of entries) {
-        if(e.contentRect && e.contentRect.width) {
-          this._layoutWidth = e.contentRect.width;
-          this.place_cards();
-          return;
-        }
-      }
-    });
-    this.resizer.observe(this);
+    this._layoutWidth = 0;
   }
 
   connectedCallback() {
@@ -55,8 +48,23 @@ class LayoutCard extends LitElement {
   async firstUpdated() {
     window.addEventListener('location-changed', () => {
       if(location.hash === "")
-        setTimeout(() => this.place_cards(), 100)
+        setTimeout(() => this.updateSize(), 100)
     });
+    if(!this.resizer) {
+      this.resizer = new ResizeObserver(() => this.updateSize());
+      this.resizer.observe(this);
+    }
+    this.updateSize();
+  }
+
+  updateSize() {
+    const width = this.getBoundingClientRect().width;
+    if(width && width !== this._layoutWidth) {
+      this._layoutWidth = width;
+      this.resizer.disconnect();
+      this.place_cards();
+      this.requestUpdate().then(() => this.resizer.observe(this));
+    }
   }
 
   async updated(changedproperties) {
@@ -68,6 +76,7 @@ class LayoutCard extends LitElement {
       const width = this.clientWidth;
       this.cards = await this.build_cards();
       this.place_cards();
+      this.requestUpdate();
     }
 
     if(changedproperties.has("hass") && this.hass && this.cards) {
@@ -112,6 +121,8 @@ class LayoutCard extends LitElement {
   place_cards() {
     if(this._config.layout === "grid")
       return;
+    if(!this.cards.length)
+      return;
     this.columns = buildLayout(
       this.cards,
       this._layoutWidth || 1,
@@ -122,8 +133,6 @@ class LayoutCard extends LitElement {
       this.columns.reverse();
 
     this.format_columns();
-
-    this.requestUpdate();
   }
 
   format_columns() {
