@@ -181,6 +181,7 @@ class LayoutCard extends LitElement {
         display: grid;
         grid-template-rows: ${this._config.gridrows};
         grid-template-columns: ${this._config.gridcols};
+        ${this._config.align_items ? `align-items: ${this._config.align_items};` : ''}
         "></div>
       `;
     return html`
