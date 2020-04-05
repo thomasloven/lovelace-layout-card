@@ -29,6 +29,7 @@ min_width: <min_width>
 flex_grow: <flex_grow>
 gridcols: <grid-cols>
 gridrows: <grid-rows>
+align_items: <align-items>
 justify_content: <justify_content>
 rtl: <rtl>
 cards:
@@ -46,7 +47,7 @@ card_options:
 - `<max_columns>` The maximum number of columns to use. Default: `100`.
 - `<column_width>` Width of columns. Default: `300px`.
 - `<max_width>`, `<min_width>`, `<flex_grow>` Set the `max-width`, `min-width` and `flex-grow` CSS properties of the columns manually. Default: `column_width or 500px`, `undefined`, `undefined`.
-- `<grid-rows>`, `<grid-col>` Set the `grid-template-rows` and `grid-template-columns` CSS properties when using `layout: grid`.
+- `<grid-rows>`, `<grid-col>`, `<align_items>` Set the `grid-template-rows`, `grid-template-columns` and `align-items` CSS properties when using `layout: grid`.
 - `<justify_content>` Set the `justify-content` CSS property of the column container. Default: `center`.
 
 ## Layouts
