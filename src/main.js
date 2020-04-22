@@ -214,17 +214,17 @@ class LayoutCard extends LitElement {
         justify-content: center;
         margin-top: -8px;
       }
+      .columns:first-child {
+        margin-left: -4px;
+      }
+      .columns:last-child {
+        margin-right: -4px;
+      }
 
       .column {
         flex-basis: 0;
         flex-grow: 1;
         overflow-x: hidden;
-      }
-      .column:first-child {
-        margin-left: -4px;
-      }
-      .column:last-child {
-        margin-right: -4px;
       }
 
 
