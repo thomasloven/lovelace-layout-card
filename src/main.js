@@ -179,8 +179,8 @@ class LayoutCard extends LitElement {
         <div id="staging" class="grid"
         style="
         display: grid;
-        grid-template-rows: ${this._config.gridrows};
-        grid-template-columns: ${this._config.gridcols};
+        grid-template-rows: ${this._config.gridrows || "auto"};
+        grid-template-columns: ${this._config.gridcols || "auto"};
         "></div>
       `;
     return html`
