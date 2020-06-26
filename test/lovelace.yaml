@@ -158,3 +158,14 @@ views:
         layout: grid
         gridcols: repeat(auto-fill, minmax(300px, 1fr))
         cards: *breakcards
+
+  - title: Test
+    panel: true
+    cards:
+      - type: custom:layout-card
+        layout: horizontal
+        cards:
+          - type: entities
+            entities:
+              - light.bed_light
+              - input_select.test

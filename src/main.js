@@ -76,7 +76,7 @@ class LayoutCard extends LitElement {
         width += 64;
       }
     }
-    if(width && width !== this._layoutWidth) {
+    if(width && Math.abs(width-this._layoutWidth) > 50) {
       this._layoutWidth = width;
       this.resizer.disconnect();
       await this.place_cards();
