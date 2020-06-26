@@ -23,12 +23,15 @@ layout: <layout>
 min_height: <min_height>
 min_columns: <min_columns>
 max_columns: <max_columns>
+column_num: <column_num>
 column_width: <column_width>
 max_width: <max_width>
 min_width: <min_width>
 flex_grow: <flex_grow>
-gridcols: <grid-cols>
-gridrows: <grid-rows>
+gridcols: <grid_cols>
+gridrows: <grid_rows>
+gridgap: <grid_gap>
+gridplace: <grid_place>
 justify_content: <justify_content>
 rtl: <rtl>
 cards:
@@ -44,9 +47,10 @@ card_options:
 - `<min_height>` The minimum length of a column in `auto` layout. Default: `5`.
 - `<min_columns>` The minimum number of columns to use. Default: `1`.
 - `<max_columns>` The maximum number of columns to use. Default: `100`.
+- `<column_num>` Shorthand to set both `min_columns>` and `<max_columns>`to the same value. Try this first.
 - `<column_width>` Width of columns. Default: `300px`.
 - `<max_width>`, `<min_width>`, `<flex_grow>` Set the `max-width`, `min-width` and `flex-grow` CSS properties of the columns manually. Default: `column_width or 500px`, `undefined`, `undefined`.
-- `<grid-rows>`, `<grid-col>` Set the `grid-template-rows` and `grid-template-columns` CSS properties when using `layout: grid`.
+- `<grid_rows>`, `<grid_col>`, `<grid_gap>`, `<grid_place>` Set the `grid-template-rows`, `grid-template-columns`, `grid-gap` and `place-items` CSS properties when using `layout: grid`.
 - `<justify_content>` Set the `justify-content` CSS property of the column container. Default: `center`.
 
 ## Layouts
@@ -116,6 +120,8 @@ cards:
       - light.bed_light
 ```
 ![layout-card 1 - auto](https://user-images.githubusercontent.com/1299821/48088464-62312500-e202-11e8-8ccc-0ef6ac10ec2e.png)
+
+> Note: To get *exactly* the same behavior as the default layout, you need to specify `max_columns: 4`. This was given a higher default value to work better with the ridiculously huge screens some people have nowadays.
 
 > Note: The same 8 cards will be used in the following examples and will be omitted for clarity.
 
@@ -229,14 +235,16 @@ cards:
 ```
 ![layout-card - Grid](https://user-images.githubusercontent.com/1299821/71694902-e3f1f380-2db0-11ea-82f1-8f880a2fbb24.png)
 
+You can also ommit `gridrows` or tweak `gridgap` and `gridplace` to get different results. I don't know how this works, but feel free to play around!
+
 ## Tweaking layouts
 
-- First of all `<min_columns>` and `<max_columns>` options, which can be used to force the number of columns displayed:
+- First of all `<column_num>`, which can be used to force the number of columns displayed:
 
 ```yaml
 type: custom:layout-card
 layout: vertical
-min_columns: 7
+column_num: 7
 cards:
   - ...
 ```

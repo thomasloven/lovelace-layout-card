@@ -1,4 +1,13 @@
-function defaultLayout(cards, cols, config) {
+import {hass} from "card-tools/src/hass";
+const computeCardSize = (card) => {
+  if (typeof card.getCardSize === "function")
+    return card.getCardSize();
+  if (customElements.get(card.localName))
+    return 1;
+  return customElements.whenDefined(card.localName).then(() => computeCardSize(card));
+}
+
+const defaultLayout = async (cards, cols, config) => {
   function shortestCol() {
     // Find the shortest column or the first one less than min_height
     let i = 0;
@@ -11,39 +20,39 @@ function defaultLayout(cards, cols, config) {
     return i;
   }
 
-  cards.forEach((c) => {
-    if(!c) return; // Gap. Skip
+  for (const c of cards) {
+    if(!c) continue; // Gap. Skip
     const col = cols[shortestCol()];
     col.appendChild(c);
-    col.length += c.getCardSize ? c.getCardSize() : 1;
-  });
+    col.length += await computeCardSize(c);
+  };
 }
 
-function horizontalLayout(cards, cols, config) {
+const horizontalLayout = async (cards, cols, config) => {
   let i = 0;
-  cards.forEach((c) => {
+  for (const c of cards) {
     i += 1;
-    if(!c) return; // Gap. Skip
+    if(!c) continue; // Gap. Skip
     const col = cols[(i-1)%cols.length];
     col.appendChild(c);
-    col.length += c.getCardSize ? c.getCardSize() : 1;
-  })
+    col.length += await computeCardSize(c);
+  }
 }
 
-function verticalLayout(cards, cols, config) {
+const verticalLayout = async (cards, cols, config) => {
   let i = 0;
-  cards.forEach((c) => {
+  for (const c of cards) {
     if(!c) { // Gap. Skip to next column
       i += 1;
-      return;
+      continue;
     }
     const col = cols[(i)%cols.length];
     col.appendChild(c);
-    col.length += c.getCardSize ? c.getCardSize() : 1;
-  })
+    col.length += await computeCardSize(c);
+  }
 }
 
-export function buildLayout(cards, width, config) {
+export const buildLayout = async (cards, width, config) => {
 
   const parseValue = (val) => {
     // Accepts e.g. `5` , `5px` or `50%`.
@@ -74,6 +83,8 @@ export function buildLayout(cards, width, config) {
   }
   colnum = Math.max(colnum, config.min_columns);
   colnum = Math.min(colnum, config.max_columns);
+  if(config.layout === "auto" && hass().dockedSidebar === "docked")
+    colnum -= 1;
   colnum = Math.max(colnum,1);
 
   let cols = [];
@@ -87,14 +98,14 @@ export function buildLayout(cards, width, config) {
 
   switch(config.layout) {
     case 'horizontal':
-      horizontalLayout(cards, cols, config);
+      await horizontalLayout(cards, cols, config);
       break;
     case 'vertical':
-      verticalLayout(cards, cols, config);
+      await verticalLayout(cards, cols, config);
       break;
     case 'auto':
     default:
-      defaultLayout(cards, cols, config);
+      await defaultLayout(cards, cols, config);
   }
 
   // Remove empty columns

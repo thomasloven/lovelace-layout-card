@@ -17,13 +17,14 @@ class LayoutCard extends LitElement {
 
   async setConfig(config) {
     this._config = {
+      layout: "auto",
       min_height: 5,
 
       column_width: 300,
       max_width: config.column_width || "500px",
 
       min_columns: config.column_num || 1,
-      max_columns: 100,
+      max_columns: config.column_num || 100,
 
       ...config,
     }
@@ -40,29 +41,45 @@ class LayoutCard extends LitElement {
     while(steps-- && el) {
       if(el.tagName === "HUI-PANEL-VIEW")
         this.classList.add("panel");
-      if(el.tagName === "DIV")
+      else if(el.tagName === "HUI-VERTICAL-STACK-CARD")
+        this.classList.add("stacked");
+      else if(el.tagName !== "DIV" && el.id !== "root")
         break;
+      if(el.parentElement)
+        el = el.parentElement;
+      else
+        el = el.getRootNode().host;
     }
   }
 
   async firstUpdated() {
     window.addEventListener('location-changed', () => {
-      if(location.hash === "")
+      if(location.hash === "") {
         setTimeout(() => this.updateSize(), 100)
+      }
     });
     if(!this.resizer) {
-      this.resizer = new ResizeObserver(() => this.updateSize());
+      this.resizer = new ResizeObserver(() => {
+        this.updateSize()
+      });
       this.resizer.observe(this);
     }
     this.updateSize();
   }
 
-  updateSize() {
-    const width = this.getBoundingClientRect().width;
+  async updateSize() {
+    let width = this.getBoundingClientRect().width;
+    if (this.classList.contains("panel")) {
+      if (this.hass && this.hass.dockedSidebar === "docked") {
+        width += 256;
+      } else {
+        width += 64;
+      }
+    }
     if(width && width !== this._layoutWidth) {
       this._layoutWidth = width;
       this.resizer.disconnect();
-      this.place_cards();
+      await this.place_cards();
       this.requestUpdate().then(() => this.resizer.observe(this));
     }
   }
@@ -75,28 +92,37 @@ class LayoutCard extends LitElement {
       // Build cards and layout
       const width = this.clientWidth;
       this.cards = await this.build_cards();
-      this.place_cards();
+      await this.place_cards();
       this.requestUpdate();
     }
 
     if(changedproperties.has("hass") && this.hass && this.cards) {
       // Update the hass object of every card
-      this.cards.forEach((c) => {
-        if(!c) return;
+      for (const c of this.cards) {
+        if(!c) continue;
         c.hass = this.hass;
-      });
+      }
     }
   }
 
   async build_card(c) {
-      if(c === "break")
+      if(c === "break") {
+        if(this._config.layout === "grid")
+        {
+          const el = document.createElement("div");
+          this.shadowRoot.querySelector("#staging").appendChild(el);
+          return el;
+        }
         return null;
+      }
       const config = {...c, ...this._config.card_options};
       const el = createCard(config);
       el.hass = hass();
 
-      el.style.gridColumn = config.gridcol;
-      el.style.gridRow = config.gridrow;
+      if(this._config.layout === "grid") {
+        el.style.gridColumn = config.gridcol || "auto";
+        el.style.gridRow = config.gridrow || "auto";
+      }
       // Cards are initially placed in the staging area
       // That places them in the DOM and lets us read their getCardSize() function
       this.shadowRoot.querySelector("#staging").appendChild(el);
@@ -118,14 +144,14 @@ class LayoutCard extends LitElement {
     );
   }
 
-  place_cards() {
+  async place_cards() {
     if(this._config.layout === "grid")
       return;
     if(!this.cards.length)
       return;
-    this.columns = buildLayout(
+    this.columns = await buildLayout(
       this.cards,
-      this._layoutWidth || 1,
+      this._layoutWidth || 1,
       this._config
     );
 
@@ -169,8 +195,9 @@ class LayoutCard extends LitElement {
   }
 
   getCardSize() {
-    if(this.columns)
+    if(this.columns.length)
       return Math.max.apply(Math, this.columns.map((c) => c.length));
+    return 2*this._config.cards.length;
   }
 
   render() {
@@ -179,8 +206,10 @@ class LayoutCard extends LitElement {
         <div id="staging" class="grid"
         style="
         display: grid;
-        grid-template-rows: ${this._config.gridrows};
-        grid-template-columns: ${this._config.gridcols};
+        grid-template-rows: ${this._config.gridrows || "auto"};
+        grid-template-columns: ${this._config.gridcols || "auto"};
+        grid-gap: ${this._config.gridgap || "auto"};
+        place-items: ${this._config.gridplace || "auto"};
         "></div>
       `;
     return html`
@@ -207,6 +236,9 @@ class LayoutCard extends LitElement {
         padding: 0 4px;
         margin-top: 8px;
       }
+      :host(.panel.stacked:first-child) {
+        margin-top: 8px !important;
+      }
 
       #columns {
         display: flex;
@@ -225,6 +257,9 @@ class LayoutCard extends LitElement {
       }
       .column:last-child {
         margin-right: -4px;
+      }
+      :host(.panel) .column {
+        margin: 0;
       }
 
 
