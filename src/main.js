@@ -195,9 +195,13 @@ class LayoutCard extends LitElement {
   }
 
   getCardSize() {
-    if(this.columns.length)
+    if(this.columns && this.columns.length)
       return Math.max.apply(Math, this.columns.map((c) => c.length));
-    return 2*this._config.cards.length;
+    if(this._config.entities)
+      return 2*this._config.entities.length;
+    if(this._config.cards)
+      return 2*this._config.cards.length;
+    return 1;
   }
 
   render() {
