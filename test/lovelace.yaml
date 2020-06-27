@@ -165,6 +165,7 @@ views:
       - type: custom:layout-card
         layout: horizontal
         cards:
+          - type: custom:layout-card
           - type: entities
             entities:
               - light.bed_light
