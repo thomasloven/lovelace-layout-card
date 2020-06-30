@@ -83,7 +83,10 @@ export const buildLayout = async (cards, width, config) => {
   }
   colnum = Math.max(colnum, config.min_columns);
   colnum = Math.min(colnum, config.max_columns);
-  if(config.layout === "auto" && hass().dockedSidebar === "docked")
+  if(config.layout === "auto"
+    && hass().dockedSidebar === "docked"
+    && (!window.matchMedia("(max-width: 870px)").matches)
+    && config.sidebar_column)
     colnum -= 1;
   colnum = Math.max(colnum,1);
 

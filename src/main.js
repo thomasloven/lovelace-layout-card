@@ -25,6 +25,7 @@ class LayoutCard extends LitElement {
 
       min_columns: config.column_num || 1,
       max_columns: config.column_num || 100,
+      sidebar_column: false,
 
       ...config,
     }
@@ -69,13 +70,16 @@ class LayoutCard extends LitElement {
 
   async updateSize() {
     let width = this.getBoundingClientRect().width;
-    if (this.classList.contains("panel")) {
+    if (this.classList.contains("panel")
+      && (!window.matchMedia("(max-width: 870px)").matches)
+      && this._config.sidebar_column) {
       if (this.hass && this.hass.dockedSidebar === "docked") {
         width += 256;
       } else {
         width += 64;
       }
     }
+    // narrow if max-width: 870px
     if(width && Math.abs(width-this._layoutWidth) > 50) {
       this._layoutWidth = width;
       this.resizer.disconnect();
@@ -243,6 +247,12 @@ class LayoutCard extends LitElement {
       :host(.panel.stacked:first-child) {
         margin-top: 8px !important;
       }
+      @media(max-width: 500px) {
+        :host(.panel) {
+          padding-left: 0px;
+          padding-right: 0px;
+        }
+      }
 
       #columns {
         display: flex;
@@ -277,6 +287,16 @@ class LayoutCard extends LitElement {
       }
       .cards>*:last-child {
         margin-bottom: 4px;
+      }
+      @media(max-width: 500px) {
+        .cards:first-child>*,
+        .grid>* {
+          margin-left: 0px;
+        }
+        .cards:last-child>*,
+        .grid>* {
+          margin-right: 0px;
+        }
       }
 
       #staging:not(.grid) {

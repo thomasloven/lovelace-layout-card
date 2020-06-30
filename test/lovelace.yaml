@@ -52,6 +52,7 @@ views:
       - type: custom:layout-card
         layout: auto
         max_columns: 4
+        sidebar_column: true
         cards: *cards
 
   - title: Horizontal

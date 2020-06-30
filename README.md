@@ -27,6 +27,7 @@ column_num: <column_num>
 column_width: <column_width>
 max_width: <max_width>
 min_width: <min_width>
+sidebar_column: <sidebar_column>
 flex_grow: <flex_grow>
 gridcols: <grid_cols>
 gridrows: <grid_rows>
@@ -50,6 +51,7 @@ card_options:
 - `<column_num>` Shorthand to set both `min_columns>` and `<max_columns>`to the same value. Try this first.
 - `<column_width>` Width of columns. Default: `300px`.
 - `<max_width>`, `<min_width>`, `<flex_grow>` Set the `max-width`, `min-width` and `flex-grow` CSS properties of the columns manually. Default: `column_width or 500px`, `undefined`, `undefined`.
+- `<sidebar-column>` is used to mimic the default behavior of lovelace. See below.
 - `<grid_rows>`, `<grid_col>`, `<grid_gap>`, `<grid_place>` Set the `grid-template-rows`, `grid-template-columns`, `grid-gap` and `place-items` CSS properties when using `layout: grid`.
 - `<justify_content>` Set the `justify-content` CSS property of the column container. Default: `center`.
 
@@ -74,6 +76,7 @@ The auto layout works in the same way as the default lovelace layout.
 
 It follows a simple process.
 - A number of columns are prepared based on the screen width and `<column_widt>`.
+- If the sidebar is opened, the number of columns is decreased by 1. (**This is not done by layout-card unless `<sidebar_column>` is true.**)
 - The number of columns is clamped between `<min_columns>`  and `<max_columns>`
 - Cards have a `cardHeight`, which is calculated from their content. One unit is roughly 50 pixels tall.
 - Each new card is added to the first row which is less than `<min_height>` units tall.
@@ -121,7 +124,7 @@ cards:
 ```
 ![layout-card 1 - auto](https://user-images.githubusercontent.com/1299821/48088464-62312500-e202-11e8-8ccc-0ef6ac10ec2e.png)
 
-> Note: To get *exactly* the same behavior as the default layout, you need to specify `max_columns: 4`. This was given a higher default value to work better with the ridiculously huge screens some people have nowadays.
+> Note: To get *exactly* the same behavior as the default layout, you need to specify `sidebar_column: true` and `max_columns: 4`. This was given a higher default value to work better with the ridiculously huge screens some people have nowadays.
 
 > Note: The same 8 cards will be used in the following examples and will be omitted for clarity.
 
