@@ -240,6 +240,90 @@ cards:
 
 You can also ommit `gridrows` or tweak `gridgap` and `gridplace` to get different results. I don't know how this works, but feel free to play around!
 
+---
+
+You can also create a grid wit the `gridareas` option. You define the gridareas on the layou-card and **MUST** set `gridarea` on every card in stead of the `gridrow` and `gridcol` options.
+To create a responsive layout optionally `gridcols_medium`, `gridareas_medium`, `gridcols_small`, `gridareas_small` can also be defined. The breakpoints are 500px and 800px.
+
+This example is responsive and also demonstrates how to leave a gap and how to make a card stretch 2 rows:
+
+```yaml
+type: custom:layout-card
+layout: grid  
+gridcols: 25% 25% 50%
+gridrows: 1fr 1fr 1fr
+gridareas: | 
+  'left1 middle1 right1' 
+  'left2 xxxxxxx right2' 
+  'left3 middle3 right2' 
+gridcols_medium: 50% 50%
+gridareas_medium: | 
+  'left1 middle1' 
+  'left2 xxxxxxx' 
+  'left3 middle3'
+  'right1 right1' 
+  'right2 right2' 
+gridcols_small: 100%   
+gridareas_small: | 
+  'left1' 
+  'left2'
+  'left3'
+  'middle1'
+  'middle3'
+  'right1' 
+  'right2'
+cards:
+  - type: markdown
+    gridarea: left1
+    content: >
+        # Card 1
+
+        gridarea: left1
+  - type: markdown
+    gridarea: left2
+    content: >
+        # Card 2
+
+        gridarea: left2
+  - type: markdown
+    gridarea: left3
+    content: >
+        # Card 3
+
+        gridarea: left3
+  - type: markdown
+    gridarea: middle1
+    content: >
+        # Card 4
+
+        gridarea: middle1
+  - type: markdown
+    gridarea: middle3
+    content: >
+        # Card 5 
+
+        gridarea: middle3
+  - type: markdown
+    gridarea: right1
+    content: >
+        # Card 6
+
+        gridarea: right1
+  - type: markdown
+    gridarea: right2
+    content: >
+        # Card 7
+
+        gridarea: right2
+    style: |
+      ha-card {
+        min-height: 100%;
+      }
+```
+![responsive-grid](img/grid-responsive.gif)
+
+> Hint: Play with the [*align-self*](https://developer.mozilla.org/en-US/docs/Web/CSS/align-self) and [*justify-self*](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-self) properties on the cards for even more control on where cards end up within their area.
+
 ## Tweaking layouts
 
 - First of all `<column_num>`, which can be used to force the number of columns displayed:

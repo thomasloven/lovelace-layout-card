@@ -126,6 +126,7 @@ class LayoutCard extends LitElement {
       if(this._config.layout === "grid") {
         el.style.gridColumn = config.gridcol || "auto";
         el.style.gridRow = config.gridrow || "auto";
+        el.style.gridArea = config.gridarea || "'myArea'";
       }
       // Cards are initially placed in the staging area
       // That places them in the DOM and lets us read their getCardSize() function
@@ -218,6 +219,12 @@ class LayoutCard extends LitElement {
         grid-template-columns: ${this._config.gridcols || "auto"};
         grid-gap: ${this._config.gridgap || "auto"};
         place-items: ${this._config.gridplace || "auto"};
+        --gridareas_large: ${this._config.gridareas || "'myArea'"};
+        --gridcols_large: ${this._config.gridcols || "auto"};
+        --gridareas_medium: ${this._config.gridareas_medium || this._config.gridareas || "'myArea'"};
+        --gridcols_medium: ${this._config.gridcols_medium || "auto"};
+        --gridareas_small: ${this._config.gridareas_small || this._config.gridareas || "'myArea'"};
+        --gridcols_small: ${this._config.gridcols_small || "auto"};
         "></div>
       `;
     return html`
@@ -305,6 +312,22 @@ class LayoutCard extends LitElement {
       }
       #staging.grid {
         margin: 0 -4px;
+        grid-template-areas: var(--gridareas_large);
+        grid-template-columns: var(--gridcols_large);
+      }
+      @media(max-width: 799px) {
+        #staging.grid {
+          margin: 0 -4px;
+          grid-template-areas: var(--gridareas_medium);
+          grid-template-columns: var(--gridcols_medium);
+        } 
+      }
+      @media(max-width: 499px) {
+        #staging.grid {
+          margin: 0 -4px;
+          grid-template-areas: var(--gridareas_small);
+          grid-template-columns: var(--gridcols_small);
+        } 
       }
     `;
   }
