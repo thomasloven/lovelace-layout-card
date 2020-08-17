@@ -34,6 +34,11 @@ gridrows: <grid_rows>
 gridgap: <grid_gap>
 gridplace: <grid_place>
 justify_content: <justify_content>
+gridareas: <grid-areas>
+gridcols_medium: <grid_cols>
+gridareas_medium: <grid_areas>
+gridcols_small: <grid_cols>
+gridareas_small: <grid_areas>
 rtl: <rtl>
 cards:
     <cards>
@@ -52,7 +57,7 @@ card_options:
 - `<column_width>` Width of columns. Default: `300px`.
 - `<max_width>`, `<min_width>`, `<flex_grow>` Set the `max-width`, `min-width` and `flex-grow` CSS properties of the columns manually. Default: `column_width or 500px`, `undefined`, `undefined`.
 - `<sidebar-column>` is used to mimic the default behavior of lovelace. See below.
-- `<grid_rows>`, `<grid_col>`, `<grid_gap>`, `<grid_place>` Set the `grid-template-rows`, `grid-template-columns`, `grid-gap` and `place-items` CSS properties when using `layout: grid`.
+- `<grid_rows>`, `<grid_cols>`, `<grid_gap>`, `<grid_place>`, `<grid_areas>`, Set the `grid-template-rows`, `grid-template-columns`, `grid-gap`, `place-items` and `grid-template-areas` CSS properties when using `layout: grid`.
 - `<justify_content>` Set the `justify-content` CSS property of the column container. Default: `center`.
 
 ## Layouts
@@ -242,16 +247,17 @@ You can also ommit `gridrows` or tweak `gridgap` and `gridplace` to get differen
 
 ---
 
-You can also create a grid with the `gridareas` option. You define the gridareas on the layout-card and **MUST** set `gridarea` on every card in stead of the `gridrow` and `gridcol` options.
-To create a responsive layout, optionally `gridcols_medium`, `gridareas_medium`, `gridcols_small`, `gridareas_small` can also be defined. The breakpoints are 500px and 800px.
+You can also create a grid with the `gridareas` option. You define the gridareas on the layout-card and **MUST** set `gridarea` on every card in stead of the `gridrow` and `gridcol` options. You can optionaly set `align_self` and `justify_self` css properties on the individial cards too.
 
-This example is responsive and also demonstrates how to leave a gap and how to make a card stretch 2 rows:
+To create a responsive layout, optionally `gridcols_medium`, `gridareas_medium`, `gridcols_small`, `gridareas_small` can be defined on the layout-card. The breakpoints are 500px and 800px.
+
+This example is responsive and also demonstrates how to leave a gap, how to make a card stretch 2 rows and how to use the `justify_self` property:
 
 ```yaml
 type: custom:layout-card
 layout: grid  
 gridcols: 25% 25% 50%
-gridrows: 1fr 1fr 1fr
+gridrows: auto auto auto
 gridareas: | 
   'card1 card4 card6' 
   'card2 xxxxx card7' 
@@ -277,30 +283,45 @@ cards:
     gridarea: card1
     content: >
         # Card 1
+        
+        text
   - type: markdown
     gridarea: card2
     content: >
         # Card 2
+
+        text
   - type: markdown
     gridarea: card3
+    justify_self: center
     content: >
         # Card 3
+
+        text
   - type: markdown
     gridarea: card4
     content: >
         # Card 4
+
+        text
   - type: markdown
     gridarea: card5
     content: >
         # Card 5 
+
+        text
   - type: markdown
     gridarea: card6
     content: >
         # Card 6
+
+        text
   - type: markdown
     gridarea: card7
     content: >
         # Card 7
+
+        text
     style: |
       ha-card {
         min-height: 100%;

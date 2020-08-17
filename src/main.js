@@ -127,6 +127,8 @@ class LayoutCard extends LitElement {
         el.style.gridColumn = config.gridcol || "auto";
         el.style.gridRow = config.gridrow || "auto";
         el.style.gridArea = config.gridarea || "'myArea'";
+        el.style.alignSelf = config.align_self || "auto";
+        el.style.justifySelf = config.justify_self || "auto";
       }
       // Cards are initially placed in the staging area
       // That places them in the DOM and lets us read their getCardSize() function

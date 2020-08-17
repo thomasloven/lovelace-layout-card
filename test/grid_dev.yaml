@@ -3,10 +3,10 @@ icon: mdi:grid
 panel: true
 path: grid_demo
 cards:
-  - type: custom:layout-card
+  - type: custom:layout-card-b
     layout: grid  
     gridcols: 25% 25% 50%
-    gridrows: 1fr 1fr 1fr
+    gridrows: auto auto auto
     gridareas: | 
       'card1 card4 card6' 
       'card2 xxxxx card7' 
@@ -32,30 +32,45 @@ cards:
         gridarea: card1
         content: >
             # Card 1
+            
+            text
       - type: markdown
         gridarea: card2
         content: >
             # Card 2
+
+            text
       - type: markdown
         gridarea: card3
+        justify_self: center
         content: >
             # Card 3
+
+            text
       - type: markdown
         gridarea: card4
         content: >
             # Card 4
+
+            text
       - type: markdown
         gridarea: card5
         content: >
             # Card 5 
+
+            text
       - type: markdown
         gridarea: card6
         content: >
             # Card 6
+
+            text
       - type: markdown
         gridarea: card7
         content: >
             # Card 7
+
+            text
         style: |
           ha-card {
             min-height: 100%;
