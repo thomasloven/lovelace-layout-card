@@ -41,7 +41,7 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
-        margin-top: -8px;
+        margin-top: 0px;
       }
 
       .column {
@@ -50,10 +50,10 @@
         overflow-x: hidden;
       }
       .column:first-child {
-        margin-left: -4px;
+        margin-left: 0px;
       }
       .column:last-child {
-        margin-right: -4px;
+        margin-right: 0px;
       }
       :host(.panel) .column {
         margin: 0;
