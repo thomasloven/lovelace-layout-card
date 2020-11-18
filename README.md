@@ -59,7 +59,7 @@ card_options:
 
 The basic concept of this card is that it takes a number of other cards, and places them in the browser window, just like lovelace does normally, but allowing you a bit more control.
 
-Since `layout-card` is a card in it self its area of effect will be limited to the width of a card, and thus you will (almost) always want to use it in [panel mode](https://www.home-assistant.io/lovelace/views/#panel-mode):
+Since `layout-card` is a card in itself its area of effect will be limited to the width of a card, and thus you will (almost) always want to use it in [panel mode](https://www.home-assistant.io/lovelace/views/#panel-mode):
 
 ```yaml
 views:
@@ -75,12 +75,12 @@ views:
 The auto layout works in the same way as the default lovelace layout.
 
 It follows a simple process.
-- A number of columns are prepared based on the screen width and `<column_widt>`.
+- A number of columns are prepared based on the screen width and `<column_width>`.
 - If the sidebar is opened, the number of columns is decreased by 1. (**This is not done by layout-card unless `<sidebar_column>` is true.**)
 - The number of columns is clamped between `<min_columns>`  and `<max_columns>`
 - Cards have a `cardHeight`, which is calculated from their content. One unit is roughly 50 pixels tall.
 - Each new card is added to the first row which is less than `<min_height>` units tall.
-- If all columns are taller than `<min_height>`, the card is added to the shortes column.
+- If all columns are taller than `<min_height>`, the card is added to the shortest column.
 - Once all cards have been placed, any remaining empty columns are removed.
 
 ```yaml
@@ -196,7 +196,7 @@ cards:
 
 For maximum control, you can place every card manually in a [CSS grid](https://css-tricks.com/snippets/css/complete-guide-grid/) by using the `grid` layout.
 
-To do this, you need to specify `gridrows` and `gridcols` with the settings for `grid-template-rows` and `grid-template-columns` repectively **and** also add `gridcol:` and `gridrow:` for *each card* with the settings for `grid-column` and `grid-row` respectively.
+To do this, you need to specify `gridrows` and `gridcols` with the settings for `grid-template-rows` and `grid-template-columns` respectively **and** also add `gridcol:` and `gridrow:` for *each card* with the settings for `grid-column` and `grid-row` respectively.
 
 > Hint: This may look better if you also have [card-mod](https://github.com/thomasloven/lovelace-card-mod) and set the card heights to `100 %`.
 
@@ -238,7 +238,7 @@ cards:
 ```
 ![layout-card - Grid](https://user-images.githubusercontent.com/1299821/71694902-e3f1f380-2db0-11ea-82f1-8f880a2fbb24.png)
 
-You can also ommit `gridrows` or tweak `gridgap` and `gridplace` to get different results. I don't know how this works, but feel free to play around!
+You can also omit `gridrows` or tweak `gridgap` and `gridplace` to get different results. I don't know how this works, but feel free to play around!
 
 ## Tweaking layouts
 
