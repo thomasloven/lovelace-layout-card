@@ -160,14 +160,37 @@ views:
         gridcols: repeat(auto-fill, minmax(300px, 1fr))
         cards: *breakcards
 
-  - title: Test
+  - title: entity_filter
+    panel: true
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            show_header_toggle: false
+            entities: &entities
+              - light.bed_light
+              - light.ceiling_lights
+              - light.kitchen_lights
+          - type: entity-filter
+            entities:
+              - entity: light.bed_light
+                type: light
+              - entity: light.ceiling_lights
+                type: light
+              - entity: light.kitchen_lights
+                type: light
+            state_filter:
+              - "on"
+            card:
+              type: custom:layout-card
+
+  - title: Errors 1
     panel: true
     cards:
       - type: custom:layout-card
-        layout: horizontal
-        cards:
-          - type: custom:layout-card
-          - type: entities
-            entities:
-              - light.bed_light
-              - input_select.test
+
+  - title: Errors 2
+    cards:
+      - type: custom:layout-card
+      - type: markdown
+        content: "# OK"

@@ -8,7 +8,7 @@ lovelace:
     lovelace-yaml:
       mode: yaml
       title: yaml
-      filename: lovelace.yaml
+      filename: test/lovelace.yaml
 
 input_select:
   test:
