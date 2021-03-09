@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "card-tools/src/lit-element";
+import { LitElement, html, css, property } from "lit-element";
 import { createCard } from "card-tools/src/lovelace-element";
 import { hass } from "card-tools/src/hass";
 
@@ -8,12 +8,12 @@ import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
 import pjson from "../package.json";
 
 class LayoutCard extends LitElement {
-  static get properties() {
-    return {
-      hass: {},
-      _config: {},
-    };
-  }
+  @property() hass;
+  @property() _config;
+  cards;
+  columns;
+  _layoutWidth;
+  resizer;
 
   async setConfig(config) {
     this._config = {
@@ -45,7 +45,7 @@ class LayoutCard extends LitElement {
         this.classList.add("stacked");
       else if (el.tagName !== "DIV" && el.id !== "root") break;
       if (el.parentElement) el = el.parentElement;
-      else el = el.getRootNode().host;
+      else el = (el.getRootNode() as any).host;
     }
   }
 
