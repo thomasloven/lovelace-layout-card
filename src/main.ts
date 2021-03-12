@@ -1,4 +1,4 @@
-import { LitElement, html, css, property } from "lit-element";
+import { LitElement, html, css, property, query } from "lit-element";
 import { createCard } from "card-tools/src/lovelace-element";
 import { hass } from "card-tools/src/hass";
 
@@ -7,13 +7,21 @@ import { buildLayout } from "./layout";
 import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
 import pjson from "../package.json";
 
+import "./layouts/masonry";
+import "./layouts/horizontal";
+import "./layouts/vertical";
+import "./layout-break";
+import "./layouts/grid";
+
 class LayoutCard extends LitElement {
   @property() hass;
   @property() _config;
   cards;
+  _cards;
   columns;
   _layoutWidth;
   resizer;
+  @query("#staging") _stage;
 
   async setConfig(config) {
     this._config = {

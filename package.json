@@ -1,6 +1,6 @@
 {
   "name": "layout-card",
-  "version": "1.4.0b0",
+  "version": "2.0.0b0",
   "description": "",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "bind-decorator": "^1.0.11",
     "rollup": "^2.39.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",

@@ -9,6 +9,10 @@ lovelace:
       mode: yaml
       title: yaml
       filename: test/lovelace.yaml
+    lovelace-views:
+      mode: yaml
+      title: views
+      filename: test/lovelace/view.yaml
 
 input_select:
   test:

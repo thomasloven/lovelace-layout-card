@@ -1,0 +1,39 @@
+title: Grid
+type: custom:grid-layout
+layout:
+  grid-template-columns: 200px auto 500px
+cards:
+  - type: entities
+    title: 1
+    entities:
+      - light.bed_light
+  - type: entities
+    title: 2
+    layout:
+      grid-column: 2
+      grid-row: 1/3
+    entities:
+      - light.bed_light
+  - type: entities
+    title: 3
+    entities:
+      - light.bed_light
+
+  - type: entities
+    title: 4
+    entities:
+      - light.bed_light
+  - type: entities
+    title: 5
+    entities:
+      - light.bed_light
+  - type: entities
+    title: 6
+    entities:
+      - light.bed_light
+  - type: entities
+    title: 7
+    layout:
+      grid-column: 2/4
+    entities:
+      - light.bed_light
