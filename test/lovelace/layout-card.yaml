@@ -1,0 +1,17 @@
+title: layout-card
+panel: true
+cards:
+  - type: vertical-stack
+    cards:
+      - type: custom:layout-card
+        cards: !include card-list.yaml
+      - type: custom:layout-card
+        layout:
+          type: custom:masonry-layout
+        cards: !include card-list.yaml
+      - type: custom:layout-card
+        cards: !include card-list.yaml
+      - type: custom:layout-card
+        cards: !include card-list.yaml
+      - type: custom:layout-card
+        cards: !include card-list.yaml

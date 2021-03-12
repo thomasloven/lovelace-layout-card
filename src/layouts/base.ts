@@ -1,7 +1,7 @@
 import { css, html, LitElement, property } from "lit-element";
 import {
   CardConfigGroup,
-  LayoutCardConfig,
+  CardConfig,
   LovelaceCard,
   MasonryViewConfig,
   ViewConfig,
@@ -10,12 +10,13 @@ import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
 import bind from "bind-decorator";
 
 export class BaseLayout extends LitElement {
-  @property() cards: Array<LovelaceCard>;
+  @property() cards: Array<LovelaceCard> = [];
   @property() index: number;
   @property() _columns?: number;
   @property() narrow: boolean;
   @property() hass;
   @property() _config: MasonryViewConfig;
+  @property() lovelace: any;
   _observer?: ResizeObserver;
   _mediaQueries: Array<MediaQueryList | null> = [];
 
@@ -46,6 +47,11 @@ export class BaseLayout extends LitElement {
       this._makeLayout();
     }
     if (changedProperties.has("narrow")) this._updateSize();
+    if (
+      changedProperties.has("hass") &&
+      changedProperties.get("hass")?.dockedSidebar != this.hass.dockedSidebar
+    )
+      this._updateSize();
   }
 
   async firstUpdated() {
@@ -93,7 +99,12 @@ export class BaseLayout extends LitElement {
     let width = this.getBoundingClientRect().width;
     let colnum = 0;
     colnum = Math.floor(width / (this._config.layout?.width || 300));
-    colnum = Math.min(colnum, this._config.layout?.max_cols || 100);
+    colnum = Math.min(
+      colnum,
+      this._config.layout?.max_cols || this.hass?.dockedSidebar === "docked"
+        ? 3
+        : 4
+    );
     colnum = Math.max(colnum, 1);
     if (colnum !== this._columns) {
       this._columns = colnum;

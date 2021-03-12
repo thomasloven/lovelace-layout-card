@@ -7,10 +7,10 @@ export interface LovelaceCard extends HTMLElement {
 export interface ViewConfig {
   title?: string;
   type?: string;
-  cards?: Array<LayoutCardConfig>;
+  cards?: Array<CardConfig>;
 }
 
-export interface LayoutCardConfig {
+export interface CardConfig {
   type: string;
   layout?: {
     show?:
@@ -25,7 +25,7 @@ export interface LayoutCardConfig {
 
 export interface CardConfigGroup {
   card: LovelaceCard;
-  config: LayoutCardConfig;
+  config: CardConfig;
 }
 
 export interface MasonryViewConfig extends ViewConfig {
@@ -35,5 +35,12 @@ export interface MasonryViewConfig extends ViewConfig {
     max_cols?: number;
     min_height?: number;
   };
-  cards?: Array<LayoutCardConfig>;
+  cards?: Array<CardConfig>;
+}
+
+export interface LayoutCardConfig {
+  cards?: Array<CardConfig>;
+  layout?: {
+    type?: string
+    layout?: any;
 }

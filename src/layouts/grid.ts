@@ -2,7 +2,7 @@ import { css, html, LitElement, property } from "lit-element";
 import { LovelaceCard } from "../types";
 
 class GridLayout extends LitElement {
-  @property() cards: Array<LovelaceCard>;
+  @property() cards: Array<LovelaceCard> = [];
   @property() index: number;
   @property() narrow: boolean;
   @property() hass;

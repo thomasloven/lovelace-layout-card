@@ -1,0 +1,131 @@
+import { css, html, LitElement, property } from "lit-element";
+import { BaseLayout } from "./layouts/base";
+import { CardConfig, LayoutCardConfig, LovelaceCard } from "./types";
+
+class LayoutCard extends LitElement {
+  @property() hass;
+  @property() editMode = false;
+  @property() isPanel = false;
+  @property() _config: LayoutCardConfig;
+  @property() _cards: Array<LovelaceCard> = [];
+  @property() _layoutElement?: BaseLayout;
+
+  @property() _layoutType?: string;
+
+  setConfig(config: LayoutCardConfig) {
+    this._config = { ...config };
+
+    let configType = config.layout?.type;
+    if (configType) {
+      if (!configType?.endsWith("-layout")) configType += "-layout";
+      if (configType.startsWith("custom:"))
+        configType = configType.substr("custom:".length);
+    } else {
+      configType = "hui-masonry-view";
+    }
+    this._layoutType = configType;
+  }
+
+  async updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+
+    console.log(changedProperties);
+    if (
+      changedProperties.has("_layoutType") ||
+      changedProperties.has("_config")
+    ) {
+      const viewConfig = {
+        type: this._layoutType,
+        layout: this._config.layout?.layout,
+        cards: this._config.cards,
+      };
+      if (!this._layoutElement) {
+        const layoutElement = document.createElement(
+          this._layoutType
+        ) as BaseLayout;
+        layoutElement.setConfig(viewConfig);
+        this._layoutElement = layoutElement;
+      }
+      await this._createCards();
+      this._layoutElement.hass = this.hass;
+      this._layoutElement.narrow = false;
+      this._layoutElement.lovelace = {
+        ...this._getLovelace(),
+        editMode: false,
+      };
+      this._layoutElement.index = 1;
+    }
+
+    if (changedProperties.has("hass")) {
+      this._cards.forEach((card) => {
+        card.hass = this.hass;
+      });
+      if (this._layoutElement) this._layoutElement.hass = this.hass;
+    }
+    if (changedProperties.has("_cards")) {
+      if (this._layoutElement) this._layoutElement.cards = this._cards;
+    }
+    if (changedProperties.has("editMode")) {
+      console.log(this.editMode);
+      if (this._layoutElement)
+        this._layoutElement.lovelace = {
+          ...this._getLovelace(),
+          editMode: false,
+        };
+    }
+  }
+
+  _getLovelace(el: any = this) {
+    if (el.lovelace) return el.lovelace;
+    if (el.localName === "home-assistant") return undefined;
+    if (el.parentElement && (el.parentElement as any).host)
+      return this._getLovelace((el.parentElement as any).host);
+    if (el.parentNode && (el.parentNode as any).host)
+      return this._getLovelace((el.parentNode as any).host);
+    if (el.parentElement) return this._getLovelace(el.parentElement);
+    if (el.parentNode) return this._getLovelace(el.parentNode);
+  }
+
+  _createCard(cardConfig: CardConfig, cardHelpers: any): LovelaceCard {
+    const el = cardHelpers.createCardElement(cardConfig);
+    el.addEventListener("ll-rebuild", (ev: Event) => {
+      ev.stopPropagation();
+      this._rebuildCard(el, cardConfig);
+    });
+    el.hass = this.hass;
+    return el;
+  }
+
+  async _createCards() {
+    const cardHelpers = await (window as any).loadCardHelpers();
+    this._cards = this._config.cards.map((cardConfig) => {
+      return this._createCard(cardConfig, cardHelpers);
+    });
+  }
+
+  async _rebuildCard(el: LovelaceCard, cardConfig: CardConfig) {
+    const cardHelpers = await (window as any).loadCardHelpers();
+    const newEl = this._createCard(cardConfig, cardHelpers);
+    if (el.parentElement) {
+      el.parentElement.replaceChild(newEl, el);
+    }
+    this._cards = this._cards.map((card) => (card === el ? newEl : card));
+  }
+
+  render() {
+    return html`${this._layoutElement}`;
+  }
+
+  static get styles() {
+    return css`
+      :host(:not(:first-child)) {
+        margin-top: 0 !important;
+      }
+      :host(:not(:last-child)) {
+        margin-bottom: 0 !important;
+      }
+    `;
+  }
+}
+
+customElements.define("layout-card", LayoutCard);

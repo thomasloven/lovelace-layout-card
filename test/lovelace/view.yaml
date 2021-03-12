@@ -1,126 +1,53 @@
-x-cards: &cards
-  - type: entities
-    title: 1
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 2
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 3
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 4
-    entities:
-      - light.bed_light
-      - light.bed_light
-      - light.bed_light
-      - light.bed_light
-  - type: entities
-    title: 5
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 6
-    layout:
-      column: 2
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 7
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 8
-    entities:
-      - light.bed_light
-x-cards2: &breakcards
-  - type: entities
-    title: 1
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 2
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 3
-    entities:
-      - light.bed_light
-  - type: custom:layout-break
-  - type: entities
-    title: 4
-    entities:
-      - light.bed_light
-      - light.bed_light
-      - light.bed_light
-      - light.bed_light
-  - type: entities
-    title: 5
-    entities:
-      - light.bed_light
-  - type: custom:layout-break
-  - type: entities
-    title: 6
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 7
-    layout:
-      show: never
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 8
-    layout:
-      show:
-        mediaquery: "(max-width: 500px)"
-    entities:
-      - light.bed_light
-  - type: entities
-    title: This card is only displayed on touch screens
-    layout:
-      show:
-        mediaquery: "(hover:none) and (pointer: coarse)"
-    entities:
-      - light.bed_light
-
 title: layout-card
 views:
   - title: Core
-    cards: *cards
-
+    cards: !include card-list.yaml
   - title: Masonry
     type: custom:masonry-layout
-    cards: *cards
-  - title: Masonry2
-    type: custom:masonry-layout
-    layout:
-      width: 200
-      max_cols: 7
-      min_height: 1
-    cards: *cards
-
+    cards: !include card-list.yaml
   - title: Horizontal
     type: custom:horizontal-layout
-    cards: *cards
-  - title: Horizontal2
-    type: custom:horizontal-layout
-    cards: *cards
-    layout:
-      width: 200
-      max_cols: 6
-  - title: Horizontal-break
-    type: custom:horizontal-layout
-    cards: *breakcards
-
+    cards: !include card-list.yaml
   - title: Vertical
     type: custom:vertical-layout
-    cards: *cards
-  - title: Vertical-break
-    type: custom:vertical-layout
-    cards: *breakcards
+    cards: !include card-list.yaml
+  - title: Grid
+    type: custom:grid-layout
+    cards: !include card-list.yaml
 
-  - !include grid-view.yaml
+  # - title: Masonry2
+  #   type: custom:masonry-layout
+  #   layout:
+  #     width: 200
+  #     max_cols: 7
+  #     min_height: 1
+  #   cards: *cards
+
+  # - title: Panel
+  #   panel: true
+  #   cards:
+  #     - type: custom:layout-card
+  #       cards: !include card-list.yaml
+
+  # - title: Horizontal
+  #   type: custom:horizontal-layout
+  #   cards: *cards
+  # - title: Horizontal2
+  #   type: custom:horizontal-layout
+  #   cards: *cards
+  #   layout:
+  #     width: 200
+  #     max_cols: 6
+  # - title: Horizontal-break
+  #   type: custom:horizontal-layout
+  #   cards: *breakcards
+
+  # - title: Vertical
+  #   type: custom:vertical-layout
+  #   cards: *cards
+  # - title: Vertical-break
+  #   type: custom:vertical-layout
+  #   cards: *breakcards
+
+  # - !include grid-view.yaml
+  # - !include layout-card.yaml
