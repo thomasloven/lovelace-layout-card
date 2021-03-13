@@ -12,13 +12,12 @@ class VerticalLayout extends BaseLayout {
   async _placeColumnCards(cols: Array<Node>, cards: CardConfigGroup[]) {
     let i = 1;
     for (const c of cards) {
-      if (this.isBreak(c.card)) {
-        i = i + 1;
-        continue;
-      }
       if (c.config.layout?.column) i = c.config.layout.column;
       const col = cols[(i - 1) % cols.length];
-      col.appendChild(c.card);
+      col.appendChild(this._makeEditable(c));
+      if (this.isBreak(c.card)) {
+        i = i + 1;
+      }
     }
   }
 }

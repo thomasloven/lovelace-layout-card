@@ -13,13 +13,15 @@ class HorizontalLayout extends BaseLayout {
     let i = 0;
     for (const c of cards) {
       i += 1;
-      if (this.isBreak(c.card)) {
-        i = 0;
-        continue;
-      }
       if (c.config.layout?.column) i = c.config.layout.column;
       const col = cols[(i - 1) % cols.length];
-      col.appendChild(c.card);
+      col.appendChild(this._makeEditable(c));
+      if (this.isBreak(c.card)) {
+        i = 0;
+        if (!this.lovelace?.editMode) {
+          col.removeChild(c.card);
+        }
+      }
     }
   }
 }

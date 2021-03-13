@@ -1,5 +1,6 @@
 export interface LovelaceCard extends HTMLElement {
   hass: any;
+  editMode?: boolean;
   setConfig(config: any): void;
   getCardSize?(): Promise<number> | number;
 }
@@ -26,6 +27,8 @@ export interface CardConfig {
 export interface CardConfigGroup {
   card: LovelaceCard;
   config: CardConfig;
+  index: number;
+  show?: boolean;
 }
 
 export interface MasonryViewConfig extends ViewConfig {

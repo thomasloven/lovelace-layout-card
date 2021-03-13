@@ -19,6 +19,7 @@ export class BaseLayout extends LitElement {
   @property() lovelace: any;
   _observer?: ResizeObserver;
   _mediaQueries: Array<MediaQueryList | null> = [];
+  _editorLoaded = false;
 
   async setConfig(config: MasonryViewConfig) {
     this._config = { ...config };
@@ -44,6 +45,22 @@ export class BaseLayout extends LitElement {
 
   async updated(changedProperties: Map<string, any>) {
     if (changedProperties.has("_columns") || changedProperties.has("cards")) {
+      this._makeLayout();
+    }
+    if (
+      changedProperties.has("lovelace") &&
+      this.lovelace?.editMode != changedProperties.get("lovelace")?.editMode
+    ) {
+      if (this.lovelace?.editMode && !this._editorLoaded) {
+        this._editorLoaded = true;
+        {
+          // Load in editor elements
+          const loader = document.createElement("hui-masonry-view");
+          (loader as any).lovelace = { editMode: true };
+          (loader as any).updated(new Map());
+        }
+      }
+      this.cards.forEach((c) => (c.editMode = this.lovelace?.editMode));
       this._makeLayout();
     }
     if (changedProperties.has("narrow")) this._updateSize();
@@ -111,10 +128,9 @@ export class BaseLayout extends LitElement {
     }
   }
 
-  @bind
-  _filterCards(card: CardConfigGroup, index: number) {
-    if (card.config.layout?.show === "always") return true;
-    if (card.config.layout?.show === "never") return false;
+  _filterCards(card: LovelaceCard, config: CardConfig, index: number) {
+    if (config.layout?.show === "always") return true;
+    if (config.layout?.show === "never") return false;
     const mq = this._mediaQueries[index];
     if (mq) {
       if (mq.matches) return true;
@@ -142,10 +158,19 @@ export class BaseLayout extends LitElement {
       cols.push(newCol);
     }
 
-    const cards: CardConfigGroup[] = this.cards.map((c, i) => {
-      return { card: c, config: this._config.cards[i] };
+    let cards: CardConfigGroup[] = this.cards.map((card, index) => {
+      const config = this._config.cards[index];
+      return {
+        card,
+        config,
+        index,
+        show: this._filterCards(card, config, index),
+      };
     });
-    await this._placeColumnCards(cols, cards.filter(this._filterCards));
+    await this._placeColumnCards(
+      cols,
+      cards.filter((c) => this.lovelace?.editMode || c.show)
+    );
 
     cols = cols.filter((c) => c.childElementCount > 0);
 
@@ -158,8 +183,29 @@ export class BaseLayout extends LitElement {
 
   async _placeColumnCards(cols: Array<Node>, cards: CardConfigGroup[]) {}
 
+  _makeEditable(card: CardConfigGroup) {
+    if (!this.lovelace?.editMode) return card.card;
+    const wrapper = document.createElement("hui-card-options") as any;
+    wrapper.hass = this.hass;
+    wrapper.lovelace = this.lovelace;
+    wrapper.path = [this.index, card.index];
+    card.card.editMode = true;
+    wrapper.appendChild(card.card);
+    if (card.show === false) wrapper.style.border = "1px solid red";
+    return wrapper;
+  }
+
+  _addCard() {
+    this.dispatchEvent(new CustomEvent("ll-create-card"));
+  }
+
   render() {
-    return html` <div id="columns"></div> `;
+    return html` <div id="columns"></div>
+      ${this.lovelace?.editMode
+        ? html`<ha-fab .label=${"Add card"} extended @click=${this._addCard}>
+            <ha-icon slot="icon" .icon=${"mdi:plus"}></ha-icon>
+          </ha-fab>`
+        : ""}`;
   }
 
   static get styles() {
@@ -186,6 +232,14 @@ export class BaseLayout extends LitElement {
       .column > * {
         display: block;
         margin: var(--masonry-view-card-margin, 4px 4px 8px);
+      }
+
+      ha-fab {
+        position: sticky;
+        float: right;
+        right: calc(16px + env(safe-area-inset-right));
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 1;
       }
     `;
   }

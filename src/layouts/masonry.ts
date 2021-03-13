@@ -27,8 +27,9 @@ class MasonryLayout extends BaseLayout {
 
     for (const c of cards) {
       const col = shortestCol();
-      col.appendChild(c.card);
-      col.length += await c.card.getCardSize();
+      col.appendChild(this._makeEditable(c));
+
+      col.length += c.card.getCardSize ? await c.card.getCardSize() : 1;
     }
   }
 }
