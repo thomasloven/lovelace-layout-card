@@ -74,7 +74,6 @@ class ViewLayoutEditor extends LitElement {
   _layoutChanged(ev) {
     ev.stopPropagation();
     this.config.layout = ev.detail.value;
-    console.log(ev.detail.value);
     this.dispatchEvent(
       new CustomEvent("view-layout-changed", {
         detail: { config: this.config },

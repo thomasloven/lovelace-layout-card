@@ -9,6 +9,7 @@ export interface ViewConfig {
   title?: string;
   type?: string;
   cards?: Array<CardConfig>;
+  layout?: any;
 }
 
 export interface CardConfig {
@@ -44,6 +45,7 @@ export interface MasonryViewConfig extends ViewConfig {
 export interface LayoutCardConfig {
   cards?: Array<CardConfig>;
   layout?: {
-    type?: string
+    type?: string;
     layout?: any;
+  };
 }

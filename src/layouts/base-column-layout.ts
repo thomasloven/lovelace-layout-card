@@ -7,22 +7,16 @@ import {
   ViewConfig,
 } from "../types";
 import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
-import bind from "bind-decorator";
+import { BaseLayout } from "./base-layout";
 
-export class BaseLayout extends LitElement {
-  @property() cards: Array<LovelaceCard> = [];
-  @property() index: number;
+export class BaseColumnLayout extends BaseLayout {
   @property() _columns?: number;
-  @property() narrow: boolean;
-  @property() hass;
-  @property() _config: MasonryViewConfig;
-  @property() lovelace: any;
+
   _observer?: ResizeObserver;
   _mediaQueries: Array<MediaQueryList | null> = [];
-  _editorLoaded = false;
 
   async setConfig(config: MasonryViewConfig) {
-    this._config = { ...config };
+    await super.setConfig(config);
 
     for (const card of this._config.cards) {
       if (
@@ -44,23 +38,11 @@ export class BaseLayout extends LitElement {
   }
 
   async updated(changedProperties: Map<string, any>) {
+    await super.updated(changedProperties);
     if (changedProperties.has("_columns") || changedProperties.has("cards")) {
       this._makeLayout();
     }
-    if (
-      changedProperties.has("lovelace") &&
-      this.lovelace?.editMode != changedProperties.get("lovelace")?.editMode
-    ) {
-      if (this.lovelace?.editMode && !this._editorLoaded) {
-        this._editorLoaded = true;
-        {
-          // Load in editor elements
-          const loader = document.createElement("hui-masonry-view");
-          (loader as any).lovelace = { editMode: true };
-          (loader as any).updated(new Map());
-        }
-      }
-      this.cards.forEach((c) => (c.editMode = this.lovelace?.editMode));
+    if (changedProperties.has("_editMode")) {
       this._makeLayout();
     }
     if (changedProperties.has("narrow")) this._updateSize();
@@ -118,9 +100,8 @@ export class BaseLayout extends LitElement {
     colnum = Math.floor(width / (this._config.layout?.width || 300));
     colnum = Math.min(
       colnum,
-      this._config.layout?.max_cols || this.hass?.dockedSidebar === "docked"
-        ? 3
-        : 4
+      this._config.layout?.max_cols ||
+        (this.hass?.dockedSidebar === "docked" ? 3 : 4)
     );
     colnum = Math.max(colnum, 1);
     if (colnum !== this._columns) {
@@ -128,15 +109,13 @@ export class BaseLayout extends LitElement {
     }
   }
 
-  _filterCards(card: LovelaceCard, config: CardConfig, index: number) {
-    if (config.layout?.show === "always") return true;
-    if (config.layout?.show === "never") return false;
+  _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
+    if (!super._shouldShow(card, config, index)) return false;
+
     const mq = this._mediaQueries[index];
-    if (mq) {
-      if (mq.matches) return true;
-      return false;
-    }
-    return true;
+    if (!mq) return true;
+    if (mq.matches) return true;
+    return false;
   }
 
   isBreak(card: LovelaceCard) {
@@ -164,7 +143,7 @@ export class BaseLayout extends LitElement {
         card,
         config,
         index,
-        show: this._filterCards(card, config, index),
+        show: this._shouldShow(card, config, index),
       };
     });
     await this._placeColumnCards(
@@ -183,64 +162,41 @@ export class BaseLayout extends LitElement {
 
   async _placeColumnCards(cols: Array<Node>, cards: CardConfigGroup[]) {}
 
-  _makeEditable(card: CardConfigGroup) {
-    if (!this.lovelace?.editMode) return card.card;
-    const wrapper = document.createElement("hui-card-options") as any;
-    wrapper.hass = this.hass;
-    wrapper.lovelace = this.lovelace;
-    wrapper.path = [this.index, card.index];
-    card.card.editMode = true;
-    wrapper.appendChild(card.card);
-    if (card.show === false) wrapper.style.border = "1px solid red";
-    return wrapper;
-  }
-
-  _addCard() {
-    this.dispatchEvent(new CustomEvent("ll-create-card"));
-  }
-
   render() {
-    return html` <div id="columns"></div>
-      ${this.lovelace?.editMode
-        ? html`<ha-fab .label=${"Add card"} extended @click=${this._addCard}>
-            <ha-icon slot="icon" .icon=${"mdi:plus"}></ha-icon>
-          </ha-fab>`
-        : ""}`;
+    return html`
+      <div id="columns"></div>
+      ${this._render_fab()}
+    `;
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        padding-top: 4px;
-        height: 100%;
-        box-sizing: border-box;
-      }
+    return [
+      this._fab_styles,
+      css`
+        :host {
+          display: block;
+          padding-top: 4px;
+          height: 100%;
+          box-sizing: border-box;
+        }
 
-      #columns {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-left: 4px;
-        margin-right: 4px;
-      }
-      .column {
-        flex: 1 0 0;
-        max-width: var(--column-max-width);
-        min-width: 0;
-      }
-      .column > * {
-        display: block;
-        margin: var(--masonry-view-card-margin, 4px 4px 8px);
-      }
-
-      ha-fab {
-        position: sticky;
-        float: right;
-        right: calc(16px + env(safe-area-inset-right));
-        bottom: calc(16px + env(safe-area-inset-bottom));
-        z-index: 1;
-      }
-    `;
+        #columns {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          margin-left: 4px;
+          margin-right: 4px;
+        }
+        .column {
+          flex: 1 0 0;
+          max-width: var(--column-max-width);
+          min-width: 0;
+        }
+        .column > * {
+          display: block;
+          margin: var(--masonry-view-card-margin, 4px 4px 8px);
+        }
+      `,
+    ];
   }
 }

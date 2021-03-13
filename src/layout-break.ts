@@ -2,7 +2,7 @@ class LayoutBreak extends HTMLElement {
   _display;
   setConfig() {
     this.style.display = "none";
-    const display = document.createElement("div");
+    const display = document.createElement("ha-card");
     display.innerHTML = "BREAK";
     display.style.cssText = `
       background: red;

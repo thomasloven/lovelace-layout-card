@@ -7,17 +7,24 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
 
     if (retval) {
       const _setConfig = retval.setConfig;
-      retval.setConfig = function (config: any) {
-        const newConfig = JSON.parse(JSON.stringify(config));
-        const layout = newConfig.layout;
+
+      retval.setConfig = async function (config: any) {
+        let newConfig = JSON.parse(JSON.stringify(config));
+        this._layoutData = newConfig.layout;
 
         delete newConfig.layout;
 
-        _setConfig.bind(this)(newConfig);
-
-        if (layout) newConfig.layout = layout;
+        await _setConfig.bind(this)(newConfig);
       };
     }
     return retval;
+  };
+
+  const _handleUIConfigChanged =
+    HuiCardElementEditor.prototype._handleUIConfigChanged;
+  HuiCardElementEditor.prototype._handleUIConfigChanged = function (ev) {
+    if (this._configElement && this._configElement._layoutData)
+      ev.detail.config.layout = this._configElement._layoutData;
+    _handleUIConfigChanged.bind(this)(ev);
   };
 });

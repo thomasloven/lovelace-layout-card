@@ -6,13 +6,13 @@ import {
   ViewConfig,
 } from "../types";
 import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
-import { BaseLayout } from "./base";
+import { BaseColumnLayout } from "./base-column-layout";
 
 interface LengthCol extends Node {
   length?: number;
 }
 
-class MasonryLayout extends BaseLayout {
+class MasonryLayout extends BaseColumnLayout {
   async _placeColumnCards(cols: Array<LengthCol>, cards: CardConfigGroup[]) {
     const min_height = this._config.layout?.min_height || 5;
 
@@ -27,7 +27,7 @@ class MasonryLayout extends BaseLayout {
 
     for (const c of cards) {
       const col = shortestCol();
-      col.appendChild(this._makeEditable(c));
+      col.appendChild(this.getCardElement(c));
 
       col.length += c.card.getCardSize ? await c.card.getCardSize() : 1;
     }

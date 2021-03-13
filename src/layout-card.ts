@@ -1,5 +1,5 @@
 import { css, html, LitElement, property } from "lit-element";
-import { BaseLayout } from "./layouts/base";
+import { BaseColumnLayout } from "./layouts/base-column-layout";
 import { CardConfig, LayoutCardConfig, LovelaceCard } from "./types";
 
 class LayoutCard extends LitElement {
@@ -8,7 +8,7 @@ class LayoutCard extends LitElement {
   @property() isPanel = false;
   @property() _config: LayoutCardConfig;
   @property() _cards: Array<LovelaceCard> = [];
-  @property() _layoutElement?: BaseLayout;
+  @property() _layoutElement?: BaseColumnLayout;
 
   @property() _layoutType?: string;
 
@@ -42,7 +42,7 @@ class LayoutCard extends LitElement {
       if (!this._layoutElement) {
         const layoutElement = document.createElement(
           this._layoutType
-        ) as BaseLayout;
+        ) as BaseColumnLayout;
         layoutElement.setConfig(viewConfig);
         this._layoutElement = layoutElement;
       }
