@@ -19,6 +19,10 @@ class LayoutBreak extends HTMLElement {
   set editMode(editMode) {
     this.style.display = editMode ? "block" : "none";
   }
+
+  static getConfigElement() {
+    return document.createElement("layout-break-editor");
+  }
   static getStubConfig() {
     return {};
   }
@@ -30,5 +34,16 @@ customElements.define("layout-break", LayoutBreak);
   type: "layout-break",
   name: "Layout Break",
   preview: false,
-  description: "Forces a break in the layout flow. For use with auto-entities.",
+  description:
+    "Forces a break in the layout flow. For use with layout-card or special layouts.",
 });
+
+class LayoutBreakEditor extends HTMLElement {
+  setConfig(config) {
+    const div = document.createElement("div");
+    div.innerHTML = "BREAK";
+    this.appendChild(div);
+  }
+}
+
+customElements.define("layout-break-editor", LayoutBreakEditor);

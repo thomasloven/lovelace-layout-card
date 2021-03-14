@@ -39,13 +39,10 @@ export interface MasonryViewConfig extends ViewConfig {
     max_cols?: number;
     min_height?: number;
   };
-  cards?: Array<CardConfig>;
 }
 
 export interface LayoutCardConfig {
   cards?: Array<CardConfig>;
-  layout?: {
-    type?: string;
-    layout?: any;
-  };
+  layout_type?: string;
+  layout_options?: any;
 }

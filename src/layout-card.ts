@@ -15,7 +15,7 @@ class LayoutCard extends LitElement {
   setConfig(config: LayoutCardConfig) {
     this._config = { ...config };
 
-    let configType = config.layout?.type;
+    let configType = config.layout_type;
     if (configType) {
       if (!configType?.endsWith("-layout")) configType += "-layout";
       if (configType.startsWith("custom:"))
@@ -29,23 +29,20 @@ class LayoutCard extends LitElement {
   async updated(changedProperties: Map<string, any>) {
     super.updated(changedProperties);
 
-    console.log(changedProperties);
     if (
       changedProperties.has("_layoutType") ||
       changedProperties.has("_config")
     ) {
       const viewConfig = {
         type: this._layoutType,
-        layout: this._config.layout?.layout,
+        layout: this._config.layout_options,
         cards: this._config.cards,
       };
-      if (!this._layoutElement) {
-        const layoutElement = document.createElement(
-          this._layoutType
-        ) as BaseColumnLayout;
-        layoutElement.setConfig(viewConfig);
-        this._layoutElement = layoutElement;
-      }
+      const layoutElement = document.createElement(
+        this._layoutType
+      ) as BaseColumnLayout;
+      layoutElement.setConfig(viewConfig);
+      this._layoutElement = layoutElement;
       await this._createCards();
       this._layoutElement.hass = this.hass;
       this._layoutElement.narrow = false;
@@ -66,7 +63,6 @@ class LayoutCard extends LitElement {
       if (this._layoutElement) this._layoutElement.cards = this._cards;
     }
     if (changedProperties.has("editMode")) {
-      console.log(this.editMode);
       if (this._layoutElement)
         this._layoutElement.lovelace = {
           ...this._getLovelace(),
@@ -126,6 +122,26 @@ class LayoutCard extends LitElement {
       }
     `;
   }
+
+  static getConfigElement() {
+    return document.createElement("layout-card-editor");
+  }
+  static getStubConfig() {
+    return {
+      layout: {
+        type: "masonry",
+        layout: {},
+      },
+      cards: [],
+    };
+  }
 }
 
 customElements.define("layout-card", LayoutCard);
+(window as any).customCards = (window as any).customCards || [];
+(window as any).customCards.push({
+  type: "layout-card",
+  name: "Layout Card",
+  preview: false,
+  description: "Like a stack card, but with way more control.",
+});
