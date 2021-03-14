@@ -10,6 +10,7 @@ import { BaseLayout } from "./base-layout";
 
 export class BaseColumnLayout extends BaseLayout {
   @property() _columns?: number;
+  @property() _config: ColumnViewConfig;
 
   _observer?: ResizeObserver;
   _mediaQueries: Array<MediaQueryList | null> = [];
@@ -151,6 +152,9 @@ export class BaseColumnLayout extends BaseLayout {
     );
 
     cols = cols.filter((c) => c.childElementCount > 0);
+    if (this._config.layout?.rtl) {
+      cols.reverse();
+    }
 
     const columns = this.shadowRoot.querySelector("#columns");
     while (columns.firstChild) columns.removeChild(columns.firstChild);

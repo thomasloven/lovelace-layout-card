@@ -109,11 +109,12 @@ The first three are column based and work similarly:
 
 All column based layouts accept the following options:
 
-|Option|Values|Description|Default
+|Option|Values|Description|Default|
 |---|---|---|---|
 |`width`| number | Size in pixels of each column | 300 |
 |`max_width` | number | Maximum width of a card | 1.5 * `width` if specified <br> otherwise 500 |
 |`max_cols` | number | Maximum number of columns to show | 4 if sidebar is hidden <br> 3 if sidebar is shown |
+|`rtl`| `true`/`false` | Place columns in right-to-left order | `false`|
 
 ### Masonry layout
 

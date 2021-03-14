@@ -29,7 +29,7 @@ export interface ViewConfig {
   title?: string;
   type?: string;
   cards?: Array<CardConfig>;
-  layout?: any;
+  layout?: {};
 }
 
 export interface ColumnViewConfig extends ViewConfig {
@@ -38,6 +38,7 @@ export interface ColumnViewConfig extends ViewConfig {
     max_width?: number;
     max_cols?: number;
     min_height?: number;
+    rtl?: boolean;
   };
 }
 
