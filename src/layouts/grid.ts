@@ -28,7 +28,7 @@ class GridLayout extends BaseLayout {
       }
     }
 
-    if (this._config.layout.mediaquery) {
+    if (this._config.layout?.mediaquery) {
       for (const [query, layout] of Object.entries(
         this._config.layout?.mediaquery
       )) {

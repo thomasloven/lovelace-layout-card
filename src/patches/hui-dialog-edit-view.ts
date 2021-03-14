@@ -60,6 +60,7 @@ class ViewLayoutEditor extends LitElement {
   _typeChanged(ev) {
     ev.stopPropagation();
     const newType = TYPE_OPTIONS[ev.target.selected];
+    this.config = { ...this.config };
     if (newType === "default") {
       delete this.config.type;
     } else {
@@ -73,6 +74,7 @@ class ViewLayoutEditor extends LitElement {
   }
   _layoutChanged(ev) {
     ev.stopPropagation();
+    this.config = { ...this.config };
     this.config.layout = ev.detail.value;
     this.dispatchEvent(
       new CustomEvent("view-layout-changed", {

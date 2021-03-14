@@ -22,7 +22,7 @@ class LayoutCardEditor extends LitElement {
   @query("hui-card-element-editor") _cardEditorEl?;
 
   setConfig(config) {
-    this._config = JSON.parse(JSON.stringify(config));
+    this._config = config;
   }
 
   _handleSwitchTab(ev: CustomEvent) {
@@ -36,6 +36,7 @@ class LayoutCardEditor extends LitElement {
           .substr("custom:".length)
           .slice(0, -"-layout".length)
       : "default";
+    this._config = { ...this._config };
     if (type !== "default") this._config.layout_type = type;
     else delete this._config.layout_type;
     if (ev.detail.config.layout)
@@ -60,7 +61,9 @@ class LayoutCardEditor extends LitElement {
   }
   _addCard(ev: CustomEvent) {
     ev.stopPropagation();
-    this._config.cards.push(ev.detail.config);
+    const cards = [...this._config.cards];
+    cards.push(ev.detail.config);
+    this._config = { ...this._config, cards };
     this._selectedCard = this._config.cards.length - 1;
     this.dispatchEvent(
       new CustomEvent("config-changed", { detail: { config: this._config } })
