@@ -116,6 +116,13 @@ All column based layouts accept the following options:
 |`max_cols` | number | Maximum number of columns to show | 4 if sidebar is hidden <br> 3 if sidebar is shown |
 |`rtl`| `true`/`false` | Place columns in right-to-left order | `false`|
 
+> NOTE: If you're migrating from layout-card "1.0" (v16 - sorry about the version number confusion), this is significantly fewer options than you are used to. \
+> The reason for this is twofold. \
+> First: Maintainability. As Home Assistant and Lovelace evolves, it grows increasingly more difficult to keep up the more options you want to keep alive. \
+> Second: Usability. I want to focus on fewer options and doing the right thing out of the box instead. And the three remaining options actually have much more impact than you'd think.
+>
+> If you want more fine-grained controll (e.g. variable sized columns), please take a look at the Grid layout.
+
 ### Masonry layout
 
 The masonry layout immitates the default layout of lovelace.
@@ -161,22 +168,33 @@ The vertical layout accepts the following **card** layout options:
 The grid layout will give you full controll of your cards by leveraging [CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/).
 
 The grid layout accepts any option starting with `grid-` that works for a Grid Container.
-The grid layout also accepts any card layout option starting with `grid-` that works for a Grid Item.
 
-![Grid Layout](https://user-images.githubusercontent.com/1299821/111069100-cac3f700-84cb-11eb-904f-cb5661c5734b.png)
+Furthermore, the special option `mediaquery` can be used to set grid options depending on currently matched [@media rules](https://www.w3schools.com/cssref/css3_pr_mediaquery.asp). This helps immensely in creating fully responsive layouts. \
+Please see the example code accompanying the screen recording below.
+
+For the card layout options. the grid layout accepts any css grid property starting with `grid-` that works for a Grid Item.
+
+![Grid Layout](https://user-images.githubusercontent.com/1299821/111082577-4d1edc00-8509-11eb-80d1-2ecbdea7a085.gif)
 <details>
-<summary>Screenshot source code</summary>
+<summary>Yaml code</summary>
 
 ```yaml
 title: Grid layout
 type: custom:grid-layout
 layout:
-  grid-template-columns: 25% 25% 25% 25%
+  grid-template-columns: 25% 1fr 50px 25%
   grid-template-rows: auto
   grid-template-areas: |
     "header header header header"
     "main main . sidebar"
     "footer footer footer footer"
+  mediaquery:
+    "(max-width: 600px)":
+      grid-template-columns: 50% 50%
+      grid-template-areas: |
+        "header sidebar"
+        "main main"
+        "footer footer"
 cards:
   - type: entities
     entities:

@@ -42,6 +42,12 @@ export interface ColumnViewConfig extends ViewConfig {
   };
 }
 
+export interface GridViewConfig extends ViewConfig {
+  layout?: {
+    mediaquery?: Array<Record<string, any>>;
+  };
+}
+
 export interface LayoutCardConfig {
   cards?: Array<CardConfig>;
   entities?: Array<CardConfig>;

@@ -3,14 +3,16 @@ import {
   CardConfig,
   CardConfigGroup,
   LovelaceCard,
-  ViewConfig,
+  GridViewConfig,
 } from "../types";
 import { BaseLayout } from "./base-layout";
 
 class GridLayout extends BaseLayout {
   _mediaQueries: Array<MediaQueryList | null> = [];
+  _layoutMQs: Array<MediaQueryList | null> = [];
+  _config: GridViewConfig;
 
-  async setConfig(config: ViewConfig) {
+  async setConfig(config: GridViewConfig) {
     await super.setConfig(config);
 
     for (const card of this._config.cards) {
@@ -25,6 +27,16 @@ class GridLayout extends BaseLayout {
         this._mediaQueries.push(null);
       }
     }
+
+    if (this._config.layout.mediaquery) {
+      for (const [query, layout] of Object.entries(
+        this._config.layout?.mediaquery
+      )) {
+        const mq = window.matchMedia(query);
+        this._layoutMQs.push(mq);
+        mq.addEventListener("change", () => this._setGridStyles());
+      }
+    }
   }
 
   async updated(changedProperties) {
@@ -35,12 +47,28 @@ class GridLayout extends BaseLayout {
   }
 
   async firstUpdated() {
+    this._setGridStyles();
+  }
+
+  _setGridStyles() {
     const root = this.shadowRoot.querySelector("#root") as HTMLElement;
-    if (this._config.layout)
-      for (const [key, value] of Object.entries(this._config.layout)) {
+    const addStyles = (layout) => {
+      for (const [key, value] of Object.entries(layout)) {
         if (key.startsWith("grid"))
           root.style.setProperty(key, (value as any) as string);
       }
+    };
+
+    root.style.cssText = "";
+
+    if (this._config.layout) addStyles(this._config.layout);
+
+    for (const q of this._layoutMQs) {
+      if (q.matches) {
+        addStyles(this._config.layout.mediaquery[q.media]);
+        break;
+      }
+    }
   }
 
   _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
@@ -91,6 +119,7 @@ class GridLayout extends BaseLayout {
           display: grid;
           margin-left: 4px;
           margin-right: 4px;
+          justify-content: center;
         }
         #root > * {
           margin: var(--masonry-view-card-margin, 4px 4px 8px);
