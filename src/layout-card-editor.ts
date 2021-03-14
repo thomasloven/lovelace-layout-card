@@ -151,6 +151,12 @@ class LayoutCardEditor extends LitElement {
   _renderCardsEditor() {
     const selected = this._selectedCard;
     const numcards = this._config.cards.length;
+    if (this._config.entities) {
+      return html`
+        This layout-card has the <code>entities</code> parameter set. You cannot
+        manually select cards.
+      `;
+    }
     return html`
       <div class="cards">
         <div class="toolbar">
@@ -188,23 +194,23 @@ class LayoutCardEditor extends LitElement {
                         : "ui.panel.lovelace.editor.edit_card.show_visual_editor"
                     )}
                   </mwc-button>
-                  <mwc-button
+                  <mwc-icon-button
                     .disabled=${selected === 0}
                     @click=${this._moveCard}
                     .move=${-1}
                   >
                     <ha-icon .icon=${"mdi:arrow-left"}></ha-icon>
-                  </mwc-button>
-                  <mwc-button
+                  </mwc-icon-button>
+                  <mwc-icon-button
                     .disabled=${selected === numcards - 1}
                     @click=${this._moveCard}
                     .move=${1}
                   >
                     <ha-icon .icon=${"mdi:arrow-right"}></ha-icon>
-                  </mwc-button>
-                  <mwc-button @click=${this._deleteCard}>
+                  </mwc-icon-button>
+                  <mwc-icon-button @click=${this._deleteCard}>
                     <ha-icon .icon=${"mdi:delete"}></ha-icon>
-                  </mwc-button>
+                  </mwc-icon-button>
                 </div>
                 <hui-card-element-editor
                   .hass=${this.hass}

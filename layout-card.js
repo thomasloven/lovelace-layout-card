@@ -79,7 +79,10 @@ function t(t,e,i,s){var o,n=arguments.length,r=n<3?e:null===s?s=Object.getOwnPro
         .config=${{type:t,layout:e}}
         @view-layout-changed=${this._layoutChanged}
       ></view-layout-editor>
-    </div>`}_renderCardsEditor(){const t=this._selectedCard,e=this._config.cards.length;return j`
+    </div>`}_renderCardsEditor(){const t=this._selectedCard,e=this._config.cards.length;return this._config.entities?j`
+        This layout-card has the <code>entities</code> parameter set. You cannot
+        manually select cards.
+      `:j`
       <div class="cards">
         <div class="toolbar">
           <paper-tabs
@@ -109,23 +112,23 @@ function t(t,e,i,s){var o,n=arguments.length,r=n<3?e:null===s?s=Object.getOwnPro
                   >
                     ${this.hass.localize(this._cardEditorEl||this._cardGUIMode?"ui.panel.lovelace.editor.edit_card.show_code_editor":"ui.panel.lovelace.editor.edit_card.show_visual_editor")}
                   </mwc-button>
-                  <mwc-button
+                  <mwc-icon-button
                     .disabled=${0===t}
                     @click=${this._moveCard}
                     .move=${-1}
                   >
                     <ha-icon .icon=${"mdi:arrow-left"}></ha-icon>
-                  </mwc-button>
-                  <mwc-button
+                  </mwc-icon-button>
+                  <mwc-icon-button
                     .disabled=${t===e-1}
                     @click=${this._moveCard}
                     .move=${1}
                   >
                     <ha-icon .icon=${"mdi:arrow-right"}></ha-icon>
-                  </mwc-button>
-                  <mwc-button @click=${this._deleteCard}>
+                  </mwc-icon-button>
+                  <mwc-icon-button @click=${this._deleteCard}>
                     <ha-icon .icon=${"mdi:delete"}></ha-icon>
-                  </mwc-button>
+                  </mwc-icon-button>
                 </div>
                 <hui-card-element-editor
                   .hass=${this.hass}
