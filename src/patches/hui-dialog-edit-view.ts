@@ -52,7 +52,7 @@ customElements.whenDefined("hui-dialog-edit-view").then(() => {
   };
 });
 
-const TYPE_OPTIONS = ["default", "masonry", "vertical", "horizontal", "grid"];
+const TYPE_OPTIONS = ["default", "masonry", "horizontal", "vertical", "grid"];
 
 class ViewLayoutEditor extends LitElement {
   config;

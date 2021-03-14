@@ -7,332 +7,286 @@ Get more control over the placement of lovelace cards
 
 For installation instructions [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
 
-Install `layout-card.js` as a `module`.
+## Quick Start
 
-```yaml
-resources:
-  - url: /local/layout-card.js
-    type: module
-```
+- Go to one of your lovelace views and select "Edit Dashboard"
+- Click the pencil symbol next to the view name to open up the view properties
+- Go to the new "Layout" tab
+- Select "Masonry" layout from the "Layout type" dropdown list
+- Click "Save"
+
+Hopefully, you should see no difference at all now.
+
+- Open up the view properties again and go to the "Layout" tab.
+- Enter the following in the "Layout Options" box:
+  ```yaml
+  width: 300
+  max_cols: 10
+  ```
+- Click Save
+
+You should now have more, narrower, collumns of cards in your view.
+
+![Quick Start](https://user-images.githubusercontent.com/1299821/111066590-11abef80-84c0-11eb-809b-2843fd8610d8.gif)
+
 
 ## Usage
 
-```yaml
-type: custom:layout-card
-layout: <layout>
-min_height: <min_height>
-min_columns: <min_columns>
-max_columns: <max_columns>
-column_num: <column_num>
-column_width: <column_width>
-max_width: <max_width>
-min_width: <min_width>
-sidebar_column: <sidebar_column>
-flex_grow: <flex_grow>
-gridcols: <grid_cols>
-gridrows: <grid_rows>
-gridgap: <grid_gap>
-gridplace: <grid_place>
-justify_content: <justify_content>
-rtl: <rtl>
-cards:
-    <cards>
-card_options:
-    <card_options>
-```
+### View Layouts
 
-## Options
-- `<cards>` **Required** A list of lovelace cards to display.
-- `<card_options>` are options that are applied to all cards.
-- `<layout>` The layout method to use. `auto`, `vertical`, `horizontal` or `grid`. See below. Default: `auto`.
-- `<min_height>` The minimum length of a column in `auto` layout. Default: `5`.
-- `<min_columns>` The minimum number of columns to use. Default: `1`.
-- `<max_columns>` The maximum number of columns to use. Default: `100`.
-- `<column_num>` Shorthand to set both `min_columns>` and `<max_columns>`to the same value. Try this first.
-- `<column_width>` Width of columns. Default: `300px`.
-- `<max_width>`, `<min_width>`, `<flex_grow>` Set the `max-width`, `min-width` and `flex-grow` CSS properties of the columns manually. Default: `column_width or 500px`, `undefined`, `undefined`.
-- `<sidebar-column>` is used to mimic the default behavior of lovelace. See below.
-- `<grid_rows>`, `<grid_col>`, `<grid_gap>`, `<grid_place>` Set the `grid-template-rows`, `grid-template-columns`, `grid-gap` and `place-items` CSS properties when using `layout: grid`.
-- `<justify_content>` Set the `justify-content` CSS property of the column container. Default: `center`.
+Layout-card adds four new view layout to lovelace.
+- Masonry (`custom:masonry-layout`)
+- Horizontal (`custom:horizontal-layout`)
+- Vertical (`custom:vertical-layout`)
+- Grid (`custom:grid-layout`)
 
-## Layouts
+The difference between the types of layout is described below.
 
-The basic concept of this card is that it takes a number of other cards, and places them in the browser window, just like lovelace does normally, but allowing you a bit more control.
-
-Since `layout-card` is a card in itself its area of effect will be limited to the width of a card, and thus you will (almost) always want to use it in [panel mode](https://www.home-assistant.io/lovelace/views/#panel-mode):
+Those can be selected either via the GUI as in the Quick Start above, or in the lovelace configuration by setting `type` (and optionally `layout`):
 
 ```yaml
 views:
-  - title: My view
-    panel: true
+  - title: Home
+    type: custom:masonry-layout
+    layout:
+      width: 300
+      max_cols: 10
     cards:
-      - type: custom:layout-card
-        ...
+      ...
 ```
 
-### `auto` layout
+### Layout-card
 
-The auto layout works in the same way as the default lovelace layout.
-
-It follows a simple process.
-- A number of columns are prepared based on the screen width and `<column_width>`.
-- If the sidebar is opened, the number of columns is decreased by 1. (**This is not done by layout-card unless `<sidebar_column>` is true.**)
-- The number of columns is clamped between `<min_columns>`  and `<max_columns>`
-- Cards have a `cardHeight`, which is calculated from their content. One unit is roughly 50 pixels tall.
-- Each new card is added to the first row which is less than `<min_height>` units tall.
-- If all columns are taller than `<min_height>`, the card is added to the shortest column.
-- Once all cards have been placed, any remaining empty columns are removed.
+Any layout can also be used inside a lovelace-card by using `layout-card`:
 
 ```yaml
 type: custom:layout-card
+layout_type: masonry
+layout_options:
+  width: 300
+  max_cols: 10
+cards:
+  ...
+```
+
+`Layout-card` will take its `cards` and place them within itself according to the specified layout.
+
+> NOTE: Please be aware that `layout-card` is itself a CARD, and cannot be wider than any other cards in the same view. \
+> All cards you specify within it must fit inside this same width. \
+> Thus `layout-card` is of limited use expect in [panel mode](https://www.home-assistant.io/lovelace/dashboards-and-views/#panel).
+
+### Card layout options
+Some layout types accept options added to separate cards:
+
+```yaml
+type: entities
+entities:
+  - light.bed_light
+layout:
+  column: 2
+```
+
+### Layout-break card
+Layout card adds a special card called `layout-break` which can be used to change how some layouts work.
+
+```yaml
+type: custom:layout-break
+```
+
+## Layouts
+Layout-card introduces four layouts.
+- Masonry
+- Horizontal
+- Vertical
+- Grid
+
+The first three are column based and work similarly:
+
+- A number of evenly sized columns is prepared based on avaialble space, the `width` option and the `max_cols` option.
+- The cards are placed into the columns one at a time in a method depending on the current layout.
+- Any empty columns are removed.
+- The remaining columns are placed centered on screen.
+
+All column based layouts accept the following options:
+
+|Option|Values|Description|Default
+|---|---|---|---|
+|`width`| number | Size in pixels of each column | 300 |
+|`max_width` | number | Maximum width of a card | 1.5 * `width` if specified <br> otherwise 500 |
+|`max_cols` | number | Maximum number of columns to show | 4 if sidebar is hidden <br> 3 if sidebar is shown |
+
+### Masonry layout
+
+The masonry layout immitates the default layout of lovelace.
+- Each card is assigned a height based on their contents. One height unit corresponds to roughly 50 pixels, but this may varry.
+- When a card is placed in the layout, it is put in the first column which has a total height of less than `min_height` units. \
+Otherwise it is put it the shortest column.
+
+![Masonry Layout](https://user-images.githubusercontent.com/1299821/111067510-f2639100-84c4-11eb-9ce1-b40cf1f13772.png)
+
+The masonry layout accepts the following options:
+|Option|Values|Description|Default
+|---|---|---|---|
+|`min_height`| number | Minimum number of card height units in a column before the next one is considered | 5 |
+
+### Horizontal layout
+
+The horizontal layout will add each card to the next column, looping back to the first one when necessary:
+
+![Horizontal Layout](https://user-images.githubusercontent.com/1299821/111067632-7453ba00-84c5-11eb-942c-88dab6d1f19b.png)
+
+A `layout-break` card will cause the next card to be places in the first column.
+
+The horizontal layout accepts the following **card** layout options:
+|Option|Values|Description|Default
+|---|---|---|---|
+|`column`| number | Which column to place the card in. Following cards will be placed in the next column. |  |
+
+
+### Vertical layout
+
+The vertical layout will add each card to the same column as the previous one.
+
+![Vertical Layout](https://user-images.githubusercontent.com/1299821/111067990-17f19a00-84c7-11eb-905a-2c687e85e972.png)
+
+A `layout-break` card will cause the next card to be placed in the next column.
+
+The vertical layout accepts the following **card** layout options:
+|Option|Values|Description|Default
+|---|---|---|---|
+|`column`| number | Which column to place the card in. Following cards will be placed in the same column. |  |
+
+### Grid layout
+The grid layout will give you full controll of your cards by leveraging [CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/).
+
+The grid layout accepts any option starting with `grid-` that works for a Grid Container.
+The grid layout also accepts any card layout option starting with `grid-` that works for a Grid Item.
+
+![Grid Layout](https://user-images.githubusercontent.com/1299821/111069100-cac3f700-84cb-11eb-904f-cb5661c5734b.png)
+<details>
+<summary>Screenshot source code</summary>
+
+```yaml
+title: Grid layout
+type: custom:grid-layout
+layout:
+  grid-template-columns: 25% 25% 25% 25%
+  grid-template-rows: auto
+  grid-template-areas: |
+    "header header header header"
+    "main main . sidebar"
+    "footer footer footer footer"
+badges: []
 cards:
   - type: entities
-    title: 1
+    entities:
+      - entity: light.bed_light
+    title: '1'
+    show_header_toggle: false
+    layout:
+      grid-area: header
+  - type: entities
+    entities:
+      - entity: light.bed_light
+    title: '2'
+    show_header_toggle: false
+    layout:
+      grid-area: footer
+  - type: entities
+    entities:
+      - entity: light.bed_light
+    title: '3'
+    show_header_toggle: false
+    layout:
+      grid-area: sidebar
+  - type: entities
     entities:
       - light.bed_light
-  - type: entities
-    title: 2
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 3
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 4
-    entities:
-      - light.bed_light
-      - light.bed_light
-      - light.bed_light
-      - light.bed_light
-  - type: entities
-    title: 5
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 6
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 7
-    entities:
-      - light.bed_light
-  - type: entities
-    title: 8
-    entities:
-      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+    title: '4'
+    show_header_toggle: false
+    layout:
+      grid-area: main
 ```
-![layout-card 1 - auto](https://user-images.githubusercontent.com/1299821/48088464-62312500-e202-11e8-8ccc-0ef6ac10ec2e.png)
 
-> Note: To get *exactly* the same behavior as the default layout, you need to specify `sidebar_column: true` and `max_columns: 4`. This was given a higher default value to work better with the ridiculously huge screens some people have nowadays.
+</details>
 
-> Note: The same 8 cards will be used in the following examples and will be omitted for clarity.
 
-### `horizontal` layout
-
-The horizontal layout calculates the number of columns just like the `auto` layout.
-It then places the first card in the first column, the second card in the second columns, and so on. Once it reaches the last column, it starts over from the first.
+## Card visibility
+Individual cards can be displayed or hidden based on their `show:` layout option.
 
 ```yaml
-type: custom:layout-card
-layout: horizontal
-cards:
-  - ...
+- type: entities
+  title: Always show
+  ...
+  layout:
+    show: always
+- type: entities
+  title: Never show
+  ...
+  layout:
+    show: never
 ```
-![layout-card 2 - horizontal](https://user-images.githubusercontent.com/1299821/48088463-62312500-e202-11e8-875a-5ff836069017.png)
 
-### `vertical` layout
-
-The vertical layout calculates the number of columns just like the `auto` layout.
-It then places every card in the first column.
+The options `show: always` and `show: never` are honestly quite pointless... but there's a cooler option:
 
 ```yaml
-type: custom:layout-card
-layout: vertical
-cards:
-  - ...
+type: entities
+title: Never show
+...
+layout:
+  show:
+    mediaquery: <mediaquery>
 ```
-![layout-card 3 - vertical](https://user-images.githubusercontent.com/1299821/48088462-62312500-e202-11e8-8e5e-7f4d1821eeb8.png)
 
-It's OK to think I'm out of my mind at this point. And if you don't, you probably will once I claim that this is probably the most useful layout.
+This card will only be displayed if the [@media rule](https://www.w3schools.com/cssref/css3_pr_mediaquery.asp) `<mediaquery>` is a match.
 
-Still here? OK. Let me tell you about the `break`.
+Example:
+```yaml
+- type: markdown
+  content: |
+    This is only shown on screens more than 800 px wide
+  layout:
+    show:
+      mediaquery: "(min-width: 800px)"
+- type: markdown
+  content: |
+    This is only shown on screens less than 400 px wide
+  layout:
+    show:
+      mediaquery: "(max-width: 400px)"
+- type: markdown
+  content: |
+    This is only shown on touch screen devices
+  layout:
+    show:
+      mediaquery: "(pointer: coarse)"
+```
 
-### `- break`
+## Use with entity filters
+Layout card can be used with cards that populate an `entities:` list, like [Entity Filter](https://www.home-assistant.io/lovelace/entity-filter/) or [auto-entities](https://github.com/thomasloven/lovelace-auto-entities).
 
-Just add `- break` to the list of `<cards>` to make card placer move on to the next column for the next card.
+If no card type is explicitly specified for the entries, the [Entity](https://www.home-assistant.io/lovelace/entity/) card will be used.
 
-This is most useful in the `vertical` layout, but will work in the `horizontal` and `auto` layouts too.
+Example:
 
 ```yaml
-type: custom:layout-card
-layout: vertical
-cards:
-  - type: entities
-    title: 1
-    ...
-  - type: entities
-    title: 2
-    ...
-  - break
-  - type: entities
-    title: 3
-    ...
-  - break
-  - type: entities
-    title: 4
-    ...
-  - type: entities
-    title: 6
-    ...
-  - break
-  - type: entities
-    title: 7
-    ...
+- type: 'custom:auto-entities'
+        filter:
+          include:
+            - domain: light
+              options:
+                type: light
+            - domain: sensor
+          exclude: []
+        card:
+          type: 'custom:layout-card'
+          cards: []
+          layout_type: masonry
 ```
-![layout-card 4 - manual breaks](https://user-images.githubusercontent.com/1299821/48088461-62312500-e202-11e8-96ab-e4f560f8d4fc.png)
 
-### `grid` layout (experimental)
-
-For maximum control, you can place every card manually in a [CSS grid](https://css-tricks.com/snippets/css/complete-guide-grid/) by using the `grid` layout.
-
-To do this, you need to specify `gridrows` and `gridcols` with the settings for `grid-template-rows` and `grid-template-columns` respectively **and** also add `gridcol:` and `gridrow:` for *each card* with the settings for `grid-column` and `grid-row` respectively.
-
-> Hint: This may look better if you also have [card-mod](https://github.com/thomasloven/lovelace-card-mod) and set the card heights to `100 %`.
-
-```yaml
-type: custom:layout-card
-layout: vertical
-column_width: 100%
-cards:
-  - type: markdown
-    content: "# Grid"
-  - type: custom:layout-card
-    layout: grid
-    gridrows: 180px 200px auto
-    gridcols: 180px auto 180px
-    cards:
-      - type: glance
-        entities:
-          - sun.sun
-        gridrow: 1 / 2
-        gridcol: 1 / 2
-        style: "ha-card { height: 100%; }"
-      - type: entities
-        entities: &ents
-          - light.bed_light
-          - light.kitchen_lights
-          - light.ceiling_lights
-        gridrow: 1 / 3
-        gridcol: 2 / 4
-        style: "ha-card { height: 100%; }"
-      - type: markdown
-        content: test
-        gridrow: 2 / 4
-        gridcol: 1 / 2
-        style: "ha-card { height: 100%; }"
-      - type: entities
-        entities: *ents
-        gridrow: 3 / 4
-        gridcol: 2 / 3
-```
-![layout-card - Grid](https://user-images.githubusercontent.com/1299821/71694902-e3f1f380-2db0-11ea-82f1-8f880a2fbb24.png)
-
-You can also omit `gridrows` or tweak `gridgap` and `gridplace` to get different results. I don't know how this works, but feel free to play around!
-
-## Tweaking layouts
-
-- First of all `<column_num>`, which can be used to force the number of columns displayed:
-
-```yaml
-type: custom:layout-card
-layout: vertical
-column_num: 7
-cards:
-  - ...
-```
-![force-number](https://user-images.githubusercontent.com/1299821/68596569-be74f780-049b-11ea-97a7-1d591edf5a26.png)
-
-> Note: See how squeezing cards too tight will make them look weird? Keep this in mind, and don't send me bug reports about it.  
-> Your toggles would pop out too if someone forced you into a 100 pixel box.
-
-- The width of columns can be specified either all together...:
-
-```yaml
-type: custom:layout-card
-column_width: 200
-cards:
-  - ...
-```
-![same-width](https://user-images.githubusercontent.com/1299821/68597185-d13bfc00-049c-11ea-8fd4-8d6327a9764a.png)
-
-- ...or as a list of column widths:
-
-```yaml
-type: custom:layout-card
-column_width: [200, 300, 150]
-cards:
-  - ...
-```
-![varied-width](https://user-images.githubusercontent.com/1299821/68597348-1829f180-049d-11ea-917a-c97be3f1e561.png)
-
-If there are more column than values in the list, the last value in the list will be used for the remaining columns.
-
-- Values can be specified either in pixels or in percentages:
-
-```yaml
-type: custom:layout-card
-column_width: 30%
-cards:
-  - ...
-```
-![percentage](https://user-images.githubusercontent.com/1299821/68598310-d4d08280-049e-11ea-8ea7-48d8b14ffef0.png)
-
-
-- Further tweaks can be made in the same way using `<max_width>` and `<min_width>`, but most of the time `<column_width>` should be enough.
-
-- `<flex_grow>` (single value or list) and `<justify_content>` (single value) can be used to tweak the CSS flexbox settings of the layout. See [this excellent guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) for more info.
-
-- `<rtl>` will populate the columns from right to left instead of left to right.
-
-
-## A few tips
-- `card_options` works really well together with [card-mod](https://github.com/thomasloven/lovelace-card-mod).
-
-- Layout-cards can be placed inside other layout-cards or in vertical-stack cards:
-![stacked](https://user-images.githubusercontent.com/1299821/68598908-f0885880-049f-11ea-814f-b91ee6ee9eef.png)
-
-- [gap-card](https://github.com/thomasloven/lovelace-gap-card) can be used to leave a gap in the layout:
-![gap](https://user-images.githubusercontent.com/1299821/68599474-eb77d900-04a0-11ea-9b89-f0d090c858b3.png)
-
-- The card list can be populated automatically using [auto-entities](https://github.com/thomasloven/lovelace-auto-entities)
-
-```yaml
-type: custom:auto-entities
-filter:
-  include:
-    - domain: light
-      options:
-        type: light # Make sure to specify a card type for every filter
-    - domain: climate
-      options:
-        type: thermostat
-  exclude:
-    - state: unavailable
-sort:
-  method: name
-  ignore_case: true
-card:
-  type: custom:layout-card
-```
-![auto-entities](https://user-images.githubusercontent.com/1299821/68600943-a86b3500-04a3-11ea-8d08-106e77262552.png)
-
-
-## Note for Home Assistant Cast users
-
-Layout-card doesn't entirely work with Cast at this time. Specifically, the view may or may not load in if you start a Cast directly to a view which uses layout-card.
-
-If you instead load a different view, and then *switch* to the one using layout-card, things seem to be working better. I hope to be able to fix this soon.
+![auto-entities](https://user-images.githubusercontent.com/1299821/111070882-019e0b00-84d4-11eb-8a00-86683d598c3e.png)
 
 ---
 <a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>

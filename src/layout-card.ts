@@ -135,8 +135,8 @@ class LayoutCard extends LitElement {
   static getStubConfig() {
     return {
       layout: {
-        type: "masonry",
-        layout: {},
+        layout_type: "masonry",
+        layout_options: {},
       },
       cards: [],
     };
