@@ -1,0 +1,21 @@
+title: Mediaquery
+type: custom:masonry-layout
+cards:
+  - type: markdown
+    content: |
+      This is only shown on screens more than 800 px wide
+    layout:
+      show:
+        mediaquery: "(min-width: 800px)"
+  - type: markdown
+    content: |
+      This is only shown on screens less than 400 px wide
+    layout:
+      show:
+        mediaquery: "(max-width: 400px)"
+  - type: markdown
+    content: |
+      This is only shown on touch screen devices
+    layout:
+      show:
+        mediaquery: "(pointer: coarse)"

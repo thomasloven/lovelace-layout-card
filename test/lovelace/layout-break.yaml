@@ -1,0 +1,12 @@
+title: layout-break
+type: custom:vertical-layout
+cards:
+  - <<: &card
+      type: entities
+      entities:
+        - light.bed_light
+        - light.ceiling_lights
+        - light.kitchen_lights
+  - type: custom:layout-break
+  - <<: *card
+  - <<: *card

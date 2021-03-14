@@ -5,10 +5,6 @@ demo:
 lovelace:
   mode: storage
   dashboards:
-    lovelace-yaml:
-      mode: yaml
-      title: yaml
-      filename: test/lovelace.yaml
     lovelace-views:
       mode: yaml
       title: views

@@ -1,35 +1,34 @@
 - type: entities
-  title: 1
+  title: '1'
   entities:
     - light.bed_light
 - type: entities
-  title: 2
+  title: '2'
   entities:
     - light.bed_light
 - type: entities
-  title: 3
+  title: '3'
   entities:
     - light.bed_light
 - type: entities
-  title: 4
+  title: '4'
   entities:
     - light.bed_light
-    - light.bed_light
-    - light.bed_light
-    - light.bed_light
+    - light.ceiling_lights
+    - light.kitchen_lights
 - type: entities
-  title: 5
-  entities:
-    - light.bed_light
-- type: entities
-  title: 6
+  title: '5'
   entities:
     - light.bed_light
 - type: entities
-  title: 7
+  title: '6'
   entities:
     - light.bed_light
 - type: entities
-  title: 8
+  title: '7'
+  entities:
+    - light.bed_light
+- type: entities
+  title: '8'
   entities:
     - light.bed_light

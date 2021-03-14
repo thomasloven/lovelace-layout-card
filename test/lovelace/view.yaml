@@ -2,52 +2,33 @@ title: layout-card
 views:
   - title: Core
     cards: !include card-list.yaml
+
   - title: Masonry
     type: custom:masonry-layout
     cards: !include card-list.yaml
+
   - title: Horizontal
     type: custom:horizontal-layout
     cards: !include card-list.yaml
+
   - title: Vertical
     type: custom:vertical-layout
     cards: !include card-list.yaml
-  - title: Grid
-    type: custom:grid-layout
+
+  - !include grid-view.yaml
+
+  - title: Options
+    type: custom:masonry-layout
+    layout:
+      width: 200
+      max_cols: 10
+      min_height: 1
     cards: !include card-list.yaml
-
-  # - title: Masonry2
-  #   type: custom:masonry-layout
-  #   layout:
-  #     width: 200
-  #     max_cols: 7
-  #     min_height: 1
-  #   cards: *cards
-
-  # - title: Panel
-  #   panel: true
-  #   cards:
-  #     - type: custom:layout-card
-  #       cards: !include card-list.yaml
-
-  # - title: Horizontal
-  #   type: custom:horizontal-layout
-  #   cards: *cards
-  # - title: Horizontal2
-  #   type: custom:horizontal-layout
-  #   cards: *cards
-  #   layout:
-  #     width: 200
-  #     max_cols: 6
-  # - title: Horizontal-break
-  #   type: custom:horizontal-layout
-  #   cards: *breakcards
-
-  # - title: Vertical
-  #   type: custom:vertical-layout
-  #   cards: *cards
-  # - title: Vertical-break
-  #   type: custom:vertical-layout
-  #   cards: *breakcards
-
-  # - !include grid-view.yaml
-  # - !include layout-card.yaml
+  - title: rtl
+    type: custom:masonry-layout
+    layout:
+      rtl: true
+    cards: !include card-list.yaml
+  - !include layout-card.yaml
+  - !include layout-break.yaml
+  - !include media-query.yaml

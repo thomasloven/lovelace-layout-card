@@ -177,7 +177,6 @@ layout:
     "header header header header"
     "main main . sidebar"
     "footer footer footer footer"
-badges: []
 cards:
   - type: entities
     entities:

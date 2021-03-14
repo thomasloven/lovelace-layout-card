@@ -6,12 +6,11 @@ cards:
       - type: custom:layout-card
         cards: !include card-list.yaml
       - type: custom:layout-card
-        layout:
-          type: custom:masonry-layout
+        layout_type: masonry
         cards: !include card-list.yaml
       - type: custom:layout-card
+        layout_type: horizontal
         cards: !include card-list.yaml
       - type: custom:layout-card
-        cards: !include card-list.yaml
-      - type: custom:layout-card
+        layout_type: vertical
         cards: !include card-list.yaml
