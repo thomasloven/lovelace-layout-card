@@ -43,6 +43,7 @@ export interface MasonryViewConfig extends ViewConfig {
 
 export interface LayoutCardConfig {
   cards?: Array<CardConfig>;
+  entities?: Array<CardConfig>;
   layout_type?: string;
   layout_options?: any;
 }
