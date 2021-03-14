@@ -102,7 +102,7 @@ Layout-card introduces four layouts.
 
 The first three are column based and work similarly:
 
-- A number of evenly sized columns is prepared based on avaialble space, the `width` option and the `max_cols` option.
+- A number of evenly sized columns is prepared based on available space, the `width` option and the `max_cols` option.
 - The cards are placed into the columns one at a time in a method depending on the current layout.
 - Any empty columns are removed.
 - The remaining columns are placed centered on screen.
