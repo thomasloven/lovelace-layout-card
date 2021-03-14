@@ -1,10 +1,9 @@
-import { css, html, LitElement, property } from "lit-element";
+import { css, html, property } from "lit-element";
 import {
   CardConfigGroup,
   CardConfig,
   LovelaceCard,
-  MasonryViewConfig,
-  ViewConfig,
+  ColumnViewConfig,
 } from "../types";
 import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
 import { BaseLayout } from "./base-layout";
@@ -15,7 +14,7 @@ export class BaseColumnLayout extends BaseLayout {
   _observer?: ResizeObserver;
   _mediaQueries: Array<MediaQueryList | null> = [];
 
-  async setConfig(config: MasonryViewConfig) {
+  async setConfig(config: ColumnViewConfig) {
     await super.setConfig(config);
 
     for (const card of this._config.cards) {

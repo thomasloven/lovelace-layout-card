@@ -1,11 +1,4 @@
-import { css, html, LitElement, property } from "lit-element";
-import {
-  CardConfigGroup,
-  LovelaceCard,
-  MasonryViewConfig,
-  ViewConfig,
-} from "../types";
-import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
+import { CardConfigGroup } from "../types";
 import { BaseColumnLayout } from "./base-column-layout";
 
 class VerticalLayout extends BaseColumnLayout {

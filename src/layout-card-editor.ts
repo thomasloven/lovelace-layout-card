@@ -9,8 +9,6 @@ import {
 } from "lit-element";
 import { LayoutCardConfig } from "./types";
 
-const TYPE_OPTIONS = ["default", "masonry", "vertical", "horizontal", "grid"];
-
 class LayoutCardEditor extends LitElement {
   @property() _config: LayoutCardConfig;
   @property() lovelace;

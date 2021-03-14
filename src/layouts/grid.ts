@@ -1,5 +1,5 @@
-import { css, html, LitElement, property } from "lit-element";
-import { CardConfigGroup, LovelaceCard } from "../types";
+import { css, html } from "lit-element";
+import { CardConfigGroup } from "../types";
 import { BaseLayout } from "./base-layout";
 
 class GridLayout extends BaseLayout {

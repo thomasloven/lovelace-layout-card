@@ -5,13 +5,6 @@ export interface LovelaceCard extends HTMLElement {
   getCardSize?(): Promise<number> | number;
 }
 
-export interface ViewConfig {
-  title?: string;
-  type?: string;
-  cards?: Array<CardConfig>;
-  layout?: any;
-}
-
 export interface CardConfig {
   type: string;
   layout?: {
@@ -32,7 +25,14 @@ export interface CardConfigGroup {
   show?: boolean;
 }
 
-export interface MasonryViewConfig extends ViewConfig {
+export interface ViewConfig {
+  title?: string;
+  type?: string;
+  cards?: Array<CardConfig>;
+  layout?: any;
+}
+
+export interface ColumnViewConfig extends ViewConfig {
   layout?: {
     width?: number;
     max_width?: number;

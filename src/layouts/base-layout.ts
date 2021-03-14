@@ -3,7 +3,6 @@ import {
   CardConfigGroup,
   CardConfig,
   LovelaceCard,
-  MasonryViewConfig,
   ViewConfig,
 } from "../types";
 
