@@ -14,7 +14,12 @@ class LayoutCard extends LitElement {
 
   setConfig(config: LayoutCardConfig) {
     this._config = { ...config };
-    if (this._config.entities) this._config.cards = this._config.entities;
+
+    if (this._config.entities) {
+      this._config.cards = this._config.entities.map((e) =>
+        e.type ? e : { ...e, type: "entity" }
+      );
+    }
 
     let configType = config.layout_type;
     if (configType) {
