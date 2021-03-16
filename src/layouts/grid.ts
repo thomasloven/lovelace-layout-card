@@ -37,6 +37,7 @@ class GridLayout extends BaseLayout {
         mq.addEventListener("change", () => this._setGridStyles());
       }
     }
+    this._setGridStyles();
   }
 
   async updated(changedProperties) {

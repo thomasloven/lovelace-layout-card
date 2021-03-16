@@ -7,6 +7,13 @@ layout:
     "header header header header"
     "main main . sidebar"
     "footer footer footer footer"
+  mediaquery:
+    "(max-width: 800px)":
+      grid-template-columns: 50% 50%
+      grid-template-areas: |
+        "header sidebar"
+        "main main"
+        "footer footer"
 cards:
   - type: entities
     entities:
