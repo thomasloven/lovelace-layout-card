@@ -7,6 +7,9 @@ Get more control over the placement of lovelace cards
 
 For installation instructions [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
 
+# IMPORTANT!
+# Due to name collisions with other popuplar lovelace cards, the parameter `layout` will likely very soon be called something else.
+
 ## Quick Start
 
 - Go to one of your lovelace views and select "Edit Dashboard"
