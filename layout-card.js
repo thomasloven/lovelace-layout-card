@@ -48,7 +48,7 @@ function t(t,e,i,s){var o,n=arguments.length,r=n<3?e:null===s?s=Object.getOwnPro
           display: grid;
           margin-left: 4px;
           margin-right: 4px;
-          justify-content: center;
+          justify-content: stretch;
         }
         #root > * {
           margin: var(--masonry-view-card-margin, 4px 4px 8px);
