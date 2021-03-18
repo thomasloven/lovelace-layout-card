@@ -17,10 +17,10 @@ class GridLayout extends BaseLayout {
 
     for (const card of this._config.cards) {
       if (
-        typeof card.layout?.show !== "string" &&
-        card.layout?.show?.mediaquery
+        typeof card.view_layout?.show !== "string" &&
+        card.view_layout?.show?.mediaquery
       ) {
-        const mq = window.matchMedia(`${card.layout.show.mediaquery}`);
+        const mq = window.matchMedia(`${card.view_layout.show.mediaquery}`);
         this._mediaQueries.push(mq);
         mq.addEventListener("change", () => this._placeCards());
       } else {
@@ -96,7 +96,9 @@ class GridLayout extends BaseLayout {
 
     for (const card of cards.filter((c) => this.lovelace?.editMode || c.show)) {
       const el = this.getCardElement(card);
-      for (const [key, value] of Object.entries(card.config?.layout ?? {})) {
+      for (const [key, value] of Object.entries(
+        card.config?.view_layout ?? {}
+      )) {
         if (key.startsWith("grid")) el.style.setProperty(key, value as string);
       }
       root.appendChild(el);

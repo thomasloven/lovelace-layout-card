@@ -7,7 +7,7 @@ export interface LovelaceCard extends HTMLElement {
 
 export interface CardConfig {
   type: string;
-  layout?: {
+  view_layout?: {
     show?:
       | "always"
       | "never"

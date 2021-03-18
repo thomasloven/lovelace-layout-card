@@ -6,7 +6,7 @@ class HorizontalLayout extends BaseColumnLayout {
     let i = 0;
     for (const c of cards) {
       i += 1;
-      if (c.config.layout?.column) i = c.config.layout.column;
+      if (c.config.view_layout?.column) i = c.config.view_layout.column;
       const col = cols[(i - 1) % cols.length];
       col.appendChild(this.getCardElement(c));
       if (this.isBreak(c.card)) {

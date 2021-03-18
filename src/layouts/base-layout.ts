@@ -41,8 +41,8 @@ export class BaseLayout extends LitElement {
   }
 
   _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
-    if (config.layout?.show === "always") return true;
-    if (config.layout?.show === "never") return false;
+    if (config.view_layout?.show === "always") return true;
+    if (config.view_layout?.show === "never") return false;
     return true;
   }
 

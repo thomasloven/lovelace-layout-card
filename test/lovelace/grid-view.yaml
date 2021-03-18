@@ -18,30 +18,30 @@ cards:
   - type: entities
     entities:
       - entity: light.bed_light
-    title: '1'
+    title: "1"
     show_header_toggle: false
-    layout:
+    view_layout:
       grid-area: header
   - type: entities
     entities:
       - entity: light.bed_light
-    title: '2'
+    title: "2"
     show_header_toggle: false
-    layout:
+    view_layout:
       grid-area: footer
   - type: entities
     entities:
       - entity: light.bed_light
-    title: '3'
+    title: "3"
     show_header_toggle: false
-    layout:
+    view_layout:
       grid-area: sidebar
   - type: entities
     entities:
       - light.bed_light
       - light.ceiling_lights
       - light.kitchen_lights
-    title: '4'
+    title: "4"
     show_header_toggle: false
-    layout:
+    view_layout:
       grid-area: main
