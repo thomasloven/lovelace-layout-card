@@ -53,6 +53,7 @@ class GridLayout extends BaseLayout {
 
   _setGridStyles() {
     const root = this.shadowRoot.querySelector("#root") as HTMLElement;
+    if (!root) return;
     const addStyles = (layout) => {
       for (const [key, value] of Object.entries(layout)) {
         if (key.startsWith("grid"))
