@@ -12,7 +12,7 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
         let newConfig = JSON.parse(JSON.stringify(config));
         this._layoutData = newConfig.layout;
 
-        delete newConfig.layout;
+        delete newConfig.view_layout;
 
         _setConfig.bind(this)(newConfig);
       };
@@ -24,7 +24,7 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
     HuiCardElementEditor.prototype._handleUIConfigChanged;
   HuiCardElementEditor.prototype._handleUIConfigChanged = function (ev) {
     if (this._configElement && this._configElement._layoutData)
-      ev.detail.config.layout = this._configElement._layoutData;
+      ev.detail.config.view_layout = this._configElement._layoutData;
     _handleUIConfigChanged.bind(this)(ev);
   };
 });
