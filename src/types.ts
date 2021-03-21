@@ -30,6 +30,7 @@ export interface ViewConfig {
   type?: string;
   cards?: Array<CardConfig>;
   layout?: {};
+  view_layout?: {};
 }
 
 export interface ColumnViewConfig extends ViewConfig {

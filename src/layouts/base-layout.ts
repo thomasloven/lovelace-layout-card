@@ -19,6 +19,10 @@ export class BaseLayout extends LitElement {
 
   async setConfig(config: ViewConfig) {
     this._config = { ...config };
+    if (this._config.view_layout && this._config.layout === undefined) {
+      // Maybe avoid a bit of confusion...
+      this._config.layout = this._config.view_layout;
+    }
   }
 
   async updated(changedProperties: Map<string, any>) {
