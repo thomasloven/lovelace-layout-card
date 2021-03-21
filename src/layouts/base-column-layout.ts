@@ -57,9 +57,10 @@ export class BaseColumnLayout extends BaseLayout {
     this._updateSize();
 
     const column_max_width =
-      this._config.layout?.max_width || this._config.layout?.width
+      this._config.layout?.max_width ||
+      (this._config.layout?.width
         ? Math.ceil(this._config.layout?.width * 1.5)
-        : 500;
+        : 500);
     const column_two_width = this._config.layout?.width
       ? this._config.layout.width * 2
       : 600;
