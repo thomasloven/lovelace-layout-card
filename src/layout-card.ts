@@ -41,7 +41,7 @@ class LayoutCard extends LitElement {
     ) {
       const viewConfig = {
         type: this._layoutType,
-        layout: this._config.layout_options,
+        layout: this._config.layout || this._config.layout_options,
         cards: this._config.cards,
       };
       const layoutElement = document.createElement(
@@ -135,7 +135,7 @@ class LayoutCard extends LitElement {
   static getStubConfig() {
     return {
       layout_type: "masonry",
-      layout_options: {},
+      layout: {},
       cards: [],
     };
   }

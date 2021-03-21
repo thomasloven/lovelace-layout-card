@@ -1,19 +1,27 @@
 title: Grid
 type: custom:grid-layout
 layout:
-  grid-template-columns: 25% 25% 25% 25%
+  grid-template-columns: auto 30px 25%
   grid-template-rows: auto
   grid-template-areas: |
-    "header header header header"
-    "main main . sidebar"
-    "footer footer footer footer"
+    "header header header"
+    "main . sidebar"
+    "footer footer footer"
   mediaquery:
+    "(max-width: 600px)":
+      grid-template-columns: 100%
+      grid-template-areas: |
+        "header"
+        "sidebar"
+        "main"
+        "footer"
     "(max-width: 800px)":
       grid-template-columns: 50% 50%
       grid-template-areas: |
         "header sidebar"
         "main main"
         "footer footer"
+
 cards:
   - type: entities
     entities:
@@ -45,3 +53,9 @@ cards:
     show_header_toggle: false
     view_layout:
       grid-area: main
+  - type: entities
+    entities:
+      - light.bed_light
+  - type: entities
+    entities:
+      - light.bed_light

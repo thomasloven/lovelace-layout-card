@@ -55,12 +55,12 @@ views:
 
 ### Layout-card
 
-Any layout can also be used inside a lovelace-card by using `layout-card`:
+If needed, any layout can also be used inside a lovelace-card by using `layout-card`:
 
 ```yaml
 type: custom:layout-card
-layout_type: masonry
-layout_options:
+layout_type: custom:masonry-layout
+layout:
   width: 300
   max_cols: 10
 cards: ...
@@ -68,13 +68,18 @@ cards: ...
 
 `Layout-card` will take its `cards` and place them within itself according to the specified layout.
 
+`layout:` takes the same options as is the view configuration for a layout.
+
 > NOTE: Please be aware that `layout-card` is itself a CARD, and cannot be wider than any other cards in the same view. \
 > All cards you specify within it must fit inside this same width. \
 > Thus `layout-card` is of limited use expect in [panel mode](https://www.home-assistant.io/lovelace/dashboards-and-views/#panel).
 
+> NOTE 2: The "default" layout option for layout-card (which you'll see if you're using the GUI lovelace editor) uses the default layout engine of lovelace. It's basically the same as the Horizontal layout, but without any options, without being able to hide cards and with the number of columns based on the width of the window rather than the layout-card. \
+> I don't recommend using it, but it's _there_.
+
 ### Card layout options
 
-Some layout types accept options added to separate cards in a `view_layout` parameter:
+For some layout types, special options can be attached to each card. This is done in the `view_layout` parameter, e.g:
 
 ```yaml
 type: entities
@@ -108,7 +113,7 @@ The first three are column based and work similarly:
 - Any empty columns are removed.
 - The remaining columns are placed centered on screen.
 
-All column based layouts accept the following `view_layout` options:
+All column based layouts accept the following `layout` options:
 
 | Option      | Values         | Description                          | Default                                           |
 | ----------- | -------------- | ------------------------------------ | ------------------------------------------------- |
@@ -123,6 +128,8 @@ All column based layouts accept the following `view_layout` options:
 > Second: Usability. I want to focus on fewer options and doing the right thing out of the box instead. And the three remaining options actually have much more impact than you'd think.
 >
 > If you want more fine-grained controll (e.g. variable sized columns), please take a look at the Grid layout.
+>
+> In general, I recommend starting over with a grid view, rather than trying to convert an old layout-card based setup. You'll likely have better results.
 
 ### Masonry layout
 
@@ -134,7 +141,7 @@ The masonry layout immitates the default layout of lovelace.
 
 ![Masonry Layout](https://user-images.githubusercontent.com/1299821/111067510-f2639100-84c4-11eb-9ce1-b40cf1f13772.png)
 
-The masonry layout accepts the following `layout` options:
+The masonry layout accepts the following `layout` options (besides the ones mentioned above):
 |Option|Values|Description|Default
 |---|---|---|---|
 |`min_height`| number | Minimum number of card height units in a column before the next one is considered | 5 |
@@ -145,7 +152,7 @@ The horizontal layout will add each card to the next column, looping back to the
 
 ![Horizontal Layout](https://user-images.githubusercontent.com/1299821/111067632-7453ba00-84c5-11eb-942c-88dab6d1f19b.png)
 
-A `layout-break` card will cause the next card to be places in the first column.
+A `layout-break` card will cause the next card to be placed in the first column.
 
 The horizontal layout accepts the following **card** `view_layout` options:
 |Option|Values|Description|Default
@@ -172,27 +179,39 @@ The grid layout will give you full controll of your cards by leveraging [CSS Gri
 The grid layout accepts any option starting with `grid-` that works for a Grid Container.
 
 Furthermore, the special option `mediaquery` can be used to set grid options depending on currently matched [@media rules](https://www.w3schools.com/cssref/css3_pr_mediaquery.asp). This helps immensely in creating fully responsive layouts. \
-Please see the example code accompanying the screen recording below.
+Please see the example code accompanying the screen recording below. \
+Note that only the first matching rule will be applied.
 
 For the card `view_layout` options. the grid layout accepts any css grid property starting with `grid-` that works for a Grid Item.
+
+There's no point in me trying to list all `grid-` options here. Instead see the excellent guide linked above.
 
 ![Grid Layout](https://user-images.githubusercontent.com/1299821/111082577-4d1edc00-8509-11eb-80d1-2ecbdea7a085.gif)
 
 <details>
 <summary>Yaml code</summary>
 
+Configuration for view:
+
 ```yaml
 title: Grid layout
 type: custom:grid-layout
 layout:
-  grid-template-columns: 25% 1fr 50px 25%
+  grid-template-columns: auto 30px 25%
   grid-template-rows: auto
   grid-template-areas: |
-    "header header header header"
-    "main main . sidebar"
-    "footer footer footer footer"
+    "header header header"
+    "main . sidebar"
+    "footer footer footer"
   mediaquery:
     "(max-width: 600px)":
+      grid-template-columns: 100%
+      grid-template-areas: |
+        "header"
+        "sidebar"
+        "main"
+        "footer"
+    "(max-width: 800px)":
       grid-template-columns: 50% 50%
       grid-template-areas: |
         "header sidebar"
@@ -235,7 +254,7 @@ cards:
 
 ## Card visibility
 
-Individual cards can be displayed or hidden based on their `show:` `view_layout` option.
+Individual cards can be displayed or hidden with the `view_layout` option `show`, e.g:
 
 ```yaml
 - type: entities

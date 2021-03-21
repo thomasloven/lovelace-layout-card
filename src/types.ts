@@ -52,5 +52,6 @@ export interface LayoutCardConfig {
   cards?: Array<CardConfig>;
   entities?: Array<CardConfig>;
   layout_type?: string;
-  layout_options?: any;
+  layout?: any;
+  layout_options?: any; // legacy
 }
