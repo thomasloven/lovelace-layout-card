@@ -138,7 +138,7 @@ All column based layouts accept the following `layout` options:
 
 The masonry layout immitates the default layout of lovelace.
 
-- Each card is assigned a height based on their contents. One height unit corresponds to roughly 50 pixels, but this may varry.
+- Each card is assigned a height based on their contents. One height unit corresponds to roughly 50 pixels, but this may vary.
 - When a card is placed in the layout, it is put in the first column which has a total height of less than `min_height` units. \
   Otherwise it is put it the shortest column.
 
