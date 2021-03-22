@@ -36,6 +36,7 @@ export interface ViewConfig {
 export interface ColumnViewConfig extends ViewConfig {
   layout?: {
     width?: number;
+    column_widths: string;
     max_width?: number;
     max_cols?: number;
     min_height?: number;

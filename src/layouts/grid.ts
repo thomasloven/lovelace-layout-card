@@ -56,7 +56,7 @@ class GridLayout extends BaseLayout {
     if (!root) return;
     const addStyles = (layout) => {
       for (const [key, value] of Object.entries(layout)) {
-        if (key.startsWith("grid"))
+        if (key.startsWith("grid") || key === "grid" || key === "place-items")
           root.style.setProperty(key, (value as any) as string);
       }
     };
@@ -100,7 +100,8 @@ class GridLayout extends BaseLayout {
       for (const [key, value] of Object.entries(
         card.config?.view_layout ?? {}
       )) {
-        if (key.startsWith("grid")) el.style.setProperty(key, value as string);
+        if (key.startsWith("grid") || key === "place-self")
+          el.style.setProperty(key, value as string);
       }
       root.appendChild(el);
     }

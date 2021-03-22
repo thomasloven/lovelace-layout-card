@@ -115,14 +115,17 @@ The first three are column based and work similarly:
 
 All column based layouts accept the following `layout` options:
 
-| Option      | Values         | Description                          | Default                                           |
-| ----------- | -------------- | ------------------------------------ | ------------------------------------------------- |
-| `width`     | number         | Size in pixels of each column        | 300                                               |
-| `max_width` | number         | Maximum width of a card              | 1.5 \* `width` if specified <br> otherwise 500    |
-| `max_cols`  | number         | Maximum number of columns to show    | 4 if sidebar is hidden <br> 3 if sidebar is shown |
-| `rtl`       | `true`/`false` | Place columns in right-to-left order | `false`                                           |
+| Option          | Values         | Description                                                                                                                        | Default                                           |
+| --------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `width`         | number         | Size in pixels of each column                                                                                                      | 300                                               |
+| `max_width`     | number         | Maximum width of a card                                                                                                            | 1.5 \* `width` if specified <br> otherwise 500    |
+| `max_cols`      | number         | Maximum number of columns to show                                                                                                  | 4 if sidebar is hidden <br> 3 if sidebar is shown |
+| `rtl`           | `true`/`false` | Place columns in right-to-left order                                                                                               | `false`                                           |
+| `column_widths` | special        | A [`grid-template-columns`](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) specification of column widths | `none`                                            |
 
-> NOTE: If you're migrating from layout-card "1.0" (v16 - sorry about the version number confusion), this is significantly fewer options than you are used to. \
+> NOTE: Even if `column_widths` is specified, the number of columns displayed will only depend on the available space, `width` and `max_cols`. If you get weird results, consider the Grid Layout.
+
+> NOTE 2: If you're migrating from layout-card "1.0" (v16 - sorry about the version number confusion), this is significantly fewer options than you are used to. \
 > The reason for this is twofold. \
 > First: Maintainability. As Home Assistant and Lovelace evolves, it grows increasingly more difficult to keep up the more options you want to keep alive. \
 > Second: Usability. I want to focus on fewer options and doing the right thing out of the box instead. And the three remaining options actually have much more impact than you'd think.
@@ -176,13 +179,13 @@ The vertical layout accepts the following **card** `view_layout` options:
 
 The grid layout will give you full controll of your cards by leveraging [CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/).
 
-The grid layout accepts any option starting with `grid-` that works for a Grid Container.
+The grid layout accepts any option starting with `grid-` that works for a Grid Container as well as `grid` and `place-items`.
 
 Furthermore, the special option `mediaquery` can be used to set grid options depending on currently matched [@media rules](https://www.w3schools.com/cssref/css3_pr_mediaquery.asp). This helps immensely in creating fully responsive layouts. \
 Please see the example code accompanying the screen recording below. \
 Note that only the first matching rule will be applied.
 
-For the card `view_layout` options. the grid layout accepts any css grid property starting with `grid-` that works for a Grid Item.
+For the card `view_layout` options. the grid layout accepts any css grid property starting with `grid-` that works for a Grid Item as well as `place-self`.
 
 There's no point in me trying to list all `grid-` options here. Instead see the excellent guide linked above.
 

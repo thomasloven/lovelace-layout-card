@@ -53,9 +53,3 @@ cards:
     show_header_toggle: false
     view_layout:
       grid-area: main
-  - type: entities
-    entities:
-      - light.bed_light
-  - type: entities
-    entities:
-      - light.bed_light

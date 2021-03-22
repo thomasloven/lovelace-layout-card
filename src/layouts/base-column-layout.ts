@@ -56,6 +56,7 @@ export class BaseColumnLayout extends BaseLayout {
   async firstUpdated() {
     this._updateSize();
 
+    const column_width = this._config.layout?.width || 300;
     const column_max_width =
       this._config.layout?.max_width ||
       (this._config.layout?.width
@@ -64,10 +65,13 @@ export class BaseColumnLayout extends BaseLayout {
     const column_two_width = this._config.layout?.width
       ? this._config.layout.width * 2
       : 600;
+
     const styleEl = document.createElement("style");
     styleEl.innerHTML = `
       :host {
         --column-max-width: ${column_max_width}px;
+        --column-width: ${column_width}px;
+        --column-widths: ${this._config.layout?.column_widths ?? "none"};
       }
       @media (max-width: ${column_max_width}px) {
         .column:first-child > * {
@@ -185,16 +189,21 @@ export class BaseColumnLayout extends BaseLayout {
         }
 
         #columns {
-          display: flex;
-          flex-direction: row;
+          display: grid;
+          grid-auto-columns: minmax(
+            var(--column-width),
+            var(--column-max-width)
+          );
+          grid-template-columns: var(--column-widths);
           justify-content: center;
+          justify-items: center;
           margin-left: 4px;
           margin-right: 4px;
         }
         .column {
-          flex: 1 0 0;
+          grid-row: 1/2;
           max-width: var(--column-max-width);
-          min-width: 0;
+          width: 100%;
         }
         .column > * {
           display: block;
