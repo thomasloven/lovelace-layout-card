@@ -56,7 +56,7 @@ class GridLayout extends BaseLayout {
     if (!root) return;
     const addStyles = (layout) => {
       for (const [key, value] of Object.entries(layout)) {
-        if (key.startsWith("grid") || key === "grid" || key === "place-items")
+        if (key.startsWith("grid") || key === "grid" || key === "place-items" || key === "place-content")
           root.style.setProperty(key, (value as any) as string);
       }
     };
