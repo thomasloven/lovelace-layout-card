@@ -15,10 +15,26 @@ class LayoutCard extends LitElement {
   setConfig(config: LayoutCardConfig) {
     this._config = { ...config };
 
+    // special handling for integration with auto-entities, which will set the entities property
     if (this._config.entities) {
-      this._config.cards = this._config.entities.map((e) =>
-        e.type ? e : { ...e, type: "entity" }
-      );
+      // if cards has been defined and contains actual cards, we clone the card and replace placeholders for entities
+      if (this._config.cards) {
+        this._config.cards = this._config.entities.map((entity) => {
+          //Typing is a bit wonky here. this._config.cards doesn't seem to be an actual CardConfig(at least with the auto-entities config)
+          let stringifiedCardConfig = JSON.stringify(this._config.cards);
+          let placeholderName = this._config.placeholder || "this.entity_id";
+          stringifiedCardConfig = stringifiedCardConfig
+            .split(placeholderName)
+            .join(entity.entity);
+          const cardClone = JSON.parse(stringifiedCardConfig);
+          return cardClone;
+        });
+      } else {
+        // cards is not defined or empty--> we will just use the entity card to show all the entities
+        this._config.cards = this._config.entities.map((entity) =>
+          entity.type ? entity : { ...entity, type: "entity" }
+        );
+      }
     }
 
     let configType = config.layout_type;
