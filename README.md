@@ -308,6 +308,20 @@ Example:
       mediaquery: "(pointer: coarse)"
 ```
 
+## Gap-card
+
+Layout card includes `gap-card` which can be used to insert empty space in any layout:
+
+```yaml
+type: custom:gap-card
+height: <height (optional)>
+size: <size (optional)>
+```
+
+`height` is the height of the gap in pixels (default: 50)
+
+`size` is the height of the card the layout engine will see in height units (default: pixel height / 50)
+
 ## Use with entity filters
 
 Layout card can be used with cards that populate an `entities:` list, like [Entity Filter](https://www.home-assistant.io/lovelace/entity-filter/) or [auto-entities](https://github.com/thomasloven/lovelace-auto-entities).

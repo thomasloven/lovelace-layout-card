@@ -7,6 +7,7 @@ import "./layout-card";
 import "./layout-card-editor";
 import "./patches/hui-dialog-edit-view";
 import "./patches/hui-card-element-editor";
+import "./gap-card.ts";
 import pjson from "../package.json";
 
 console.info(
