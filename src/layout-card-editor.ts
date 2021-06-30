@@ -36,12 +36,14 @@ class LayoutCardEditor extends LitElement {
           .substr("custom:".length)
           .slice(0, -"-layout".length)
       : "default";
+
     this._config = { ...this._config };
+
     if (type !== "default") this._config.layout_type = type;
     else delete this._config.layout_type;
-    if (ev.detail.config.layout)
-      this._config.layout_options = ev.detail.config.layout;
-    else delete this._config.layout_options;
+
+    if (ev.detail.config.layout) this._config.layout = ev.detail.config.layout;
+    else delete this._config.layout;
 
     this.dispatchEvent(
       new CustomEvent("config-changed", { detail: { config: this._config } })
@@ -139,7 +141,7 @@ class LayoutCardEditor extends LitElement {
       this._config.layout_type && this._config.layout_type !== "default"
         ? `custom:${this._config.layout_type}-layout`
         : undefined;
-    const layout = this._config.layout_options;
+    const layout = this._config.layout;
 
     return html`<div class="layout">
       <view-layout-editor

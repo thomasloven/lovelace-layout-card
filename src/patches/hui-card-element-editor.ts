@@ -10,7 +10,7 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
 
       retval.setConfig = function (config: any) {
         let newConfig = JSON.parse(JSON.stringify(config));
-        this._layoutData = newConfig.layout;
+        this._layoutData = newConfig.view_layout;
 
         delete newConfig.view_layout;
 
