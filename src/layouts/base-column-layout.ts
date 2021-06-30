@@ -45,12 +45,14 @@ export class BaseColumnLayout extends BaseLayout {
     if (changedProperties.has("_editMode")) {
       this._makeLayout();
     }
-    if (changedProperties.has("narrow")) this._updateSize();
     if (
-      changedProperties.has("hass") &&
-      changedProperties.get("hass")?.dockedSidebar != this.hass.dockedSidebar
-    )
+      changedProperties.has("narrow") ||
+      (changedProperties.has("hass") &&
+        changedProperties.get("hass")?.dockedSidebar != this.hass.dockedSidebar)
+    ) {
       this._updateSize();
+      this._makeLayout();
+    }
   }
 
   async firstUpdated() {

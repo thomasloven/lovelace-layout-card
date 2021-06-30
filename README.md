@@ -308,6 +308,21 @@ Example:
       mediaquery: "(pointer: coarse)"
 ```
 
+Another option is this:
+
+```yaml
+- type: entities
+  title: Show only when sidebar is hidden
+  view_layout:
+    show:
+      sidebar: hidden
+- type: entities
+  title: Show only when sidebar is visible
+  view_layout:
+    show:
+      sidebar: shown
+```
+
 ## Gap-card
 
 Layout card includes `gap-card` which can be used to insert empty space in any layout:

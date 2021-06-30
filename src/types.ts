@@ -12,7 +12,8 @@ export interface CardConfig {
       | "always"
       | "never"
       | {
-          mediaquery: string;
+          mediaquery?: string;
+          sidebar?: string;
         };
     column?: number;
   };
