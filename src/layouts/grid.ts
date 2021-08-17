@@ -74,7 +74,6 @@ class GridLayout extends BaseLayout {
       this._config.style.margin == "0" || this._config.style.margin
         ? this._config.style.margin
         : "4px 4px 0px 4px";
-    console.warn(this._config.style.margin);
 
     const styleEl = document.createElement("style");
     styleEl.innerHTML = `
