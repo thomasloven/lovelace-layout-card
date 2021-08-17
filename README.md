@@ -189,6 +189,8 @@ For the card `view_layout` options. the grid layout accepts any css grid propert
 
 There's no point in me trying to list all `grid-` options here. Instead see the excellent guide linked above.
 
+The grid layout's `style` option accepts a `margin` parameter that sets the margins for the grid layout's container. This parameter accepts values in the CSS [`margin` shorthand format](https://developer.mozilla.org/en-US/docs/Web/CSS/margin).
+
 ![Grid Layout](https://user-images.githubusercontent.com/1299821/111082577-4d1edc00-8509-11eb-80d1-2ecbdea7a085.gif)
 
 <details>
@@ -199,6 +201,8 @@ Configuration for view:
 ```yaml
 title: Grid layout
 type: custom:grid-layout
+style:
+  margin: 0
 layout:
   grid-template-columns: auto 30px 25%
   grid-template-rows: auto
