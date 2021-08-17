@@ -50,7 +50,8 @@ export interface GridViewConfig extends ViewConfig {
     mediaquery?: Array<Record<string, any>>;
   };
   style?: {
-    margin: string;
+		margin: string;
+		padding: string;
   };
 }
 

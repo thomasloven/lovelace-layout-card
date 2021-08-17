@@ -74,14 +74,28 @@ class GridLayout extends BaseLayout {
       this._config.style.margin == "0" || this._config.style.margin
         ? this._config.style.margin
         : "4px 4px 0px 4px";
-    console.warn(this._config.style.margin);
+
+    const grid_padding =
+      this._config.style.padding == "0" || this._config.style.padding
+        ? this._config.style.padding
+        : undefined;
 
     const styleEl = document.createElement("style");
     styleEl.innerHTML = `
       :host {
         --custom-layout-grid-margin: ${grid_margin};
+		`;
+
+    if (grid_padding) {
+      styleEl.innerHTML += `
+        --custom-layout-grid-padding: ${grid_padding};
+      `;
+    }
+
+    styleEl.innerHTML += `
       }
     `;
+
     this.shadowRoot.appendChild(styleEl);
 
     for (const q of this._layoutMQs) {
@@ -142,6 +156,7 @@ class GridLayout extends BaseLayout {
           display: grid;
           justify-content: stretch;
           margin: var(--custom-layout-grid-margin, 4px 4px 0px 4px);
+          padding: var(--custom-layout-grid-padding);
         }
         #root > * {
           margin: var(--masonry-view-card-margin, 4px 4px 8px);
