@@ -1,5 +1,5 @@
 {
     "name": "layout-card",
     "render_readme": true,
-    "homeassistant": "2021.3.0"
+    "homeassistant": "2021.8.0"
 }

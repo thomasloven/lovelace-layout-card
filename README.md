@@ -10,13 +10,11 @@ For installation instructions [see this guide](https://github.com/thomasloven/ha
 
 - Go to one of your lovelace views and select "Edit Dashboard"
 - Click the pencil symbol next to the view name to open up the view properties
-- Go to the new "Layout" tab
-- Select "Masonry" layout from the "Layout type" dropdown list
+- Select "Masonry (layout-card)" from the "View type" dropdown list
 - Click "Save"
 
 Hopefully, you should see no difference at all now.
 
-- Open up the view properties again and go to the "Layout" tab.
 - Enter the following in the "Layout Options" box:
   ```yaml
   width: 300
@@ -25,6 +23,8 @@ Hopefully, you should see no difference at all now.
 - Click Save
 
 You should now have more, narrower, collumns of cards in your view.
+
+> Please note that the "LAYOUT" tab in the animation below is now incorporated in the "SETTINGS" tab instead.
 
 ![Quick Start](https://user-images.githubusercontent.com/1299821/111066590-11abef80-84c0-11eb-809b-2843fd8610d8.gif)
 

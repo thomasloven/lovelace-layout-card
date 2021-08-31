@@ -36,7 +36,7 @@ export class BaseLayout extends LitElement {
           // Load in editor elements
           const loader = document.createElement("hui-masonry-view");
           (loader as any).lovelace = { editMode: true };
-          (loader as any).updated(new Map());
+          (loader as any).willUpdate(new Map());
         }
       }
       this.cards.forEach((c) => (c.editMode = this.lovelace?.editMode));
