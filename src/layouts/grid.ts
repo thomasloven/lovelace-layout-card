@@ -60,7 +60,8 @@ class GridLayout extends BaseLayout {
           key.startsWith("grid") ||
           key === "grid" ||
           key === "place-items" ||
-          key === "place-content"
+          key === "place-content" ||
+          key === "height"
         )
           root.style.setProperty(key, value as any as string);
       }

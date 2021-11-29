@@ -179,7 +179,7 @@ The vertical layout accepts the following **card** `view_layout` options:
 
 The grid layout will give you full controll of your cards by leveraging [CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/).
 
-The grid layout accepts any option starting with `grid-` that works for a Grid Container as well as `grid` and `place-items` and `place-content`.
+The grid layout accepts any option starting with `grid-` that works for a Grid Container, as well as `grid`, `place-items`, `place-content` and `height`.
 
 Furthermore, the special option `mediaquery` can be used to set grid options depending on currently matched [@media rules](https://www.w3schools.com/cssref/css3_pr_mediaquery.asp). This helps immensely in creating fully responsive layouts. \
 Please see the example code accompanying the screen recording below. \
