@@ -125,6 +125,7 @@ class GridLayout extends BaseLayout {
           padding-top: 4px;
           height: 100%;
           box-sizing: border-box;
+          display: block;
         }
         #root {
           display: grid;
