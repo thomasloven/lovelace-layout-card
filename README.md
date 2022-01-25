@@ -72,7 +72,7 @@ cards: ...
 
 > NOTE: Please be aware that `layout-card` is itself a CARD, and cannot be wider than any other cards in the same view. \
 > All cards you specify within it must fit inside this same width. \
-> Thus `layout-card` is of limited use expect in [panel mode](https://www.home-assistant.io/lovelace/dashboards-and-views/#panel).
+> Thus `layout-card` is of limited use except in [panel mode](https://www.home-assistant.io/lovelace/dashboards-and-views/#panel).
 
 > NOTE 2: The "default" layout option for layout-card (which you'll see if you're using the GUI lovelace editor) uses the default layout engine of lovelace. It's basically the same as the Horizontal layout, but without any options, without being able to hide cards and with the number of columns based on the width of the window rather than the layout-card. \
 > I don't recommend using it, but it's _there_.
