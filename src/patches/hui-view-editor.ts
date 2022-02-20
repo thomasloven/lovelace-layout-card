@@ -1,5 +1,3 @@
-import { LitElement, html } from "lit-element";
-
 const LAYOUT_TYPES = ["masonry", "horizontal", "vertical", "grid"];
 
 customElements.whenDefined("hui-view-editor").then(() => {
@@ -23,14 +21,12 @@ customElements.whenDefined("hui-view-editor").then(() => {
   HuiViewEditor.prototype.firstUpdated = function () {
     firstUpdated?.bind(this)();
 
-    const listBox = this.shadowRoot.querySelector(
-      "paper-listbox[attr-for-selected=type]"
-    );
+    const listBox = this.shadowRoot.querySelector("mwc-select");
     if (!listBox || listBox.layoutCardPatch) return;
 
     LAYOUT_TYPES.forEach((type) => {
-      const el = document.createElement("paper-item");
-      (el as any).type = `custom:${type}-layout`;
+      const el = document.createElement("mwc-list-item");
+      (el as any).value = `custom:${type}-layout`;
       el.innerHTML = `${type} (layout-card)`;
       listBox.appendChild(el);
     });
