@@ -44,6 +44,7 @@ export interface ColumnViewConfig extends ViewConfig {
     rtl?: boolean;
     margin?: string;
     padding?: string;
+    height?: string;
     card_margin?: string;
   };
 }
@@ -53,6 +54,7 @@ export interface GridViewConfig extends ViewConfig {
     mediaquery?: Array<Record<string, any>>;
     margin?: string;
     padding?: string;
+    height?: string;
   };
 }
 

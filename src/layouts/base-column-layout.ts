@@ -80,6 +80,7 @@ export class BaseColumnLayout extends BaseLayout {
           this._config.layout?.card_margin ??
           "var(--masonry-view-card-margin, 4px 4px 8px)"
         };
+        --layout-height: ${this._config.layout?.height ?? "auto"};
       }
       @media (max-width: ${column_max_width}px) {
         .column:first-child > * {
@@ -206,6 +207,8 @@ export class BaseColumnLayout extends BaseLayout {
           justify-items: center;
           margin: var(--layout-margin);
           padding: var(--layout-padding);
+          height: var(--layout-height);
+          overflow-y: auto;
         }
         .column {
           grid-row: 1/2;
