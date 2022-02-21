@@ -148,9 +148,10 @@ The masonry layout immitates the default layout of lovelace.
 ![Masonry Layout](https://user-images.githubusercontent.com/1299821/111067510-f2639100-84c4-11eb-9ce1-b40cf1f13772.png)
 
 The masonry layout accepts the following `layout` options (besides the ones mentioned above):
-|Option|Values|Description|Default
-|---|---|---|---|
-|`min_height`| number | Minimum number of card height units in a column before the next one is considered | 5 |
+
+| Option       | Values | Description                                                                       | Default |
+| ------------ | ------ | --------------------------------------------------------------------------------- | ------- |
+| `min_height` | number | Minimum number of card height units in a column before the next one is considered | 5       |
 
 ### Horizontal layout
 
@@ -161,9 +162,10 @@ The horizontal layout will add each card to the next column, looping back to the
 A `layout-break` card will cause the next card to be placed in the first column.
 
 The horizontal layout accepts the following **card** `view_layout` options:
-|Option|Values|Description|Default
-|---|---|---|---|
-|`column`| number | Which column to place the card in. Following cards will be placed in the next column. | |
+
+| Option   | Values | Description                                                                           | Default |
+| -------- | ------ | ------------------------------------------------------------------------------------- | ------- |
+| `column` | number | Which column to place the card in. Following cards will be placed in the next column. |         |
 
 ### Vertical layout
 
@@ -174,9 +176,10 @@ The vertical layout will add each card to the same column as the previous one.
 A `layout-break` card will cause the next card to be placed in the next column.
 
 The vertical layout accepts the following **card** `view_layout` options:
-|Option|Values|Description|Default
-|---|---|---|---|
-|`column`| number | Which column to place the card in. Following cards will be placed in the same column. | |
+
+| Option   | Values | Description                                                                           | Default |
+| -------- | ------ | ------------------------------------------------------------------------------------- | ------- |
+| `column` | number | Which column to place the card in. Following cards will be placed in the same column. |         |
 
 ### Grid layout
 
