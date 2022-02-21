@@ -1,12 +1,5 @@
-import {
-  LitElement,
-  html,
-  property,
-  internalProperty,
-  CSSResultArray,
-  css,
-  query,
-} from "lit-element";
+import { LitElement, html, CSSResultArray, css } from "lit";
+import { property, state, query } from "lit/decorators.js";
 import { LayoutCardConfig } from "./types";
 
 class LayoutCardEditor extends LitElement {
@@ -14,10 +7,10 @@ class LayoutCardEditor extends LitElement {
   @property() lovelace;
   @property() hass;
 
-  @internalProperty() _selectedTab = 0;
-  @internalProperty() _selectedCard = 0;
-  @internalProperty() _cardGUIMode = true;
-  @internalProperty() _cardGUIModeAvailable = true;
+  @state() _selectedTab = 0;
+  @state() _selectedCard = 0;
+  @state() _cardGUIMode = true;
+  @state() _cardGUIModeAvailable = true;
 
   @query("hui-card-element-editor") _cardEditorEl?;
 

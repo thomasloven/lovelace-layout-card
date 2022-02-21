@@ -1,4 +1,5 @@
-import { css, html, LitElement, property } from "lit-element";
+import { css, html, LitElement } from "lit";
+import { property } from "lit/decorators.js";
 import {
   CardConfigGroup,
   CardConfig,

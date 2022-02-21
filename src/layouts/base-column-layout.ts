@@ -1,4 +1,5 @@
-import { css, html, property } from "lit-element";
+import { css, html } from "lit";
+import { property } from "lit/decorators.js";
 import {
   CardConfigGroup,
   CardConfig,
@@ -174,7 +175,9 @@ export class BaseColumnLayout extends BaseLayout {
     while (columns.firstChild) columns.removeChild(columns.firstChild);
 
     for (const col of cols) columns.appendChild(col);
-    this.requestUpdate().then(() => this._observer.observe(this));
+    this.requestUpdate();
+    await this.updateComplete;
+    this._observer.observe(this);
   }
 
   async _placeColumnCards(cols: Array<Node>, cards: CardConfigGroup[]) {}
@@ -194,6 +197,7 @@ export class BaseColumnLayout extends BaseLayout {
           display: block;
           height: 100%;
           box-sizing: border-box;
+          overflow-y: auto;
         }
 
         #columns {

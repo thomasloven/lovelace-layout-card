@@ -1,4 +1,5 @@
-import { css, html, LitElement, property } from "lit-element";
+import { html, LitElement } from "lit";
+import { property } from "lit/decorators.js";
 class GapCard extends HTMLElement {
   height: number;
   size: number;

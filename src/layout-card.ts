@@ -1,4 +1,5 @@
-import { css, html, LitElement, property } from "lit-element";
+import { css, html, LitElement } from "lit";
+import { property } from "lit/decorators.js";
 import { BaseColumnLayout } from "./layouts/base-column-layout";
 import { CardConfig, LayoutCardConfig, LovelaceCard } from "./types";
 
