@@ -122,6 +122,9 @@ All column based layouts accept the following `layout` options:
 | `max_cols`      | number         | Maximum number of columns to show                                                                                                  | 4 if sidebar is hidden <br> 3 if sidebar is shown |
 | `rtl`           | `true`/`false` | Place columns in right-to-left order                                                                                               | `false`                                           |
 | `column_widths` | special        | A [`grid-template-columns`](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) specification of column widths | `none`                                            |
+| `margin`        | string         | A CSS margin applied to the layout itself                                                                                          | `4px 4px 0px 4px`                                 |
+| `padding`       | string         | A CSS padding applied to the layout itself                                                                                         | `0px`                                             |
+| `card_margin`   | string         | CSS margin applied to each card in the layout                                                                                      | `var(--masonry-view-card-margin, 4px 4px 8px)`    |
 
 > NOTE: Even if `column_widths` is specified, the number of columns displayed will only depend on the available space, `width` and `max_cols`. If you get weird results, consider the Grid Layout.
 
@@ -180,6 +183,7 @@ The vertical layout accepts the following **card** `view_layout` options:
 The grid layout will give you full controll of your cards by leveraging [CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/).
 
 The grid layout accepts any option starting with `grid-` that works for a Grid Container as well as `grid` and `place-items` and `place-content`.
+The layout options `margin` and `padding` also apply as for column based layouts.
 
 Furthermore, the special option `mediaquery` can be used to set grid options depending on currently matched [@media rules](https://www.w3schools.com/cssref/css3_pr_mediaquery.asp). This helps immensely in creating fully responsive layouts. \
 Please see the example code accompanying the screen recording below. \

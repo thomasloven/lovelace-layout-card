@@ -49,6 +49,14 @@ class GridLayout extends BaseLayout {
 
   async firstUpdated() {
     this._setGridStyles();
+
+    const styleEl = document.createElement("style");
+    styleEl.innerHTML = `
+      :host {
+        --layout-margin: ${this._config.layout?.margin ?? "4px 4px 0px 4px"};
+        --layout-padding: ${this._config.layout?.padding ?? "0px"};
+      }`;
+    this.shadowRoot.appendChild(styleEl);
   }
 
   _setGridStyles() {
@@ -121,15 +129,14 @@ class GridLayout extends BaseLayout {
       this._fab_styles,
       css`
         :host {
-          padding-top: 4px;
           height: 100%;
           box-sizing: border-box;
         }
         #root {
           display: grid;
-          margin-left: 4px;
-          margin-right: 4px;
           justify-content: stretch;
+          margin: var(--layout-margin);
+          padding: var(--layout-padding);
         }
         #root > * {
           margin: var(--masonry-view-card-margin, 4px 4px 8px);

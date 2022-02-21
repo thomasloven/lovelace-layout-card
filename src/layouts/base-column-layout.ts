@@ -74,6 +74,12 @@ export class BaseColumnLayout extends BaseLayout {
         --column-max-width: ${column_max_width}px;
         --column-width: ${column_width}px;
         --column-widths: ${this._config.layout?.column_widths ?? "none"};
+        --layout-margin: ${this._config.layout?.margin ?? "4px 4px 0px 4px"};
+        --layout-padding: ${this._config.layout?.padding ?? "0px"};
+        --card-margin: ${
+          this._config.layout?.card_margin ??
+          "var(--masonry-view-card-margin, 4px 4px 8px)"
+        };
       }
       @media (max-width: ${column_max_width}px) {
         .column:first-child > * {
@@ -185,7 +191,6 @@ export class BaseColumnLayout extends BaseLayout {
       css`
         :host {
           display: block;
-          padding-top: 4px;
           height: 100%;
           box-sizing: border-box;
         }
@@ -199,8 +204,8 @@ export class BaseColumnLayout extends BaseLayout {
           grid-template-columns: var(--column-widths);
           justify-content: center;
           justify-items: center;
-          margin-left: 4px;
-          margin-right: 4px;
+          margin: var(--layout-margin);
+          padding: var(--layout-padding);
         }
         .column {
           grid-row: 1/2;
@@ -209,7 +214,7 @@ export class BaseColumnLayout extends BaseLayout {
         }
         .column > * {
           display: block;
-          margin: var(--masonry-view-card-margin, 4px 4px 8px);
+          margin: var(--card-margin);
         }
       `,
     ];

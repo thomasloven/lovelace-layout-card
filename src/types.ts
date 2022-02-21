@@ -42,12 +42,17 @@ export interface ColumnViewConfig extends ViewConfig {
     max_cols?: number;
     min_height?: number;
     rtl?: boolean;
+    margin?: string;
+    padding?: string;
+    card_margin?: string;
   };
 }
 
 export interface GridViewConfig extends ViewConfig {
   layout?: {
     mediaquery?: Array<Record<string, any>>;
+    margin?: string;
+    padding?: string;
   };
 }
 
