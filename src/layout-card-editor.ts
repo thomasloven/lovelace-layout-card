@@ -2,6 +2,9 @@ import { LitElement, html, CSSResultArray, css } from "lit";
 import { property, state, query } from "lit/decorators.js";
 import { LayoutCardConfig } from "./types";
 
+const LAYOUT_TYPES = ["masonry", "panel", "sidebar"];
+const CUSTOM_LAYOUT_TYPES = ["masonry", "horizontal", "vertical", "grid"];
+
 class LayoutCardEditor extends LitElement {
   @property() _config: LayoutCardConfig;
   @property() lovelace;
@@ -16,6 +19,7 @@ class LayoutCardEditor extends LitElement {
 
   setConfig(config) {
     this._config = config;
+    console.log(this._config);
   }
 
   _handleSwitchTab(ev: CustomEvent) {
@@ -24,20 +28,18 @@ class LayoutCardEditor extends LitElement {
 
   _layoutChanged(ev: CustomEvent) {
     ev.stopPropagation();
-    const type = ev.detail.config.type
-      ? ev.detail.config.type
-          .substr("custom:".length)
-          .slice(0, -"-layout".length)
-      : "default";
-
+    const target: any = ev.target;
     this._config = { ...this._config };
-
-    if (type !== "default") this._config.layout_type = type;
-    else delete this._config.layout_type;
-
-    if (ev.detail.config.layout) this._config.layout = ev.detail.config.layout;
-    else delete this._config.layout;
-
+    if (target.id === "layout_type") {
+      if (target.value === "default") {
+        delete this._config.layout_type;
+      } else {
+        this._config.layout_type = target.value;
+      }
+    }
+    if (target.id === "layout") {
+      this._config.layout = target.value;
+    }
     this.dispatchEvent(
       new CustomEvent("config-changed", { detail: { config: this._config } })
     );
@@ -130,17 +132,34 @@ class LayoutCardEditor extends LitElement {
   }
 
   _renderLayoutEditor() {
-    const type =
-      this._config.layout_type && this._config.layout_type !== "default"
-        ? `custom:${this._config.layout_type}-layout`
-        : undefined;
-    const layout = this._config.layout;
-
     return html`<div class="layout">
-      <view-layout-editor
-        .config=${{ type, layout }}
-        @view-layout-changed=${this._layoutChanged}
-      ></view-layout-editor>
+      <mwc-select
+        .label=${this.hass.localize("ui.panel.lovelace.editor.edit_view.type")}
+        .value=${this._config.layout_type || "default"}
+        @selected=${this._layoutChanged}
+        @closed=${(ev) => ev.stopPropagation()}
+        fixedMenuPosition
+        naturalMenuWidth
+        id="layout_type"
+      >
+        <mwc-list-item .value=${"default"}>
+          ${this.hass.localize(
+            `ui.panel.lovelace.editor.edit_view.types.masonry`
+          )}
+        </mwc-list-item>
+        ${CUSTOM_LAYOUT_TYPES.map(
+          (type) => html`<mwc-list-item .value=${`custom:${type}-layout`}>
+            ${type} (layout-card)
+          </mwc-list-item>`
+        )}
+      </mwc-select>
+      <ha-yaml-editor
+        id="layout"
+        .label=${"Layout options"}
+        .defaultValue=${this._config.layout ?? ""}
+        @value-changed=${this._layoutChanged}
+      >
+      </ha-yaml-editor>
     </div>`;
   }
 

@@ -26,7 +26,7 @@ class LayoutCard extends LitElement {
     if (configType) {
       if (!configType?.endsWith("-layout")) configType += "-layout";
       if (configType.startsWith("custom:"))
-        configType = configType.substr("custom:".length);
+        configType = configType.substring("custom:".length);
     } else {
       configType = "hui-masonry-view";
     }
@@ -48,7 +48,7 @@ class LayoutCard extends LitElement {
       const layoutElement = document.createElement(
         this._layoutType
       ) as BaseColumnLayout;
-      layoutElement.setConfig(viewConfig);
+      layoutElement.setConfig?.(viewConfig);
       this._layoutElement = layoutElement;
       await this._createCards();
       this._layoutElement.hass = this.hass;

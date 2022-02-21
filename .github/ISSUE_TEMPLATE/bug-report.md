@@ -6,7 +6,7 @@ labels: ""
 assignees: ""
 ---
 
-My Home Assistant version: 2021.XX.X
+My Home Assistant version: 2022.XX.X
 
 Layout-card version (FROM BROWSER CONSOLE):
 
