@@ -30,31 +30,36 @@ export interface ViewConfig {
   title?: string;
   type?: string;
   cards?: Array<CardConfig>;
-  layout?: {};
+  layout?: {
+    margin?: string;
+    padding?: string;
+    height?: string;
+  };
   view_layout?: {};
 }
 
 export interface ColumnViewConfig extends ViewConfig {
   layout?: {
+    margin?: string;
+    padding?: string;
+    height?: string;
+    reflow?: boolean;
     width?: number;
     column_widths: string;
     max_width?: number;
     max_cols?: number;
     min_height?: number;
     rtl?: boolean;
-    margin?: string;
-    padding?: string;
-    height?: string;
     card_margin?: string;
   };
 }
 
 export interface GridViewConfig extends ViewConfig {
   layout?: {
-    mediaquery?: Array<Record<string, any>>;
     margin?: string;
     padding?: string;
     height?: string;
+    mediaquery?: Array<Record<string, any>>;
   };
 }
 

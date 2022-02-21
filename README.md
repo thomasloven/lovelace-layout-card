@@ -115,17 +115,18 @@ The first three are column based and work similarly:
 
 All column based layouts accept the following `layout` options:
 
-| Option          | Values         | Description                                                                                                                        | Default                                           |
-| --------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `width`         | number         | Size in pixels of each column                                                                                                      | 300                                               |
-| `max_width`     | number         | Maximum width of a card                                                                                                            | 1.5 \* `width` if specified <br> otherwise 500    |
-| `max_cols`      | number         | Maximum number of columns to show                                                                                                  | 4 if sidebar is hidden <br> 3 if sidebar is shown |
-| `rtl`           | `true`/`false` | Place columns in right-to-left order                                                                                               | `false`                                           |
-| `column_widths` | special        | A [`grid-template-columns`](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) specification of column widths | `none`                                            |
-| `margin`        | string         | A CSS margin applied to the layout itself                                                                                          | `4px 4px 0px 4px`                                 |
-| `padding`       | string         | A CSS padding applied to the layout itself                                                                                         | `0px`                                             |
-| `height`        | string         | A CSS height applied to the layout itself                                                                                          | `auto`                                            |
-| `card_margin`   | string         | CSS margin applied to each card in the layout                                                                                      | `var(--masonry-view-card-margin, 4px 4px 8px)`    |
+| Option          | Values         | Description                                                                                                                                   | Default                                           |
+| --------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `width`         | number         | Size in pixels of each column                                                                                                                 | 300                                               |
+| `max_width`     | number         | Maximum width of a card                                                                                                                       | 1.5 \* `width` if specified <br> otherwise 500    |
+| `max_cols`      | number         | Maximum number of columns to show                                                                                                             | 4 if sidebar is hidden <br> 3 if sidebar is shown |
+| `rtl`           | `true`/`false` | Place columns in right-to-left order                                                                                                          | `false`                                           |
+| `column_widths` | special        | A [`grid-template-columns`](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) specification of column widths            | `none`                                            |
+| `margin`        | string         | A CSS margin applied to the layout itself                                                                                                     | `4px 4px 0px 4px`                                 |
+| `padding`       | string         | A CSS padding applied to the layout itself                                                                                                    | `0px`                                             |
+| `height`        | string         | A CSS height applied to the layout itself                                                                                                     | `auto`                                            |
+| `card_margin`   | string         | CSS margin applied to each card in the layout                                                                                                 | `var(--masonry-view-card-margin, 4px 4px 8px)`    |
+| `reflow`        | `true`/`false` | If `true` the layout will get reorganized when cards are hidden (e.g. with conditional or entity-filter cards). May cause performance issues. | `false`                                           |
 
 > NOTE: Even if `column_widths` is specified, the number of columns displayed will only depend on the available space, `width` and `max_cols`. If you get weird results, consider the Grid Layout.
 

@@ -14,6 +14,7 @@ export class BaseColumnLayout extends BaseLayout {
   @property() _config: ColumnViewConfig;
 
   _observer?: ResizeObserver;
+  _cardObserver?: MutationObserver;
   _mediaQueries: Array<MediaQueryList | null> = [];
 
   async setConfig(config: ColumnViewConfig) {
@@ -36,6 +37,20 @@ export class BaseColumnLayout extends BaseLayout {
     this._observer = new ResizeObserver(() => {
       this._updateSize();
     });
+    if (this._cardObserver) this._cardObserver.disconnect();
+    if (config.layout?.reflow) {
+      this._cardObserver = new MutationObserver((mutationlist) => {
+        for (const mutation of mutationlist) {
+          if (
+            mutation.type === "attributes" &&
+            (mutation.attributeName === "style" ||
+              mutation.attributeName === "hidden")
+          ) {
+            this._makeLayout();
+          }
+        }
+      });
+    }
   }
 
   async updated(changedProperties: Map<string, any>) {
@@ -127,6 +142,11 @@ export class BaseColumnLayout extends BaseLayout {
   _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
     if (!super._shouldShow(card, config, index)) return false;
 
+    if (this._config.layout?.reflow) {
+      if (getComputedStyle(card).display === "none") return false;
+      if (card.hidden === true) return false;
+    }
+
     const mq = this._mediaQueries[index];
     if (!mq) return true;
     if (mq.matches) return true;
@@ -143,6 +163,9 @@ export class BaseColumnLayout extends BaseLayout {
 
   async _makeColumnLayout() {
     this._observer.disconnect();
+    if (this._cardObserver) {
+      this._cardObserver.disconnect();
+    }
     if (!this._columns) return;
     let cols = [];
     for (let i = 0; i < this._columns; i++) {
@@ -173,6 +196,12 @@ export class BaseColumnLayout extends BaseLayout {
 
     const columns = this.shadowRoot.querySelector("#columns");
     while (columns.firstChild) columns.removeChild(columns.firstChild);
+
+    if (this._cardObserver) {
+      for (const card of this.cards) {
+        this._cardObserver.observe(card, { attributes: true });
+      }
+    }
 
     for (const col of cols) columns.appendChild(col);
     this.requestUpdate();
