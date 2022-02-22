@@ -22,7 +22,12 @@ class MasonryLayout extends BaseColumnLayout {
       const col = shortestCol();
       col.appendChild(this.getCardElement(c));
 
-      col.length += c.card.getCardSize ? await c.card.getCardSize() : 1;
+      col.length += c.card.getCardSize
+        ? await (Promise.race([
+            c.card.getCardSize(),
+            new Promise((resolve) => setTimeout(() => resolve(1), 500)),
+          ]) as Promise<number>)
+        : 1;
     }
   }
 }

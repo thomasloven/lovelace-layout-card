@@ -1,8 +1,8 @@
 import { LitElement, html, CSSResultArray, css } from "lit";
 import { property, state, query } from "lit/decorators.js";
 import { LayoutCardConfig } from "./types";
+import { loadHaYamlEditor } from "./helpers";
 
-const LAYOUT_TYPES = ["masonry", "panel", "sidebar"];
 const CUSTOM_LAYOUT_TYPES = ["masonry", "horizontal", "vertical", "grid"];
 
 class LayoutCardEditor extends LitElement {
@@ -19,7 +19,10 @@ class LayoutCardEditor extends LitElement {
 
   setConfig(config) {
     this._config = config;
-    console.log(this._config);
+  }
+
+  firstUpdated() {
+    loadHaYamlEditor();
   }
 
   _handleSwitchTab(ev: CustomEvent) {

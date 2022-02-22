@@ -1,21 +1,10 @@
+import { loadHaYamlEditor } from "../helpers";
 const LAYOUT_TYPES = ["masonry", "horizontal", "vertical", "grid"];
 
 customElements.whenDefined("hui-view-editor").then(() => {
   const HuiViewEditor = customElements.get("hui-view-editor");
 
-  (async () => {
-    // Load in ha-yaml-editor from developer-tools-service
-    const ppResolver = document.createElement("partial-panel-resolver");
-    const routes = (ppResolver as any).getRoutes([
-      {
-        component_name: "developer-tools",
-        url_path: "a",
-      },
-    ]);
-    await routes?.routes?.a?.load?.();
-    const devToolsRouter = document.createElement("developer-tools-router");
-    await (devToolsRouter as any)?.routerOptions?.routes?.service?.load?.();
-  })();
+  loadHaYamlEditor();
 
   const firstUpdated = HuiViewEditor.prototype.firstUpdated;
   HuiViewEditor.prototype.firstUpdated = function () {
@@ -55,7 +44,7 @@ customElements.whenDefined("hui-view-editor").then(() => {
 
     if (_changedProperties.has("_config")) {
       const layoutEditor = this.shadowRoot.querySelector("ha-yaml-editor");
-      if (layoutEditor) return;
+      if (!layoutEditor) return;
       (layoutEditor as any).defaultValue = this._config.layout;
     }
   };

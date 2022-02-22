@@ -97,6 +97,9 @@ export class BaseColumnLayout extends BaseLayout {
           "var(--masonry-view-card-margin, 4px 4px 8px)"
         };
         --layout-height: ${this._config.layout?.height ?? "auto"};
+        --layout-overflow: ${
+          this._config.layout?.height !== undefined ? "auto" : "visible"
+        };
       }
       @media (max-width: ${column_max_width}px) {
         .column:first-child > * {
@@ -226,7 +229,7 @@ export class BaseColumnLayout extends BaseLayout {
           display: block;
           height: 100%;
           box-sizing: border-box;
-          overflow-y: auto;
+          overflow-y: var(--layout-overflow);
         }
 
         #columns {
@@ -241,7 +244,7 @@ export class BaseColumnLayout extends BaseLayout {
           margin: var(--layout-margin);
           padding: var(--layout-padding);
           height: var(--layout-height);
-          overflow-y: auto;
+          overflow-y: var(--layout-overflow);
         }
         .column {
           grid-row: 1/2;
