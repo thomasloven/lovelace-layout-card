@@ -1,9 +1,9 @@
 import { LitElement, html, CSSResultArray, css } from "lit";
 import { property, state, query } from "lit/decorators.js";
 import { LayoutCardConfig } from "./types";
-import { loadHaYamlEditor } from "./helpers";
+import { loadHaForm, LAYOUT_CARD_SELECTOR_OPTIONS } from "./helpers";
 
-const CUSTOM_LAYOUT_TYPES = ["masonry", "horizontal", "vertical", "grid"];
+const DEFAULT_LAYOUT_TYPES = ["masonry", "sidebar", "panel"];
 
 class LayoutCardEditor extends LitElement {
   @property() _config: LayoutCardConfig;
@@ -17,35 +17,39 @@ class LayoutCardEditor extends LitElement {
 
   @query("hui-card-element-editor") _cardEditorEl?;
 
+  _schema = (localize) => [
+    {
+      name: "layout_type",
+      selector: {
+        select: {
+          options: [
+            ...DEFAULT_LAYOUT_TYPES.map((type) => ({
+              value: type,
+              label: localize(
+                `ui.panel.lovelace.editor.edit_view.types.${type}`
+              ),
+            })),
+            ...LAYOUT_CARD_SELECTOR_OPTIONS,
+          ],
+        },
+      },
+    },
+    {
+      name: "layout",
+      selector: { object: {} },
+    },
+  ];
+
   setConfig(config) {
     this._config = config;
   }
 
   firstUpdated() {
-    loadHaYamlEditor();
+    loadHaForm();
   }
 
   _handleSwitchTab(ev: CustomEvent) {
     this._selectedTab = parseInt(ev.detail.index, 10);
-  }
-
-  _layoutChanged(ev: CustomEvent) {
-    ev.stopPropagation();
-    const target: any = ev.target;
-    this._config = { ...this._config };
-    if (target.id === "layout_type") {
-      if (target.value === "default") {
-        delete this._config.layout_type;
-      } else {
-        this._config.layout_type = target.value;
-      }
-    }
-    if (target.id === "layout") {
-      this._config.layout = target.value;
-    }
-    this.dispatchEvent(
-      new CustomEvent("config-changed", { detail: { config: this._config } })
-    );
   }
 
   _editCard(ev) {
@@ -109,6 +113,21 @@ class LayoutCardEditor extends LitElement {
     );
   }
 
+  _valueChanged(ev) {
+    ev.stopPropagation();
+    const config = ev.detail.value;
+
+    this.dispatchEvent(
+      new CustomEvent("config-changed", { detail: { config } })
+    );
+  }
+
+  _computeLabel(schema) {
+    if (schema.name === "layout_type")
+      return this.hass.localize("ui.panel.lovelace.editor.edit_view.type");
+    if (schema.name === "layout") return "Layout options (layout-card)";
+  }
+
   render() {
     if (!this.hass || !this._config) {
       return html``;
@@ -135,35 +154,19 @@ class LayoutCardEditor extends LitElement {
   }
 
   _renderLayoutEditor() {
-    return html`<div class="layout">
-      <mwc-select
-        .label=${this.hass.localize("ui.panel.lovelace.editor.edit_view.type")}
-        .value=${this._config.layout_type || "default"}
-        @selected=${this._layoutChanged}
-        @closed=${(ev) => ev.stopPropagation()}
-        fixedMenuPosition
-        naturalMenuWidth
-        id="layout_type"
-      >
-        <mwc-list-item .value=${"default"}>
-          ${this.hass.localize(
-            `ui.panel.lovelace.editor.edit_view.types.masonry`
-          )}
-        </mwc-list-item>
-        ${CUSTOM_LAYOUT_TYPES.map(
-          (type) => html`<mwc-list-item .value=${`custom:${type}-layout`}>
-            ${type} (layout-card)
-          </mwc-list-item>`
-        )}
-      </mwc-select>
-      <ha-yaml-editor
-        id="layout"
-        .label=${"Layout options"}
-        .defaultValue=${this._config.layout ?? ""}
-        @value-changed=${this._layoutChanged}
-      >
-      </ha-yaml-editor>
-    </div>`;
+    const schema = this._schema(this.hass.localize);
+    const data = {
+      ...this._config,
+    };
+    return html`
+      <ha-form
+        .hass=${this.hass}
+        .data=${data}
+        .schema=${schema}
+        .computeLabel=${this._computeLabel}
+        @value-changed=${this._valueChanged}
+      ></ha-form>
+    `;
   }
 
   _renderCardsEditor() {

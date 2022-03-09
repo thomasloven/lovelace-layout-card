@@ -1,5 +1,4 @@
-import { loadHaYamlEditor } from "../helpers";
-const LAYOUT_TYPES = ["masonry", "horizontal", "vertical", "grid"];
+import { LAYOUT_CARD_SELECTOR_OPTIONS } from "../helpers";
 
 customElements.whenDefined("hui-view-editor").then(() => {
   const HuiViewEditor = customElements.get("hui-view-editor");
@@ -12,23 +11,10 @@ customElements.whenDefined("hui-view-editor").then(() => {
     this._schema = (localize) => {
       const retval = this._oldSchema(localize);
       const typeSelector = retval[retval.length - 1];
-      typeSelector.selector.select.options.push({
-        value: "custom:masonry-layout",
-        label: "Masonry (layout-card)",
-      });
-      typeSelector.selector.select.options.push({
-        value: "custom:horizontal-layout",
-        label: "Horizontal (layout-card)",
-      });
-      typeSelector.selector.select.options.push({
-        value: "custom:vertical-layout",
-        label: "Vertical (layout-card)",
-      });
-      typeSelector.selector.select.options.push({
-        value: "custom:grid-layout",
-        label: "Grid (layout-card)",
-      });
-      console.log(retval, typeSelector);
+      if (typeSelector.name === "layout") return retval;
+      typeSelector.selector.select.options.push(
+        ...LAYOUT_CARD_SELECTOR_OPTIONS
+      );
       retval.push({
         name: "layout",
         selector: { object: {} },
