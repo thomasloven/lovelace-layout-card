@@ -10,8 +10,9 @@ import "./patches/hui-view-editor";
 import "./gap-card.ts";
 import pjson from "../package.json";
 
-console.info(
+console.groupCollapsed(
   `%cLAYOUT-CARD ${pjson.version} IS INSTALLED`,
-  "color: green; font-weight: bold",
-  ""
+  "color: green; font-weight: bold"
 );
+console.log("Readme:", "https://github.com/thomasloven/lovelace-layout-card");
+console.groupEnd();

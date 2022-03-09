@@ -159,6 +159,17 @@ class LayoutCardEditor extends LitElement {
       ...this._config,
     };
     return html`
+      <p>
+        See
+        <a
+          href="https://github.com/thomasloven/lovelace-layout-card"
+          target="_blank"
+          rel="no referrer"
+        >
+          layout-card on github
+        </a>
+        for usage instructions.
+      </p>
       <ha-form
         .hass=${this.hass}
         .data=${data}
@@ -293,6 +304,10 @@ class LayoutCardEditor extends LitElement {
         }
         .gui-mode-button {
           margin-right: auto;
+        }
+
+        a {
+          color: var(--primary-color);
         }
       `,
     ];
