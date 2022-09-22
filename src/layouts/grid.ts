@@ -63,6 +63,10 @@ class GridLayout extends BaseLayout {
           this._config.layout?.card_margin ??
           "var(--masonry-view-card-margin, 4px 4px 8px)"
         };
+        --card-overflow: ${
+          this._config.layout?.card_overflow ??
+          "visible"
+        };
       }`;
     this.shadowRoot.appendChild(styleEl);
   }
@@ -150,6 +154,7 @@ class GridLayout extends BaseLayout {
         }
         #root > * {
           margin: var(--card-margin);
+          overflow: var(--card-overflow);
         }
       `,
     ];

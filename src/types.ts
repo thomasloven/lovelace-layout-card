@@ -61,6 +61,7 @@ export interface GridViewConfig extends ViewConfig {
     height?: string;
     mediaquery?: Array<Record<string, any>>;
     card_margin?: string;
+    card_overflow?: string;
   };
 }
 
