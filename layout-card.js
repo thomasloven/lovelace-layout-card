@@ -226,4 +226,4 @@ function t(t,e,i,o){var s,n=arguments.length,a=n<3?e:null===o?o=Object.getOwnPro
         .value=${this._config.size}
         @value-changed=${this.sizeChanged}
       ></paper-input>
-    `}}t([tt()],zt.prototype,"_config",void 0),customElements.define("gap-card-editor",zt);var Ht="2.4.2";console.groupCollapsed(`%cLAYOUT-CARD ${Ht} IS INSTALLED`,"color: green; font-weight: bold"),console.log("Readme:","https://github.com/thomasloven/lovelace-layout-card"),console.groupEnd();
+    `}}t([tt()],zt.prototype,"_config",void 0),customElements.define("gap-card-editor",zt);var Ht="2.4.3";console.groupCollapsed(`%cLAYOUT-CARD ${Ht} IS INSTALLED`,"color: green; font-weight: bold"),console.log("Readme:","https://github.com/thomasloven/lovelace-layout-card"),console.groupEnd();
