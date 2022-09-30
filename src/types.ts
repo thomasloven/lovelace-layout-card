@@ -44,6 +44,7 @@ export interface ColumnViewConfig extends ViewConfig {
     padding?: string;
     height?: string;
     reflow?: boolean;
+    scrollable?: boolean;
     width?: number;
     column_widths: string;
     max_width?: number;
