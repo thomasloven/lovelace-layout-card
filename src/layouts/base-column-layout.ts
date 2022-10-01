@@ -95,7 +95,7 @@ export class BaseColumnLayout extends BaseLayout {
         overflow-x:auto;
       `;
 
-      stylesOverride += css`
+      stylesOverride += `
       .column {
         max-height:85vh;
         overflow: auto;
