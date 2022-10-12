@@ -10,15 +10,16 @@ customElements.whenDefined("hui-view-editor").then(() => {
     this._oldSchema = this._schema;
     this._schema = (localize) => {
       const retval = this._oldSchema(localize);
-      const typeSelector = retval[retval.length - 1];
+      const typeSelector = retval.find((e) => e.name == "type");
       if (typeSelector.name === "layout") return retval;
       typeSelector.selector.select.options.push(
         ...LAYOUT_CARD_SELECTOR_OPTIONS
       );
-      retval.push({
-        name: "layout",
-        selector: { object: {} },
-      });
+      if (retval.find((e) => e.name === "layout") === undefined)
+        retval.push({
+          name: "layout",
+          selector: { object: {} },
+        });
       return retval;
     };
 
