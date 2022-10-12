@@ -59,6 +59,14 @@ class GridLayout extends BaseLayout {
         --layout-overflow: ${
           this._config.layout?.height !== undefined ? "auto" : "visible"
         };
+        --card-margin: ${
+          this._config.layout?.card_margin ??
+          "var(--masonry-view-card-margin, 4px 4px 8px)"
+        };
+        --card-overflow: ${
+          this._config.layout?.card_overflow ??
+          "visible"
+        };
       }`;
     this.shadowRoot.appendChild(styleEl);
   }
@@ -145,7 +153,8 @@ class GridLayout extends BaseLayout {
           overflow-y: var(--layout-overflow);
         }
         #root > * {
-          margin: var(--masonry-view-card-margin, 4px 4px 8px);
+          margin: var(--card-margin);
+          overflow: var(--card-overflow);
         }
       `,
     ];
