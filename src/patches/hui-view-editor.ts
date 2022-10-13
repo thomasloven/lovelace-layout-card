@@ -12,9 +12,14 @@ customElements.whenDefined("hui-view-editor").then(() => {
       const retval = this._oldSchema(localize);
       const typeSelector = retval.find((e) => e.name == "type");
       if (typeSelector.name === "layout") return retval;
-      typeSelector.selector.select.options.push(
-        ...LAYOUT_CARD_SELECTOR_OPTIONS
-      );
+      if (
+        typeSelector.selector.select.options.indexOf(
+          LAYOUT_CARD_SELECTOR_OPTIONS[0]
+        ) === -1
+      )
+        typeSelector.selector.select.options.push(
+          ...LAYOUT_CARD_SELECTOR_OPTIONS
+        );
       if (retval.find((e) => e.name === "layout") === undefined)
         retval.push({
           name: "layout",
