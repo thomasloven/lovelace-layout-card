@@ -90,8 +90,7 @@ export class BaseLayout extends LitElement {
   static get _fab_styles() {
     return css`
       ha-fab {
-        position: sticky;
-        float: right;
+        position: fixed;
         right: calc(16px + env(safe-area-inset-right));
         bottom: calc(16px + env(safe-area-inset-bottom));
         z-index: 1;

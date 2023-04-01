@@ -53,8 +53,8 @@ class GridLayout extends BaseLayout {
     const styleEl = document.createElement("style");
     styleEl.innerHTML = `
       :host {
-        --layout-margin: ${this._config.layout?.margin ?? "4px 4px 0px 4px"};
-        --layout-padding: ${this._config.layout?.padding ?? "0px"};
+        --layout-margin: ${this._config.layout?.margin ?? "0px 4px 0px 4px"};
+        --layout-padding: ${this._config.layout?.padding ?? "4px 0px 4px 0px"};
         --layout-height: ${this._config.layout?.height ?? "auto"};
         --layout-overflow: ${
           this._config.layout?.height !== undefined ? "auto" : "visible"

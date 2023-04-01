@@ -90,8 +90,8 @@ export class BaseColumnLayout extends BaseLayout {
         --column-max-width: ${column_max_width}px;
         --column-width: ${column_width}px;
         --column-widths: ${this._config.layout?.column_widths ?? "none"};
-        --layout-margin: ${this._config.layout?.margin ?? "4px 4px 0px 4px"};
-        --layout-padding: ${this._config.layout?.padding ?? "0px"};
+        --layout-margin: ${this._config.layout?.margin ?? "0px 4px 0px 4px"};
+        --layout-padding: ${this._config.layout?.padding ?? "4px 0px 4px 0px"};
         --card-margin: ${
           this._config.layout?.card_margin ??
           "var(--masonry-view-card-margin, 4px 4px 8px)"
