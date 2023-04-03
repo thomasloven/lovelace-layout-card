@@ -22,7 +22,7 @@ Hopefully, you should see no difference at all now.
   ```
 - Click Save
 
-You should now have more, narrower, collumns of cards in your view.
+You should now have more, narrower, columns of cards in your view.
 
 > Please note that the "LAYOUT" tab in the animation below is now incorporated in the "SETTINGS" tab instead.
 
