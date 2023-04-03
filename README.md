@@ -22,7 +22,7 @@ Hopefully, you should see no difference at all now.
   ```
 - Click Save
 
-You should now have more, narrower, collumns of cards in your view.
+You should now have more, narrower, columns of cards in your view.
 
 > Please note that the "LAYOUT" tab in the animation below is now incorporated in the "SETTINGS" tab instead.
 
@@ -141,7 +141,7 @@ All column based layouts accept the following `layout` options:
 
 ### Masonry layout
 
-The masonry layout immitates the default layout of lovelace.
+The masonry layout imitates the default layout of lovelace.
 
 - Each card is assigned a height based on their contents. One height unit corresponds to roughly 50 pixels, but this may vary.
 - When a card is placed in the layout, it is put in the first column which has a total height of less than `min_height` units. \
