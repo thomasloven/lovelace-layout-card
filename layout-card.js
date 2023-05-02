@@ -16,7 +16,7 @@ function t(t,e,i,o){var s,n=arguments.length,a=n<3?e:null===o?o=Object.getOwnPro
     `}static get styles(){return[this._fab_styles,n`
         :host {
           display: block;
-          height: 100%;
+          height: auto;
           box-sizing: border-box;
           overflow-y: var(--layout-overflow);
         }
