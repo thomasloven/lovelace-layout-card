@@ -207,7 +207,8 @@ Configuration for view:
 
 ```yaml
 title: Grid layout
-type: custom:grid-layout
+type: custom:layout-card
+layout_type: custom:grid-layout
 layout:
   grid-template-columns: auto 30px 25%
   grid-template-rows: auto
