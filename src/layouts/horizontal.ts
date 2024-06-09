@@ -9,7 +9,7 @@ class HorizontalLayout extends BaseColumnLayout {
       if (c.config.view_layout?.column) i = c.config.view_layout.column;
       const col = cols[(i - 1) % cols.length];
       col.appendChild(this.getCardElement(c));
-      if (this.isBreak(c.card)) {
+      if (this.isBreak(c.config)) {
         i = 0;
         if (!this.lovelace?.editMode) {
           col.removeChild(c.card);

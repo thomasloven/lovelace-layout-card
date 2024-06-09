@@ -8,7 +8,7 @@ class VerticalLayout extends BaseColumnLayout {
       if (c.config.view_layout?.column) i = c.config.view_layout.column;
       const col = cols[(i - 1) % cols.length];
       col.appendChild(this.getCardElement(c));
-      if (this.isBreak(c.card)) {
+      if (this.isBreak(c.config)) {
         i = i + 1;
       }
     }

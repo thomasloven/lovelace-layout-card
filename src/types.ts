@@ -5,6 +5,12 @@ export interface LovelaceCard extends HTMLElement {
   getCardSize?(): Promise<number> | number;
 }
 
+export interface HuiCard extends HTMLElement {
+  hass: any;
+  editMode?: boolean;
+  getCardSize?(): Promise<number> | number;
+}
+
 export interface CardConfig {
   type: string;
   view_layout?: {
@@ -20,7 +26,7 @@ export interface CardConfig {
 }
 
 export interface CardConfigGroup {
-  card: LovelaceCard;
+  card: LovelaceCard | HuiCard;
   config: CardConfig;
   index: number;
   show?: boolean;

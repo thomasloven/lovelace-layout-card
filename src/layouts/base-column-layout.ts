@@ -4,6 +4,7 @@ import {
   CardConfigGroup,
   CardConfig,
   LovelaceCard,
+  HuiCard,
   ColumnViewConfig,
 } from "../types";
 import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
@@ -142,7 +143,7 @@ export class BaseColumnLayout extends BaseLayout {
     }
   }
 
-  _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
+  _shouldShow(card: LovelaceCard | HuiCard, config: CardConfig, index: number) {
     if (!super._shouldShow(card, config, index)) return false;
 
     if (this._config.layout?.reflow) {
@@ -156,8 +157,8 @@ export class BaseColumnLayout extends BaseLayout {
     return false;
   }
 
-  isBreak(card: LovelaceCard) {
-    return card.localName === "layout-break";
+  isBreak(config: CardConfig) {
+    return config.type === "custom:layout-break";
   }
 
   async _makeLayout() {

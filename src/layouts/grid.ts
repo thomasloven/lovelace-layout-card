@@ -2,8 +2,9 @@ import { css, html } from "lit";
 import {
   CardConfig,
   CardConfigGroup,
-  LovelaceCard,
   GridViewConfig,
+  HuiCard,
+  LovelaceCard,
 } from "../types";
 import { BaseLayout } from "./base-layout";
 
@@ -90,7 +91,7 @@ class GridLayout extends BaseLayout {
     }
   }
 
-  _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
+  _shouldShow(card: LovelaceCard | HuiCard, config: CardConfig, index: number) {
     if (!super._shouldShow(card, config, index)) return false;
 
     const mq = this._mediaQueries[index];
