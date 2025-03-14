@@ -356,18 +356,18 @@ If no card type is explicitly specified for the entries, the [Entity](https://ww
 Example:
 
 ```yaml
-- type: 'custom:auto-entities'
-        filter:
-          include:
-            - domain: light
-              options:
-                type: light
-            - domain: sensor
-          exclude: []
-        card:
-          type: 'custom:layout-card'
-          cards: []
-          layout_type: masonry
+type: 'custom:auto-entities'
+filter:
+  include:
+    - domain: light
+      options:
+        type: light
+    - domain: sensor
+  exclude: []
+card:
+  type: 'custom:layout-card'
+  cards: []
+  layout_type: masonry
 ```
 
 ![auto-entities](https://user-images.githubusercontent.com/1299821/111070882-019e0b00-84d4-11eb-8a00-86683d598c3e.png)
