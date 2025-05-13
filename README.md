@@ -52,6 +52,7 @@ views:
       max_cols: 10
     cards: ...
 ```
+> NOTE: To ensure proper parsing of YAML code in Layout-card, it is recommended to avoid using semicolons (;) at the end of lines. This is especially important for properties like grid-template-columns and grid-template-rows.
 
 ### Layout-card
 
