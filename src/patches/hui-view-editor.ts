@@ -9,7 +9,6 @@ customElements.whenDefined("hui-view-editor").then(() => {
 
     this._oldSchema = this._schema;
     this._schema = (...arg) => {
-      const [_localize, currentType, isNew] = arg;
       const retval = this._oldSchema(...arg);
       const typeSelector = retval.find((e) => e.name == "type");
       if (typeSelector.name === "layout") return retval;
@@ -18,11 +17,9 @@ customElements.whenDefined("hui-view-editor").then(() => {
           (option) => option.value === LAYOUT_CARD_SELECTOR_OPTIONS[0].value
         )
       ) {
-        const options = LAYOUT_CARD_SELECTOR_OPTIONS.map((option) => ({
-          ...option,
-          disabled: currentType === "sections" && isNew === false,
-        }));
-        typeSelector.selector.select.options.push(...options);
+        typeSelector.selector.select.options.push(
+          ...LAYOUT_CARD_SELECTOR_OPTIONS
+        );
       }
 
       if (retval.find((e) => e.name === "layout") === undefined)
