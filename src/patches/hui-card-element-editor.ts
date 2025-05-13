@@ -8,14 +8,18 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
     if (retval) {
       const _setConfig = retval.setConfig;
 
-      retval.setConfig = function (config: any) {
-        let newConfig = JSON.parse(JSON.stringify(config));
-        this._layoutData = newConfig.view_layout;
+      try {
+        retval.setConfig = function (config: any) {
+          let newConfig = JSON.parse(JSON.stringify(config));
+          this._layoutData = newConfig.view_layout;
 
-        delete newConfig.view_layout;
+          delete newConfig.view_layout;
 
-        _setConfig.bind(this)(newConfig);
-      };
+          _setConfig.bind(this)(newConfig);
+        };
+      } catch (error) {
+        console.warn(error);
+      }
     }
     return retval;
   };
