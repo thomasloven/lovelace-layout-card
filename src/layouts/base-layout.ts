@@ -1,14 +1,15 @@
 import { css, html, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import {
-  CardConfigGroup,
   CardConfig,
+  CardConfigGroup,
+  HuiCard,
   LovelaceCard,
   ViewConfig,
 } from "../types";
 
 export class BaseLayout extends LitElement {
-  @property() cards: Array<LovelaceCard> = [];
+  @property() cards: Array<LovelaceCard | HuiCard> = [];
   @property() index: number;
   @property() narrow: boolean;
   @property() hass;
@@ -45,7 +46,7 @@ export class BaseLayout extends LitElement {
     }
   }
 
-  _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
+  _shouldShow(card: LovelaceCard | HuiCard, config: CardConfig, index: number) {
     if (config.view_layout?.show === "always") return true;
     if (config.view_layout?.show === "never") return false;
     if (
