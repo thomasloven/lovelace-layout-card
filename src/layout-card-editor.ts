@@ -49,19 +49,20 @@ class LayoutCardEditor extends LitElement {
   }
 
   _handleSwitchTab(ev: CustomEvent) {
-    this._selectedTab = parseInt(ev.detail.index, 10);
+    ev.stopPropagation();
+    this._selectedTab = parseInt(ev.detail.name, 10);
   }
 
   _editCard(ev) {
     ev.stopPropagation();
-    if (ev.target.id === "add-card") {
+    if (ev.detail.name === "add-card") {
       this._selectedCard = this._config.cards.length;
       return;
     }
     this._cardGUIMode = true;
     if (this._cardEditorEl) this._cardEditorEl.GUImode = true;
     this._cardGUIModeAvailable = true;
-    this._selectedCard = parseInt(ev.detail.selected, 10);
+    this._selectedCard = parseInt(ev.detail.name, 10);
   }
   _addCard(ev: CustomEvent) {
     ev.stopPropagation();
@@ -135,15 +136,14 @@ class LayoutCardEditor extends LitElement {
 
     return html`
       <div class="card-config">
-        <div class="toolbar">
-          <mwc-tab-bar
-            .activeIndex=${this._selectedTab}
-            @MDCTabBar:activated=${this._handleSwitchTab}
-          >
-            <mwc-tab .label=${"Layout"}></mwc-tab>
-            <mwc-tab .label=${"Cards"}></mwc-tab>
-          </mwc-tab-bar>
-        </div>
+        <sl-tab-group @sl-tab-show=${this._handleSwitchTab}>
+          <sl-tab slot="nav" .active=${this._selectedTab == 0} .panel=${0}>
+            Layout
+          </sl-tab>
+          <sl-tab slot="nav" .active=${this._selectedTab == 1} .panel=${1}>
+            Cards
+          </sl-tab>
+        </sl-tab-group>
         <div id="editor">
           ${[this._renderLayoutEditor, this._renderCardsEditor][
             this._selectedTab
@@ -191,26 +191,23 @@ class LayoutCardEditor extends LitElement {
     }
     return html`
       <div class="cards">
-        <div class="toolbar">
-          <paper-tabs
-            scrollable
-            .selected=${selected}
-            @iron-activate=${this._editCard}
-          >
-            ${this._config.cards.map((_card, i) => {
-              return html` <paper-tab> ${i + 1} </paper-tab> `;
-            })}
-          </paper-tabs>
-          <paper-tabs
+        <sl-tab-group @sl-tab-show=${this._editCard}>
+          ${this._config.cards.map((_card, i) => {
+            return html`
+              <sl-tab slot="nav" .active=${selected == i} .panel=${i}>
+                ${i + 1}
+              </sl-tab>
+            `;
+          })}
+          <sl-tab
+            slot="nav"
+            .active=${selected == numcards}
+            panel="add-card"
             id="add-card"
-            .selected=${selected == numcards ? "0" : undefined}
-            @iron-activate=${this._editCard}
           >
-            <paper-tab>
-              <ha-icon .icon=${"mdi:plus"}></ha-icon>
-            </paper-tab>
-          </paper-tabs>
-        </div>
+            <ha-icon .icon=${"mdi:plus"}></ha-icon>
+          </sl-tab>
+        </sl-tab-group>
         <div id="editor">
           ${selected < numcards
             ? html`
@@ -278,19 +275,20 @@ class LayoutCardEditor extends LitElement {
           padding: 12px;
         }
 
-        .cards .toolbar {
-          display: flex;
-          --paper-tabs-selection-bar-color: var(--primary-color);
-          --paper-tab-ink: var(--primary-color);
-        }
-        paper-tabs {
-          display: flex;
-          font-size: 14px;
-          flex-grow: 1;
-        }
         #add-card {
           max-width: 32px;
           padding: 0;
+        }
+        sl-tab-group {
+          margin-top: -16px;
+          margin-bottom: 16px;
+        }
+        sl-tab {
+          flex: 1;
+        }
+        sl-tab::part(base) {
+          width: 100%;
+          justify-content: center;
         }
 
         .cards .card-options {

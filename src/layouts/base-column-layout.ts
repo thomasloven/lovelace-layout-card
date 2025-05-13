@@ -7,7 +7,6 @@ import {
   HuiCard,
   ColumnViewConfig,
 } from "../types";
-import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
 import { BaseLayout } from "./base-layout";
 
 export class BaseColumnLayout extends BaseLayout {
