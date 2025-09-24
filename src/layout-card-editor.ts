@@ -181,10 +181,7 @@ class LayoutCardEditor extends LitElement {
           href="https://github.com/thomasloven/lovelace-layout-card"
           target="_blank"
           rel="no referrer"
-        >
-          layout-card on github
-        </a>
-        for usage instructions.
+        >layout-card on GitHub</a> for usage instructions.
       </p>
       <ha-form
         .hass=${this.hass}
