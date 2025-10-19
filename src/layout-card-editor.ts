@@ -136,14 +136,14 @@ class LayoutCardEditor extends LitElement {
 
     return html`
       <div class="card-config">
-        <sl-tab-group @sl-tab-show=${this._handleSwitchTab}>
-          <sl-tab slot="nav" .active=${this._selectedTab == 0} .panel=${0}>
+        <ha-tab-group @wa-tab-show=${this._handleSwitchTab}>
+          <ha-tab-group-tab slot="nav" .active=${this._selectedTab == 0} .panel=${0}>
             Layout
-          </sl-tab>
-          <sl-tab slot="nav" .active=${this._selectedTab == 1} .panel=${1}>
+          </ha-tab-group-tab>
+          <ha-tab-group-tab slot="nav" .active=${this._selectedTab == 1} .panel=${1}>
             Cards
-          </sl-tab>
-        </sl-tab-group>
+          </ha-tab-group-tab>
+        </ha-tab-group>
         <div id="editor">
           ${[this._renderLayoutEditor, this._renderCardsEditor][
             this._selectedTab
@@ -191,23 +191,23 @@ class LayoutCardEditor extends LitElement {
     }
     return html`
       <div class="cards">
-        <sl-tab-group @sl-tab-show=${this._editCard}>
+        <ha-tab-group @wa-tab-show=${this._editCard}>
           ${this._config.cards.map((_card, i) => {
             return html`
-              <sl-tab slot="nav" .active=${selected == i} .panel=${i}>
+              <ha-tab-group-tab slot="nav" .active=${selected == i} .panel=${i}>
                 ${i + 1}
-              </sl-tab>
+              </ha-tab-group-tab>
             `;
           })}
-          <sl-tab
+          <ha-tab-group-tab
             slot="nav"
             .active=${selected == numcards}
             panel="add-card"
             id="add-card"
           >
             <ha-icon .icon=${"mdi:plus"}></ha-icon>
-          </sl-tab>
-        </sl-tab-group>
+          </ha-tab-group-tab>
+        </ha-tab-group>
         <div id="editor">
           ${selected < numcards
             ? html`
