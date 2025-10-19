@@ -191,7 +191,7 @@ class LayoutCardEditor extends LitElement {
     }
     return html`
       <div class="cards">
-        <ha-tab-group @wa-tab-show=${this._handleSwitchTab}>
+        <ha-tab-group @wa-tab-show=${this._editCard}>
           ${this._config.cards.map((_card, i) => {
             return html`
               <ha-tab-group-tab slot="nav" .active=${selected == i} .panel=${i}>
