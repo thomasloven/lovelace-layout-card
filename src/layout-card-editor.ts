@@ -58,6 +58,7 @@ class LayoutCardEditor extends LitElement {
       cards: [],
     });
 
+    await customElements.whenDefined("hui-vertical-stack-card");
     if (verticalStackCard?.constructor?.getConfigElement) {
       await verticalStackCard.constructor.getConfigElement();
     }
