@@ -44,8 +44,24 @@ class LayoutCardEditor extends LitElement {
     this._config = config;
   }
 
-  firstUpdated() {
+  async firstUpdated() {
     loadHaForm();
+    await this._preloadCardEditors();
+  }
+
+  async _preloadCardEditors() {
+    const helpers = await (window as any).loadCardHelpers?.();
+    if (!helpers) return;
+
+    const verticalStackCard = await helpers.createCardElement({
+      type: "vertical-stack",
+      cards: [],
+    });
+
+    await customElements.whenDefined("hui-vertical-stack-card");
+    if (verticalStackCard?.constructor?.getConfigElement) {
+      await verticalStackCard.constructor.getConfigElement();
+    }
   }
 
   _handleSwitchTab(ev: CustomEvent) {
@@ -136,14 +152,14 @@ class LayoutCardEditor extends LitElement {
 
     return html`
       <div class="card-config">
-        <sl-tab-group @sl-tab-show=${this._handleSwitchTab}>
-          <sl-tab slot="nav" .active=${this._selectedTab == 0} .panel=${0}>
+        <ha-tab-group @wa-tab-show=${this._handleSwitchTab}>
+          <ha-tab-group-tab slot="nav" .active=${this._selectedTab == 0} .panel=${0}>
             Layout
-          </sl-tab>
-          <sl-tab slot="nav" .active=${this._selectedTab == 1} .panel=${1}>
+          </ha-tab-group-tab>
+          <ha-tab-group-tab slot="nav" .active=${this._selectedTab == 1} .panel=${1}>
             Cards
-          </sl-tab>
-        </sl-tab-group>
+          </ha-tab-group-tab>
+        </ha-tab-group>
         <div id="editor">
           ${[this._renderLayoutEditor, this._renderCardsEditor][
             this._selectedTab
@@ -191,55 +207,55 @@ class LayoutCardEditor extends LitElement {
     }
     return html`
       <div class="cards">
-        <sl-tab-group @sl-tab-show=${this._editCard}>
+        <ha-tab-group @wa-tab-show=${this._editCard}>
           ${this._config.cards.map((_card, i) => {
             return html`
-              <sl-tab slot="nav" .active=${selected == i} .panel=${i}>
+              <ha-tab-group-tab slot="nav" .active=${selected == i} .panel=${i}>
                 ${i + 1}
-              </sl-tab>
+              </ha-tab-group-tab>
             `;
           })}
-          <sl-tab
+          <ha-tab-group-tab 
             slot="nav"
             .active=${selected == numcards}
-            panel="add-card"
+            .panel=${"add-card"}
             id="add-card"
           >
             <ha-icon .icon=${"mdi:plus"}></ha-icon>
-          </sl-tab>
-        </sl-tab-group>
+          </ha-tab-group-tab>
+        </ha-tab-group>
         <div id="editor">
           ${selected < numcards
-            ? html`
+              ? html`
                 <div class="card-options">
-                  <mwc-button
-                    @click=${this._toggleMode}
-                    .disabled=${!this._cardGUIModeAvailable}
-                    class="gui-mode-button"
+                  <ha-button
+                      @click=${this._toggleMode}
+                      .disabled=${!this._cardGUIModeAvailable}
+                      class="gui-mode-button"
                   >
                     ${this.hass.localize(
-                      this._cardEditorEl || this._cardGUIMode
-                        ? "ui.panel.lovelace.editor.edit_card.show_code_editor"
-                        : "ui.panel.lovelace.editor.edit_card.show_visual_editor"
+                        this._cardEditorEl || this._cardGUIMode
+                            ? "ui.panel.lovelace.editor.edit_card.show_code_editor"
+                            : "ui.panel.lovelace.editor.edit_card.show_visual_editor"
                     )}
-                  </mwc-button>
-                  <mwc-icon-button
-                    .disabled=${selected === 0}
-                    @click=${this._moveCard}
-                    .move=${-1}
+                  </ha-button>
+                  <ha-icon-button
+                      .disabled=${selected === 0}
+                      @click=${this._moveCard}
+                      .move=${-1}
                   >
                     <ha-icon .icon=${"mdi:arrow-left"}></ha-icon>
-                  </mwc-icon-button>
-                  <mwc-icon-button
-                    .disabled=${selected === numcards - 1}
-                    @click=${this._moveCard}
-                    .move=${1}
+                  </ha-icon-button>
+                  <ha-icon-button
+                      .disabled=${selected === numcards - 1}
+                      @click=${this._moveCard}
+                      .move=${1}
                   >
                     <ha-icon .icon=${"mdi:arrow-right"}></ha-icon>
-                  </mwc-icon-button>
-                  <mwc-icon-button @click=${this._deleteCard}>
+                  </ha-icon-button>
+                  <ha-icon-button @click=${this._deleteCard}>
                     <ha-icon .icon=${"mdi:delete"}></ha-icon>
-                  </mwc-icon-button>
+                  </ha-icon-button>
                 </div>
                 <hui-card-element-editor
                   .hass=${this.hass}
@@ -279,16 +295,19 @@ class LayoutCardEditor extends LitElement {
           max-width: 32px;
           padding: 0;
         }
-        sl-tab-group {
+        ha-tab-group {
           margin-top: -16px;
           margin-bottom: 16px;
         }
-        sl-tab {
+        ha-tab-group-tab {
           flex: 1;
         }
-        sl-tab::part(base) {
+        ha-tab-group-tab::part(base) {
           width: 100%;
           justify-content: center;
+        }
+        ha-tab-group-tab[panel="?"] {
+          flex: 0;
         }
 
         .cards .card-options {
