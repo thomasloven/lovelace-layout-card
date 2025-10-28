@@ -44,8 +44,23 @@ class LayoutCardEditor extends LitElement {
     this._config = config;
   }
 
-  firstUpdated() {
+  async firstUpdated() {
     loadHaForm();
+    await this._preloadCardEditors();
+  }
+
+  async _preloadCardEditors() {
+    const helpers = await (window as any).loadCardHelpers?.();
+    if (!helpers) return;
+
+    const verticalStackCard = await helpers.createCardElement({
+      type: "vertical-stack",
+      cards: [],
+    });
+
+    if (verticalStackCard?.constructor?.getConfigElement) {
+      await verticalStackCard.constructor.getConfigElement();
+    }
   }
 
   _handleSwitchTab(ev: CustomEvent) {
@@ -199,47 +214,47 @@ class LayoutCardEditor extends LitElement {
               </ha-tab-group-tab>
             `;
           })}
-          <sl-tab
+          <ha-tab-group-tab 
             slot="nav"
             .active=${selected == numcards}
-            panel="add-card"
+            .panel=${"add-card"}
             id="add-card"
           >
             <ha-icon .icon=${"mdi:plus"}></ha-icon>
-          </sl-tab>
+          </ha-tab-group-tab>
         </ha-tab-group>
         <div id="editor">
           ${selected < numcards
-            ? html`
+              ? html`
                 <div class="card-options">
-                  <mwc-button
-                    @click=${this._toggleMode}
-                    .disabled=${!this._cardGUIModeAvailable}
-                    class="gui-mode-button"
+                  <ha-button
+                      @click=${this._toggleMode}
+                      .disabled=${!this._cardGUIModeAvailable}
+                      class="gui-mode-button"
                   >
                     ${this.hass.localize(
-                      this._cardEditorEl || this._cardGUIMode
-                        ? "ui.panel.lovelace.editor.edit_card.show_code_editor"
-                        : "ui.panel.lovelace.editor.edit_card.show_visual_editor"
+                        this._cardEditorEl || this._cardGUIMode
+                            ? "ui.panel.lovelace.editor.edit_card.show_code_editor"
+                            : "ui.panel.lovelace.editor.edit_card.show_visual_editor"
                     )}
-                  </mwc-button>
-                  <mwc-icon-button
-                    .disabled=${selected === 0}
-                    @click=${this._moveCard}
-                    .move=${-1}
+                  </ha-button>
+                  <ha-icon-button
+                      .disabled=${selected === 0}
+                      @click=${this._moveCard}
+                      .move=${-1}
                   >
                     <ha-icon .icon=${"mdi:arrow-left"}></ha-icon>
-                  </mwc-icon-button>
-                  <mwc-icon-button
-                    .disabled=${selected === numcards - 1}
-                    @click=${this._moveCard}
-                    .move=${1}
+                  </ha-icon-button>
+                  <ha-icon-button
+                      .disabled=${selected === numcards - 1}
+                      @click=${this._moveCard}
+                      .move=${1}
                   >
                     <ha-icon .icon=${"mdi:arrow-right"}></ha-icon>
-                  </mwc-icon-button>
-                  <mwc-icon-button @click=${this._deleteCard}>
+                  </ha-icon-button>
+                  <ha-icon-button @click=${this._deleteCard}>
                     <ha-icon .icon=${"mdi:delete"}></ha-icon>
-                  </mwc-icon-button>
+                  </ha-icon-button>
                 </div>
                 <hui-card-element-editor
                   .hass=${this.hass}
