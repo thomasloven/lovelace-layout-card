@@ -84,8 +84,36 @@ export class BaseColumnLayout extends BaseLayout {
       ? this._config.layout.width * 2
       : 600;
 
+    const scrollable = this._config.layout?.scrollable || false;
+
+    let additionalHostStyles = ``;
+    let stylesOverride = ``;
+
+    if (scrollable) {
+      additionalHostStyles += `
+        max-width:100%;
+        overflow-x:auto;
+      `;
+
+      stylesOverride += `
+      .column {
+        max-height:85vh;
+        overflow: auto;
+      }
+      `;
+    }
+
+
+    stylesOverride += `
+    #columns {
+      justify-content: ${scrollable ? "start": "center"};
+    }
+  `
+
     const styleEl = document.createElement("style");
     styleEl.innerHTML = `
+      ${stylesOverride}
+
       :host {
         --column-max-width: ${column_max_width}px;
         --column-width: ${column_width}px;
@@ -100,6 +128,7 @@ export class BaseColumnLayout extends BaseLayout {
         --layout-overflow: ${
           this._config.layout?.height !== undefined ? "auto" : "visible"
         };
+        ${additionalHostStyles}
       }
       @media (max-width: ${column_max_width}px) {
         .column:first-child > * {
@@ -128,7 +157,11 @@ export class BaseColumnLayout extends BaseLayout {
   }
 
   async _updateSize() {
-    let width = this.getBoundingClientRect().width;
+    if (this._config.layout?.scrollable) {
+      this._columns = this._config.layout?.max_cols || (this.hass?.dockedSidebar === "docked" ? 3 : 4)
+      return;
+    }
+    let width = this.getBoundingClientRect().width * 3;
     let colnum = 0;
     colnum = Math.floor(width / (this._config.layout?.width || 300));
     colnum = Math.min(
@@ -239,7 +272,7 @@ export class BaseColumnLayout extends BaseLayout {
             var(--column-max-width)
           );
           grid-template-columns: var(--column-widths);
-          justify-content: center;
+          
           justify-items: center;
           margin: var(--layout-margin);
           padding: var(--layout-padding);
