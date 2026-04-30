@@ -253,6 +253,7 @@ export class BaseColumnLayout extends BaseLayout {
         }
         .column > * {
           display: block;
+          height: auto;
           margin: var(--card-margin);
         }
       `,
