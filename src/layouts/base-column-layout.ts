@@ -13,7 +13,10 @@ export class BaseColumnLayout extends BaseLayout {
   @property() _columns?: number;
   @property() _config: ColumnViewConfig;
 
-  _observer?: ResizeObserver;
+  // Lifecycle callbacks can run before async setConfig resumes.
+  _observer = new ResizeObserver(() => {
+    this._updateSize();
+  });
   _cardObserver?: MutationObserver;
   _mediaQueries: Array<MediaQueryList | null> = [];
 
@@ -33,10 +36,7 @@ export class BaseColumnLayout extends BaseLayout {
       }
     }
 
-    if (this._observer) this._observer.disconnect();
-    this._observer = new ResizeObserver(() => {
-      this._updateSize();
-    });
+    this._observer.disconnect();
     if (this._cardObserver) this._cardObserver.disconnect();
     if (config.layout?.reflow) {
       this._cardObserver = new MutationObserver((mutationlist) => {
