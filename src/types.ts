@@ -13,6 +13,7 @@ export interface HuiCard extends HTMLElement {
 
 export interface CardConfig {
   type: string;
+  visibility?: Array<Record<string, unknown>>;
   view_layout?: {
     show?:
       | "always"

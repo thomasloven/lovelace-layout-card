@@ -90,7 +90,16 @@ class LayoutCard extends LitElement {
   }
 
   _createCard(cardConfig: CardConfig, cardHelpers: any): LovelaceCard {
-    const el = cardHelpers.createCardElement(cardConfig);
+    // Card helpers return the bare card, without HA's visibility wrapper.
+    const el = cardHelpers.createCardElement(
+      cardConfig.visibility?.length
+        ? {
+            type: "conditional",
+            conditions: cardConfig.visibility,
+            card: cardConfig,
+          }
+        : cardConfig
+    );
     el.addEventListener("ll-rebuild", (ev: Event) => {
       ev.stopPropagation();
       this._rebuildCard(el, cardConfig);
