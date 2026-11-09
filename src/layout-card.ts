@@ -49,6 +49,8 @@ class LayoutCard extends LitElement {
         this._layoutType
       ) as BaseColumnLayout;
       layoutElement.setConfig?.(viewConfig);
+      // hui-masonry-view spreads path in render(), which runs as soon as it's connected
+      (layoutElement as any).path = [];
       this._layoutElement = layoutElement;
       await this._createCards();
       this._layoutElement.hass = this.hass;
