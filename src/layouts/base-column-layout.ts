@@ -216,6 +216,7 @@ export class BaseColumnLayout extends BaseLayout {
 
   render() {
     return html`
+      ${this._render_header()}
       <div id="columns"></div>
       ${this._render_fab()}
     `;
@@ -224,6 +225,7 @@ export class BaseColumnLayout extends BaseLayout {
   static get styles() {
     return [
       this._fab_styles,
+      this._header_styles,
       css`
         :host {
           display: block;

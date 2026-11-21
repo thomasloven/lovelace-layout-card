@@ -126,12 +126,14 @@ class GridLayout extends BaseLayout {
   }
 
   render() {
-    return html` <div id="root"></div>
+    return html`${this._render_header()}
+      <div id="root"></div>
       ${this._render_fab()}`;
   }
   static get styles() {
     return [
       this._fab_styles,
+      this._header_styles,
       css`
         :host {
           height: 100%;

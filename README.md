@@ -264,6 +264,28 @@ cards:
 
 </details>
 
+## Badges and view header
+
+Layout-card views show the view's `badges` and `header`, the same way the built-in sections view does. Both can be edited from the dashboard editor: badges can be added, moved and edited, and the header card can be edited in place.
+
+```yaml
+type: custom:masonry-layout
+badges:
+  - type: entity
+    entity: input_select.home_mode
+    name: Home mode
+header:
+  card:
+    type: markdown
+    content: "# Hello {{ user }}"
+  layout: start
+  badges_position: bottom
+cards:
+  ...
+```
+
+The header uses Home Assistant's own view header, which is loaded together with the sections view. On a dashboard without a sections view, the badges are shown on their own until the header has loaded, which normally takes a moment on the first page load.
+
 ## Card visibility
 
 Individual cards can be displayed or hidden with the `view_layout` option `show`, e.g:

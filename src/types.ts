@@ -42,6 +42,8 @@ export interface ViewConfig {
     height?: string;
   };
   view_layout?: {};
+  badges?: Array<Record<string, any>>;
+  header?: Record<string, any>;
 }
 
 export interface ColumnViewConfig extends ViewConfig {

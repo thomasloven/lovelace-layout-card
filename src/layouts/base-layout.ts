@@ -10,6 +10,9 @@ import {
 
 export class BaseLayout extends LitElement {
   @property() cards: Array<LovelaceCard | HuiCard> = [];
+  @property() badges: Array<HTMLElement> = [];
+  // Set by Home Assistant (e.g. ["views", 0]); older versions only set index.
+  @property() path?: Array<string | number>;
   @property() index: number;
   @property() narrow: boolean;
   @property() hass;
@@ -73,6 +76,87 @@ export class BaseLayout extends LitElement {
     wrapper.appendChild(card.card);
     if (card.show === false) wrapper.style.border = "1px solid red";
     return wrapper;
+  }
+
+  _render_header() {
+    const header = this._config?.header;
+    const editMode = this.lovelace?.editMode ?? false;
+    const viewPath = this.path ?? [this.index];
+
+    // <hui-view-header> renders the view header card and the badges, with
+    // the same editing as the sections view. It is part of the lazily
+    // loaded sections view, so it may not be defined yet.
+    if (customElements.get("hui-view-header")) {
+      if (!header && !this.badges?.length && !editMode) return html``;
+      return html`
+        <hui-view-header
+          .hass=${this.hass}
+          .badges=${this.badges}
+          .lovelace=${this.lovelace}
+          .path=${viewPath}
+          .config=${header}
+        ></hui-view-header>
+      `;
+    }
+    if (header || editMode) this._loadViewHeader();
+
+    // <hui-view-badges> is part of the masonry view, which Home Assistant
+    // always loads.
+    if (!this.badges?.length && !editMode) return html``;
+    return html`
+      <hui-view-badges
+        .badges=${this.badges}
+        .lovelace=${this.lovelace}
+        .path=${[...viewPath, "badges"]}
+        show-add-label
+      ></hui-view-badges>
+    `;
+  }
+
+  static _viewHeaderRequested = false;
+  _waitingForViewHeader = false;
+
+  _loadViewHeader() {
+    if (!this._waitingForViewHeader) {
+      this._waitingForViewHeader = true;
+      customElements
+        .whenDefined("hui-view-header")
+        .then(() => this.requestUpdate());
+    }
+    if (BaseLayout._viewHeaderRequested || !this.hass || !this.lovelace)
+      return;
+    BaseLayout._viewHeaderRequested = true;
+
+    // Home Assistant has no public way to load the sections view. A hidden
+    // sections <hui-view> makes it import that view, which defines
+    // <hui-view-header>. The loader is removed again right after.
+    const loader = document.createElement("hui-view") as any;
+    loader.style.display = "none";
+    loader.hass = this.hass;
+    loader.lovelace = {
+      ...this.lovelace,
+      editMode: false,
+      config: { views: [{ type: "sections", sections: [] }] },
+    };
+    loader.index = 0;
+    document.body.appendChild(loader);
+    const remove = () => loader.remove();
+    customElements.whenDefined("hui-view-header").then(remove);
+    setTimeout(remove, 30000);
+  }
+
+  static get _header_styles() {
+    return css`
+      hui-view-header {
+        display: block;
+        padding: 4px 8px 8px;
+      }
+      hui-view-badges {
+        display: block;
+        margin: 4px 8px 8px;
+        font-size: var(--ha-font-size-s);
+      }
+    `;
   }
 
   _addCard() {
